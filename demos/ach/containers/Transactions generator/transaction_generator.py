@@ -113,7 +113,7 @@ entries = create_transactions_entries()
 ach_file.add_batch('POS', entries, credits=True, debits=True)
 
 # Save generated file to merchant-upload bucket
-bucket_name = 'merchant-upload'
+bucket_name = 'ach-merchant-upload'
 file_name = str(uuid.uuid4()) + '.ach'
 content = ach_file.render_to_string()
 save_file(bucket_name, file_name, content)
