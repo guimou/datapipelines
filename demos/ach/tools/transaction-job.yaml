@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    job-name: create-transaction
+  name: create-transaction
+  namespace: ach
+spec:
+  backoffLimit: 6
+  completions: 6
+  parallelism: 2
+  template:
+    metadata:
+      labels:
+        job-name: create-transaction
+      name: create-transaction
+    spec:
+      containers:
+      - env:
+        - name: AWS_ACCESS_KEY_ID
+          value: 0C9X34QIN7205RG42HR0
+        - name: AWS_SECRET_ACCESS_KEY
+          value: WhOOqzq58MpoH5H2b5zDBhb70pQzp2myWpGKmzbC
+        - name: service_point
+          value: http://s3-rook-ceph.apps.perf3.ocs.lab.eng.blr.redhat.com/
+        image: quay.io/guimou/ach-transactions-generator:latest
+        imagePullPolicy: Always
+        name: gen
+        resources: {}
+      restartPolicy: Never
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+
