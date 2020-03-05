@@ -5,6 +5,7 @@ import random
 import sys
 import uuid
 
+import boto3
 import names
 
 from ach.builder import AchFile
