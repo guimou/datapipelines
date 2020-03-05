@@ -2,7 +2,7 @@ FROM python:3.7
 
 WORKDIR /usr/src/app
 
-COPY requirements.txt transaction_generator.py  ach ./
+COPY . ./
 
 RUN pip install -r requirements.txt
 
