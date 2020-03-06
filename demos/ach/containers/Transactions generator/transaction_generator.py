@@ -93,7 +93,7 @@ def create_transactions_entries():
         amount = str(random.randint(100,200000)/100)  # Random amount between 1.00 and 2000.00
         name = names.get_full_name()  #  Generates random names
         entries.append({
-            'type'           : '27',  #  We're creatign debits only
+            'type'           : '27',  #  We're creating debits only
             'routing_number' : routing_number,
             'account_number' : account_number,
             'amount'         : amount,
