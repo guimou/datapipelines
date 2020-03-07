@@ -7,8 +7,8 @@ metadata:
   namespace: ach
 spec:
   backoffLimit: 6
-  completions: 200
-  parallelism: 10
+  completions: 1
+  parallelism: 1
   template:
     metadata:
       labels:
