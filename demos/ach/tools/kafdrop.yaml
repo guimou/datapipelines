@@ -41,7 +41,7 @@ spec:
 kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
-  name: kafrop
+  name: kafdrop
   namespace: kafka
 spec:
   subdomain: ''
