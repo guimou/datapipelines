@@ -5,6 +5,9 @@ metadata:
   namespace: ach
 spec:
   template:
+    metadata:
+        annotations:
+          autoscaling.knative.dev/target: '10'
     spec:
       containers:
       - image: quay.io/guimou/ach-odfi-split:latest
