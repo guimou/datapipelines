@@ -1,0 +1,34 @@
+apiVersion: serving.knative.dev/v1 
+kind: Service
+metadata:
+  name: rdfi-process
+  namespace: ach
+spec:
+  template:
+    metadata:
+        annotations:
+          autoscaling.knative.dev/target: '10'
+    spec:
+      containers:
+      - image: quay.io/guimou/ach-rdfi-process:latest
+        env:
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: s3-secret
+              key: AWS_ACCESS_KEY_ID 
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: s3-secret
+              key: AWS_SECRET_ACCESS_KEY 
+        - name: service_point
+          value: 'replace_me'
+        resources:
+          limits:
+            cpu: '2'
+            memory: 1G
+          requests:
+            cpu: 400m
+            memory: 100M
+

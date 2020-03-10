@@ -1,0 +1,3 @@
+boto3==1.9.*
+cloudevents==0.2.*
+mysql-connector-python==8.0.*
