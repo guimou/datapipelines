@@ -1,0 +1,3 @@
+CREATE TABLE bank_balance(time TIMESTAMP, amount DECIMAL(12,2));
+DELETE FROM bank_balance;
+INSERT INTO bank_balance(time,balance) SELECT CURRENT_TIMESTAMP(), 0;

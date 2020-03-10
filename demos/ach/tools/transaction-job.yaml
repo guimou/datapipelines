@@ -7,8 +7,9 @@ metadata:
   namespace: ach
 spec:
   backoffLimit: 6
-  completions: 1
-  parallelism: 1
+  completions: 60
+  parallelism: 5
+  successfulJobsHistoryLimit: 0
   template:
     metadata:
       labels:
@@ -29,5 +30,5 @@ spec:
         resources: {}
       restartPolicy: Never
       schedulerName: default-scheduler
-      terminationGracePeriodSeconds: 30
+      terminationGracePeriodSeconds: 15
 
