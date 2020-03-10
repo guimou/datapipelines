@@ -15,10 +15,116 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 1,
-  "iteration": 1583809635610,
+  "iteration": 1583876493428,
   "links": [],
   "panels": [
+    {
+      "bgColor": null,
+      "bgURL": "https://github.com/guimou/datapipelines/raw/master/demos/ach/tools/img/ACH%20workflow%20-%20Simplified%20-%20Dashboard%20schematic.png",
+      "boxes": [
+        {
+          "angle": "0",
+          "color": "#1F60C4",
+          "colorHigh": "#f00",
+          "colorLow": "#0f0",
+          "colorMedium": "#fa1",
+          "decimal": 1,
+          "fontsize": "30",
+          "hasOrb": false,
+          "isBlinking": false,
+          "orbHideText": false,
+          "orbLocation": "Left",
+          "orbSize": "10",
+          "prefixSize": 10,
+          "serie": "transactions",
+          "suffixSize": 10,
+          "text": "N/A",
+          "thresholds": "20,60",
+          "usingThresholds": false,
+          "xpos": "65",
+          "ypos": "165"
+        },
+        {
+          "angle": 0,
+          "color": "#1F60C4",
+          "colorHigh": "#f00",
+          "colorLow": "#0f0",
+          "colorMedium": "#fa1",
+          "decimal": 1,
+          "fontsize": "30",
+          "hasOrb": false,
+          "isBlinking": false,
+          "orbHideText": false,
+          "orbLocation": "Left",
+          "orbSize": "10",
+          "prefixSize": 10,
+          "serie": "dispatch",
+          "suffixSize": 10,
+          "text": "N/A",
+          "thresholds": "20,60",
+          "usingThresholds": false,
+          "xpos": "350",
+          "ypos": "100"
+        },
+        {
+          "angle": 0,
+          "color": "#1F60C4",
+          "colorHigh": "#f00",
+          "colorLow": "#0f0",
+          "colorMedium": "#fa1",
+          "decimal": 1,
+          "fontsize": "30",
+          "hasOrb": false,
+          "isBlinking": false,
+          "orbHideText": false,
+          "orbLocation": "Left",
+          "orbSize": "10",
+          "prefixSize": 10,
+          "serie": "processed",
+          "suffixSize": 10,
+          "text": "N/A",
+          "thresholds": "20,60",
+          "usingThresholds": false,
+          "xpos": "768",
+          "ypos": "100"
+        },
+        {
+          "angle": 0,
+          "color": "#1F60C4",
+          "colorHigh": "#f00",
+          "colorLow": "#0f0",
+          "colorMedium": "#fa1",
+          "decimal": 1,
+          "fontsize": "30",
+          "hasOrb": false,
+          "isBlinking": false,
+          "orbHideText": false,
+          "orbLocation": "Left",
+          "orbSize": "10",
+          "prefixSize": 10,
+          "serie": "rdfi-processed",
+          "suffixSize": 10,
+          "text": "N/A",
+          "thresholds": "20,60",
+          "usingThresholds": false,
+          "xpos": "770",
+          "ypos": "325"
+        }
+      ],
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 14,
+      "links": [],
+      "options": {},
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Pipeline realtime view",
+      "type": "larona-epict-panel"
+    },
     {
       "aliasColors": {},
       "bars": true,
@@ -27,9 +133,9 @@
       "datasource": "MySQL",
       "fill": 1,
       "gridPos": {
-        "h": 9,
-        "w": 6,
-        "x": 0,
+        "h": 12,
+        "w": 7,
+        "x": 12,
         "y": 0
       },
       "id": 12,
@@ -127,91 +233,6 @@
       }
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": false,
-      "colors": [
-        "#299c46",
-        "rgba(237, 129, 40, 0.89)",
-        "#d44a3a"
-      ],
-      "datasource": "prometheus",
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": true,
-        "thresholdLabels": false,
-        "thresholdMarkers": false
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 6,
-        "x": 6,
-        "y": 0
-      },
-      "id": 2,
-      "interval": null,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "options": {},
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": true
-      },
-      "tableColumn": "",
-      "targets": [
-        {
-          "expr": "sum(kube_pod_container_status_running{namespace=~\"$namespace\"})",
-          "format": "time_series",
-          "instant": false,
-          "intervalFactor": 1,
-          "legendFormat": "{{ deployment }}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": "",
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Pods running",
-      "type": "singlestat",
-      "valueFontSize": "80%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
-    },
-    {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -220,10 +241,10 @@
       "fill": 10,
       "fillGradient": 0,
       "gridPos": {
-        "h": 10,
-        "w": 6,
-        "x": 12,
-        "y": 0
+        "h": 7,
+        "w": 4,
+        "x": 0,
+        "y": 12
       },
       "id": 10,
       "legend": {
@@ -303,6 +324,182 @@
       }
     },
     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$datasource",
+      "fill": 10,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 4,
+        "x": 4,
+        "y": 12
+      },
+      "id": 4,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 0,
+      "links": [],
+      "nullPointMode": "null as zero",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": true,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(container_memory_working_set_bytes{namespace=\"$namespace\"}) by (pod)",
+          "format": "time_series",
+          "intervalFactor": 2,
+          "legendFormat": "{{pod}}",
+          "legendLink": null,
+          "refId": "A",
+          "step": 10
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "RAM Usage",
+      "tooltip": {
+        "shared": false,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": 0,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "datasource": "prometheus",
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": true,
+        "thresholdLabels": false,
+        "thresholdMarkers": false
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 4,
+        "x": 8,
+        "y": 12
+      },
+      "id": 2,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "options": {},
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": true
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "sum(kube_pod_container_status_running{namespace=~\"$namespace\"})",
+          "format": "time_series",
+          "instant": false,
+          "intervalFactor": 1,
+          "legendFormat": "{{ deployment }}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": "",
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Pods running",
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "current"
+    },
+    {
       "columns": [
         {
           "text": "Current",
@@ -312,10 +509,10 @@
       "datasource": "prometheus",
       "fontSize": "100%",
       "gridPos": {
-        "h": 11,
-        "w": 12,
-        "x": 0,
-        "y": 9
+        "h": 7,
+        "w": 8,
+        "x": 12,
+        "y": 12
       },
       "id": 6,
       "links": [],
@@ -394,100 +591,9 @@
       "title": "Deployments and Jobs",
       "transform": "timeseries_to_rows",
       "type": "table"
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$datasource",
-      "fill": 10,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 10,
-        "w": 6,
-        "x": 12,
-        "y": 10
-      },
-      "id": 4,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 0,
-      "links": [],
-      "nullPointMode": "null as zero",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": true,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(container_memory_working_set_bytes{namespace=\"$namespace\"}) by (pod)",
-          "format": "time_series",
-          "intervalFactor": 2,
-          "legendFormat": "{{pod}}",
-          "legendLink": null,
-          "refId": "A",
-          "step": 10
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "RAM Usage",
-      "tooltip": {
-        "shared": false,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": 0,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
     }
   ],
-  "refresh": "5s",
+  "refresh": false,
   "schemaVersion": 18,
   "style": "dark",
   "tags": [],
@@ -533,8 +639,8 @@
     ]
   },
   "time": {
-    "from": "now-5m",
-    "to": "now"
+    "from": "2020-03-10T21:32:29.441Z",
+    "to": "2020-03-10T21:34:01.198Z"
   },
   "timepicker": {
     "refresh_intervals": [
@@ -564,5 +670,5 @@
   "timezone": "",
   "title": "ACH Demo",
   "uid": "8JWxuiuZz",
-  "version": 19
+  "version": 1
 }
