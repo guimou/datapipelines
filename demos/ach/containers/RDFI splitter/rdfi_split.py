@@ -149,7 +149,7 @@ def create_ach_files(content):
                 # Add an entry
                 routing_number = lines[j][3:11] # RDFI bank (customer's bank)
                 account_number = lines[j][12:29] # Customer account number
-                amount = lines[j][29:39] # Amount
+                amount = str(float(lines[j][29:39])/100) # Amount
                 name = lines[j][54:76] # Customer name
                 entries.append({
                     'type'           : '27',  #  We're creatign debits only
