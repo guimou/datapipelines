@@ -15,7 +15,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "iteration": 1583890001580,
+  "iteration": 1583933284032,
   "links": [],
   "panels": [
     {
@@ -262,7 +262,7 @@
       "datasource": "MySQL",
       "fill": 1,
       "gridPos": {
-        "h": 12,
+        "h": 7,
         "w": 8,
         "x": 12,
         "y": 0
@@ -362,6 +362,99 @@
       }
     },
     {
+      "columns": [
+        {
+          "text": "Current",
+          "value": "current"
+        }
+      ],
+      "datasource": "prometheus",
+      "fontSize": "100%",
+      "gridPos": {
+        "h": 12,
+        "w": 8,
+        "x": 12,
+        "y": 7
+      },
+      "id": 6,
+      "links": [],
+      "options": {},
+      "pageSize": null,
+      "scroll": true,
+      "showHeader": true,
+      "sort": {
+        "col": 1,
+        "desc": true
+      },
+      "styles": [
+        {
+          "alias": "Time",
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "pattern": "Time",
+          "type": "date"
+        },
+        {
+          "alias": "",
+          "colorMode": "row",
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "decimals": 0,
+          "pattern": "Metric",
+          "thresholds": [
+            "0",
+            "0",
+            ".9"
+          ],
+          "type": "string",
+          "unit": "none"
+        },
+        {
+          "alias": "",
+          "colorMode": "row",
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 0,
+          "link": false,
+          "pattern": "Value",
+          "thresholds": [
+            "0",
+            "1"
+          ],
+          "type": "number",
+          "unit": "none"
+        }
+      ],
+      "targets": [
+        {
+          "expr": "kube_deployment_status_replicas{namespace=~\"$namespace\"}",
+          "format": "time_series",
+          "instant": true,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{ deployment }}",
+          "refId": "A"
+        },
+        {
+          "expr": "kube_job_status_active{namespace=~\"$namespace\"}",
+          "format": "time_series",
+          "instant": true,
+          "intervalFactor": 1,
+          "legendFormat": "{{job_name}}",
+          "refId": "B"
+        }
+      ],
+      "title": "Deployments and Jobs",
+      "transform": "timeseries_to_rows",
+      "type": "table"
+    },
+    {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -402,7 +495,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{namespace=\"$namespace\"}) by (pod)",
+          "expr": "sum(pod:container_cpu_usage:sum{namespace=\"$namespace\"}) by (pod)",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{pod}}",
@@ -555,11 +648,11 @@
       "datasource": "prometheus",
       "format": "none",
       "gauge": {
-        "maxValue": 100,
+        "maxValue": 20,
         "minValue": 0,
         "show": true,
-        "thresholdLabels": false,
-        "thresholdMarkers": false
+        "thresholdLabels": true,
+        "thresholdMarkers": true
       },
       "gridPos": {
         "h": 7,
@@ -613,7 +706,7 @@
           "refId": "A"
         }
       ],
-      "thresholds": "",
+      "thresholds": "10,15,20",
       "timeFrom": null,
       "timeShift": null,
       "title": "Pods running",
@@ -627,99 +720,6 @@
         }
       ],
       "valueName": "current"
-    },
-    {
-      "columns": [
-        {
-          "text": "Current",
-          "value": "current"
-        }
-      ],
-      "datasource": "prometheus",
-      "fontSize": "100%",
-      "gridPos": {
-        "h": 7,
-        "w": 8,
-        "x": 12,
-        "y": 12
-      },
-      "id": 6,
-      "links": [],
-      "options": {},
-      "pageSize": null,
-      "scroll": true,
-      "showHeader": true,
-      "sort": {
-        "col": 1,
-        "desc": true
-      },
-      "styles": [
-        {
-          "alias": "Time",
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "pattern": "Time",
-          "type": "date"
-        },
-        {
-          "alias": "",
-          "colorMode": "row",
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "decimals": 0,
-          "pattern": "Metric",
-          "thresholds": [
-            "0",
-            "0",
-            ".9"
-          ],
-          "type": "string",
-          "unit": "none"
-        },
-        {
-          "alias": "",
-          "colorMode": "row",
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 0,
-          "link": false,
-          "pattern": "Value",
-          "thresholds": [
-            "0",
-            "1"
-          ],
-          "type": "number",
-          "unit": "none"
-        }
-      ],
-      "targets": [
-        {
-          "expr": "kube_deployment_status_replicas{namespace=~\"$namespace\"}",
-          "format": "time_series",
-          "instant": true,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{ deployment }}",
-          "refId": "A"
-        },
-        {
-          "expr": "kube_job_status_active{namespace=~\"$namespace\"}",
-          "format": "time_series",
-          "instant": true,
-          "intervalFactor": 1,
-          "legendFormat": "{{job_name}}",
-          "refId": "B"
-        }
-      ],
-      "title": "Deployments and Jobs",
-      "transform": "timeseries_to_rows",
-      "type": "table"
     }
   ],
   "refresh": "5s",
@@ -799,5 +799,5 @@
   "timezone": "",
   "title": "ACH Demo",
   "uid": "8JWxuiuZz",
-  "version": 2
+  "version": 3
 }

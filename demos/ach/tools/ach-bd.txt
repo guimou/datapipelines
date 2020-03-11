@@ -4,6 +4,12 @@ CREATE TABLE odfi_split(time TIMESTAMP, entry INT(5));
 CREATE TABLE rdfi_split(time TIMESTAMP, entry INT(5));
 CREATE TABLE rdfi_process(time TIMESTAMP, entry INT(5));
 
+SELECT * FROM bank_balance;
+SELECT * FROM merchant_upload;
+SELECT * FROM odfi_split;
+SELECT * FROM rdfi_split;
+SELECT * FROM rdfi_process;
+
 
 DELETE FROM bank_balance;
 DELETE FROM merchant_upload;
