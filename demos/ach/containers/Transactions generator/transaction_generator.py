@@ -8,6 +8,7 @@ import uuid
 import boto3
 import names
 
+import mysql.connector
 from ach.builder import AchFile
 
 # banks format = (routing without check_digit, name)
@@ -103,6 +104,22 @@ def create_transactions_entries():
     
     return entries
 
+def update_merchant_upload():
+    try:
+        cnx = mysql.connector.connect(user='achuser', password='achpassword',
+                                      host='achdb.ach-db',
+                                      database='achdb')
+        cursor = cnx.cursor()
+        query = 'INSERT INTO merchant_upload(time,entry) SELECT CURRENT_TIMESTAMP(), 1;'
+        cursor.execute(query)
+        cnx.commit()
+        cursor.close()
+        cnx.close()
+
+    except Exception as e:
+        logging.error(f"Unexpected error: {e}")
+        raise
+
 # Initialize a new ACH file
 ach_file = AchFile('A', create_setting_entry())
 
@@ -117,3 +134,4 @@ bucket_name = 'ach-merchant-upload'
 file_name = str(uuid.uuid4()) + '.ach'
 content = ach_file.render_to_string()
 save_file(bucket_name, file_name, content)
+update_merchant_upload()

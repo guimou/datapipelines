@@ -11,6 +11,7 @@ from io import BytesIO
 
 import boto3
 
+import mysql.connector
 from ach.builder import AchFile
 from cloudevents.sdk import marshaller
 from cloudevents.sdk.event import v02
@@ -166,6 +167,21 @@ def create_ach_files(content):
             ach_content = ach_file.render_to_string()
             save_file(bucket_name, file_name, ach_content)
 
+def update_rdfi_split():
+    try:
+        cnx = mysql.connector.connect(user='achuser', password='achpassword',
+                                      host='achdb.ach-db',
+                                      database='achdb')
+        cursor = cnx.cursor()
+        query = 'INSERT INTO rdfi_split(time,entry) SELECT CURRENT_TIMESTAMP(), 1;'
+        cursor.execute(query)
+        cnx.commit()
+        cursor.close()
+        cnx.close()
+
+    except Exception as e:
+        logging.error(f"Unexpected error: {e}")
+        raise
 
 def run_event(event):
     try:
@@ -179,6 +195,7 @@ def run_event(event):
             # Load file and treat it
             content = load_file(bucket_name, object_key)
             create_ach_files(content)
+            update_rdfi_split()
             
     except Exception as e:
         logging.error(f"Unexpected error: {e}")

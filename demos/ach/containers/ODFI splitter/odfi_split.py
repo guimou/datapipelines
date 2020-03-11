@@ -9,6 +9,7 @@ import sys
 from io import BytesIO
 
 import boto3
+import mysql.connector
 from cloudevents.sdk import marshaller
 from cloudevents.sdk.event import v02
 
@@ -110,6 +111,22 @@ def get_odfi_routing(content):
     odfi_routing = content.splitlines()[0][4:12]
     return odfi_routing
 
+def update_odfi_split():
+    try:
+        cnx = mysql.connector.connect(user='achuser', password='achpassword',
+                                      host='achdb.ach-db',
+                                      database='achdb')
+        cursor = cnx.cursor()
+        query = 'INSERT INTO odfi_split(time,entry) SELECT CURRENT_TIMESTAMP(), 1;'
+        cursor.execute(query)
+        cnx.commit()
+        cursor.close()
+        cnx.close()
+
+    except Exception as e:
+        logging.error(f"Unexpected error: {e}")
+        raise
+
 
 def run_event(event):
     try:
@@ -124,6 +141,7 @@ def run_event(event):
             content = load_file(bucket_name, object_key)
             odfi_routing = get_odfi_routing(content)
             save_file('ach-odfi-' + odfi_routing,object_key,content)
+            update_odfi_split()
 
     except Exception as e:
         logging.error(f"Unexpected error: {e}")

@@ -128,6 +128,23 @@ def update_balance(transactions_amount):
         raise
 
 
+def update_rdfi_process():
+    try:
+        cnx = mysql.connector.connect(user='achuser', password='achpassword',
+                                      host='achdb.ach-db',
+                                      database='achdb')
+        cursor = cnx.cursor()
+        query = 'INSERT INTO rdfi_process(time,entry) SELECT CURRENT_TIMESTAMP(), 1;'
+        cursor.execute(query)
+        cnx.commit()
+        cursor.close()
+        cnx.close()
+
+    except Exception as e:
+        logging.error(f"Unexpected error: {e}")
+        raise
+
+
 def run_event(event):
     try:
         extracted_data = extract_data(event.Data())
@@ -141,6 +158,7 @@ def run_event(event):
             content = load_file(bucket_name, object_key)
             transactions_amount = compute_amount(content)
             update_balance(transactions_amount)
+            update_rdfi_process()
 
     except Exception as e:
         logging.error(f"Unexpected error: {e}")
