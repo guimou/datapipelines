@@ -100,6 +100,9 @@ def load_file(bucket_name, object_key):
     content = obj['Body'].read().decode('utf-8')
     return content
 
+def delete_file(bucket_name, object_key):
+    logging.info('delete_file')
+    s3client.delete_object(Bucket=bucket_name,Key=object_key)
 
 def compute_amount(content):
     lines = content.splitlines()
@@ -159,6 +162,7 @@ def run_event(event):
             transactions_amount = compute_amount(content)
             update_balance(transactions_amount)
             update_rdfi_process()
+            delete_file(bucket_name, object_key)
 
     except Exception as e:
         logging.error(f"Unexpected error: {e}")

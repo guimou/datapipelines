@@ -106,6 +106,10 @@ def save_file(bucket_name, file_name, content):
         raise logging.error(
             'Failed to upload file {} to bucket {}'.format(file_name, bucket_name))
 
+def delete_file(bucket_name, object_key):
+    logging.info('delete_file')
+    s3client.delete_object(Bucket=bucket_name,Key=object_key)
+
 
 def get_odfi_routing(content):
     odfi_routing = content.splitlines()[0][4:12]
@@ -142,6 +146,7 @@ def run_event(event):
             odfi_routing = get_odfi_routing(content)
             save_file('ach-odfi-' + odfi_routing,object_key,content)
             update_odfi_split()
+            delete_file(bucket_name, object_key)
 
     except Exception as e:
         logging.error(f"Unexpected error: {e}")
