@@ -1,3 +1,17 @@
 CREATE TABLE bank_balance(time TIMESTAMP, amount DECIMAL(12,2));
+CREATE TABLE merchant_upload(time TIMESTAMP, entry INT(5));
+CREATE TABLE odfi_split(time TIMESTAMP, entry INT(5));
+CREATE TABLE rdfi_split(time TIMESTAMP, entry INT(5));
+CREATE TABLE rdfi_process(time TIMESTAMP, entry INT(5));
+
+
 DELETE FROM bank_balance;
+DELETE FROM merchant_upload;
+DELETE FROM odfi_split;
+DELETE FROM rdfi_split;
+DELETE FROM rdfi_process;
 INSERT INTO bank_balance(time,balance) SELECT CURRENT_TIMESTAMP(), 0;
+INSERT INTO merchant_upload(time,entry) SELECT CURRENT_TIMESTAMP(), 0;
+INSERT INTO odfi_split(time,entry) SELECT CURRENT_TIMESTAMP(), 0;
+INSERT INTO rdfi_split(time,entry) SELECT CURRENT_TIMESTAMP(), 0;
+INSERT INTO rdfi_process(time,entry) SELECT CURRENT_TIMESTAMP(), 0;

@@ -15,7 +15,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "iteration": 1583876493428,
+  "iteration": 1583890001580,
   "links": [],
   "panels": [
     {
@@ -58,7 +58,7 @@
           "orbLocation": "Left",
           "orbSize": "10",
           "prefixSize": 10,
-          "serie": "dispatch",
+          "serie": "odfi_split",
           "suffixSize": 10,
           "text": "N/A",
           "thresholds": "20,60",
@@ -80,7 +80,7 @@
           "orbLocation": "Left",
           "orbSize": "10",
           "prefixSize": 10,
-          "serie": "processed",
+          "serie": "rdfi_split",
           "suffixSize": 10,
           "text": "N/A",
           "thresholds": "20,60",
@@ -102,7 +102,7 @@
           "orbLocation": "Left",
           "orbSize": "10",
           "prefixSize": 10,
-          "serie": "rdfi-processed",
+          "serie": "rdfi_process",
           "suffixSize": 10,
           "text": "N/A",
           "thresholds": "20,60",
@@ -111,6 +111,7 @@
           "ypos": "325"
         }
       ],
+      "datasource": "MySQL",
       "gridPos": {
         "h": 12,
         "w": 12,
@@ -120,9 +121,137 @@
       "id": 14,
       "links": [],
       "options": {},
+      "targets": [
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "1h",
+                "none"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  time,\n  sum(entry) AS \"transactions\"\nFROM merchant_upload",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "entry"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "sum"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "transactions"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "merchant_upload",
+          "timeColumn": "time",
+          "timeColumnType": "timestamp",
+          "where": []
+        },
+        {
+          "format": "time_series",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  time,\n  sum(entry) AS \"odfi_split\"\nFROM odfi_split",
+          "refId": "B",
+          "select": [
+            [
+              {
+                "params": [
+                  "entry"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "merchant_upload",
+          "timeColumn": "time",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  time,\n  sum(entry) AS \"rdfi_split\"\nFROM rdfi_split",
+          "refId": "C",
+          "select": [
+            [
+              {
+                "params": [
+                  "entry"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "merchant_upload",
+          "timeColumn": "time",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  time,\n  sum(entry) AS \"rdfi_process\"\nFROM rdfi_process",
+          "refId": "D",
+          "select": [
+            [
+              {
+                "params": [
+                  "entry"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "merchant_upload",
+          "timeColumn": "time",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Pipeline realtime view",
+      "title": "Realtime pipeline view",
       "type": "larona-epict-panel"
     },
     {
@@ -134,7 +263,7 @@
       "fill": 1,
       "gridPos": {
         "h": 12,
-        "w": 7,
+        "w": 8,
         "x": 12,
         "y": 0
       },
@@ -593,7 +722,7 @@
       "type": "table"
     }
   ],
-  "refresh": false,
+  "refresh": "5s",
   "schemaVersion": 18,
   "style": "dark",
   "tags": [],
@@ -639,8 +768,8 @@
     ]
   },
   "time": {
-    "from": "2020-03-10T21:32:29.441Z",
-    "to": "2020-03-10T21:34:01.198Z"
+    "from": "now-5m",
+    "to": "now"
   },
   "timepicker": {
     "refresh_intervals": [
@@ -670,5 +799,5 @@
   "timezone": "",
   "title": "ACH Demo",
   "uid": "8JWxuiuZz",
-  "version": 1
+  "version": 2
 }
