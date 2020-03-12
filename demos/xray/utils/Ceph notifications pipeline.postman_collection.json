@@ -1,0 +1,305 @@
+{
+	"info": {
+		"name": "Ceph notifications pipeline",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "List Topics",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [],
+					"options": {
+						"raw": {
+							"language": "text"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://your.ceph.rgw.url/?Action=ListTopics",
+					"protocol": "http",
+					"host": [
+						"your",
+						"ceph",
+						"rgw",
+						"url"
+					],
+					"path": [
+						""
+					],
+					"query": [
+						{
+							"key": "Action",
+							"value": "ListTopics"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Topic",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [],
+					"options": {
+						"raw": {
+							"language": "text"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://your.ceph.rgw.url/?Action=CreateTopic&Name=storage&push-endpoint=kafka://my-cluster-kafka-bootstrap.kafka:9092&kafka-ack-level=broker",
+					"protocol": "http",
+					"host": [
+						"your",
+						"ceph",
+						"rgw",
+						"url"
+					],
+					"path": [
+						""
+					],
+					"query": [
+						{
+							"key": "Action",
+							"value": "CreateTopic"
+						},
+						{
+							"key": "Name",
+							"value": "storage"
+						},
+						{
+							"key": "push-endpoint",
+							"value": "kafka://my-cluster-kafka-bootstrap.kafka:9092"
+						},
+						{
+							"key": "kafka-ack-level",
+							"value": "broker"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Bckt Notification",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<NotificationConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n    <TopicConfiguration>\n        <Id>storage</Id>\n        <Topic>arn:aws:sns:my-store::storage</Topic>\n    </TopicConfiguration>\n</NotificationConfiguration>",
+					"options": {
+						"raw": {
+							"language": "text"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://your.ceph.rgw.url/data-bckt?notification",
+					"protocol": "http",
+					"host": [
+						"your",
+						"ceph",
+						"rgw",
+						"url"
+					],
+					"path": [
+						"data-bckt"
+					],
+					"query": [
+						{
+							"key": "notification",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Bckt Notifications",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://your.ceph.rgw.url/data-bckt?notification",
+					"protocol": "http",
+					"host": [
+						"your",
+						"ceph",
+						"rgw",
+						"url"
+					],
+					"path": [
+						"data-bckt"
+					],
+					"query": [
+						{
+							"key": "notification",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Topic",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [],
+					"options": {
+						"raw": {
+							"language": "text"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://your.ceph.rgw.url/?Action=DeleteTopic&TopicArn=arn:aws:sns:my-store::storage",
+					"protocol": "http",
+					"host": [
+						"your",
+						"ceph",
+						"rgw",
+						"url"
+					],
+					"path": [
+						""
+					],
+					"query": [
+						{
+							"key": "Action",
+							"value": "DeleteTopic"
+						},
+						{
+							"key": "TopicArn",
+							"value": "arn:aws:sns:my-store::storage"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Bckt Notification",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://your.ceph.rgw.url/data-bckt?notification=storage",
+					"protocol": "http",
+					"host": [
+						"your",
+						"ceph",
+						"rgw",
+						"url"
+					],
+					"path": [
+						"data-bckt"
+					],
+					"query": [
+						{
+							"key": "notification",
+							"value": "storage"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "awsv4",
+		"awsv4": [
+			{
+				"key": "secretKey",
+				"value": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+				"type": "string"
+			},
+			{
+				"key": "accessKey",
+				"value": "xxxxxxxxxxxxxxxxxxx",
+				"type": "string"
+			},
+			{
+				"key": "region",
+				"value": "us-east-1",
+				"type": "string"
+			},
+			{
+				"key": "service",
+				"value": "s3",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "b3690c19-bb99-4e17-bab7-170e472941f2",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "3b6cca2c-fe46-48da-8729-9ef5e965d36d",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

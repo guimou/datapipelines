@@ -1,0 +1,13 @@
+apiVersion: sources.eventing.knative.dev/v1alpha1
+kind: KafkaSource
+metadata:
+  name: kafka-source-event
+  namespace: xray
+spec:
+  consumerGroup: xray-events
+  bootstrapServers: my-cluster-kafka-bootstrap.kafka:9092
+  topics: storage
+  sink:
+    apiVersion: serving.knative.dev/v1alpha1
+    kind: Service
+    name: logevents

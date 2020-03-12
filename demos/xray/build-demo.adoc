@@ -1,0 +1,277 @@
+:imagesdir: ./img
+:toc:
+
+= XRay Demo Building Walkthrough
+
+== RHCS installation
+
+=== Rook operator and Ceph cluster
+
+The standard procedure to deploy the rook operator and create a cluster is described at https://rook.io/docs/rook/v1.2/ceph-openshift.html. We will modify it a little bit to use the RHCS4 image.
+
+Begin the procedure as described by fetching and installing the files *common.yaml* and *openshift-operator.yaml* at https://github.com/rook/rook/tree/release-1.2/cluster/examples/kubernetes/ceph:
+
+[source,bash]
+----
+oc create -f https://github.com/rook/rook/raw/release-1.2/cluster/examples/kubernetes/ceph/common.yaml
+oc create -f https://github.com/rook/rook/raw/release-1.2/cluster/examples/kubernetes/ceph/operator-openshift.yaml
+----
+
+This will have created a *rook-ceph* project. The following commands must be run from this project:
+
+[source,bash]
+----
+oc project rook-ceph
+----
+
+As we will use the RHCS4 image, we first have to install it on OCP:
+
+* To get your secret token for the Red Hat Registry access, connect at https://access.redhat.com/terms-based-registry/
+
+* If you don't already have a token, you can generate a new one. When you access it there is directly an OpenShift Secret tab where you will the instructions on how to install it as a secret in the rook-ceph project.
+
+* Import the image, which will create an Image Stream:
+
+[source,bash]
+----
+oc import-image rhceph/rhceph-4-rhel8 --from=registry.redhat.io/rhceph/rhceph-4-rhel8 --confirm
+----
+
+You can now adapt the cluster.yaml from the rook-ceph repo to your specific configuration and needs (type of storage, size...). For the demo *you must at least change the image line to use the one we just imported, and set "allowUnsupported" to true*. Also, make sure to enable the dashboard and disable SSL if you don't have trusted certificates in your environment.
+
+.cluster.yaml (excerpt)
+[source,yaml]
+----
+  cephVersion:
+    image: registry.redhat.io/rhceph/rhceph-4-rhel8
+    allowUnsupported: true
+  dashboard:
+    enabled: true
+    #ssl: true
+----
+
+*Note*: In the *utils* folder you will find two demo *cluster-xxx.yaml* files for *AWS* or *VMware* environment.
+
+Create the Ceph cluster:
+
+[source,bash]
+----
+oc create -f cluster.yaml
+----
+
+Wait for all the pods in the *rook-ceph* namespace to be in the running state (~5mn). The last ones will be *rook-ceph-osd-0-xxx* to *rook-ceph-osd-2-xxx*.
+
+Install the Ceph toolbox (usefull later):
+
+[source,bash]
+----
+oc create -f https://github.com/rook/rook/raw/release-1.2/cluster/examples/kubernetes/ceph/toolbox.yaml
+----
+
+=== Object Store
+
+The Object Store is the Ceph component that will provide object storage. In the *utils* folder you will find a file *object.yaml*.
+
+_You can also use the one provided with rook-ceph, but in this demo I changed the name for *rook-obj*. That's the reference you will find in some address and commands, so you may have to adapt them if you chose a different name._
+
+[source,bash]
+----
+oc create -f object.yaml
+----
+
+
+=== Ceph dashboard configuration
+
+To be able to interact with the Object Store from the Ceph Dashboard, we have to create a special user with system rights. This user will be used by the Dashboard to interact with the gateway.
+
+Connect to the toolbox Pod we just created (CLI or using the Terminal view from the OCP UI), and create the user:
+
+[source,bash]
+----
+radosgw-admin user create --uid=dash-rgw-user --display-name=RGW-Dashboard-User --system
+----
+
+From the output, note the Access Key and the Secret Key that have been generated for this user. In OCP, also note the Service name for the Ceph RGW (in this example 'rook-ceph-rgw-rook-obj.rook-ceph'). Configure the Dashboard to use those information:
+
+[source,bash]
+----
+ceph dashboard set-rgw-api-access-key YOU_ACCESS_KEY
+
+ceph dashboard set-rgw-api-secret-key YOUR_SECRET_KEY
+
+ceph dashboard set-rgw-api-host rook-ceph-rgw-rook-obj.rook-ceph
+
+ceph dashboard set-rgw-api-port 80
+----
+
+Create a Route to the Ceph Dashboard Service, *rook-ceph-mgr-dashboard* (e.g. *dashboard*). If you secure it make sure certificates are trusted by the clients you will use.
+
+[source,bash]
+----
+oc expose svc/rook-ceph-mgr-dashboard --name ceph-dash
+----
+
+You can now access the Ceph Dashboard through this route. Of course you will have to log in. The user name is *admin*, the password has been configured as a Secret in the rook-ceph project, named *rook-ceph-dashboard-password*.
+
+Once logged in you will access the Ceph Dashboard:
+
+image::ceph-dashboard.png[Ceph Dashboard]
+
+=== User and Buckets provioning
+
+On the Ceph dashboard, from the menu *Object Gateway => Users*, create the user *demo-xray*
+
+Select the newly created user, click on the *Keys* tab, select the user, and click on the *Show* button. Reveal and take note of the Access and Secret Keys.
+
+image::user_keys.png[User keys]
+
+From the menu *Object Gateway => Buckets*, create the following buckets, with the user *demo-xray* as Owner:
+
+* *xray-data-in*
+* *xray-data-in-processed*
+* *xray-data-in-anonymized*
+
+Create a Route to the Ceph RGW Service, *rook-ceph-rgw-rook-obj* (e.g. *s3*). If you secure it make sure certificates are trusted by the clients you will use.
+
+[source,bash]
+----
+oc expose svc/rook-ceph-rgw-rook-obj --name s3
+----
+
+== KNative Operators Installation
+
+The following Operators must be installed from the OperatorHub, for all namespaces:
+
+* *OpenShift ServerLess*
+* *KNative Eventing*
+* *KNative Apache Kafka*
+
+This will also automatically deploy all the other components (Service Mesh, Kiali, Jaeger, ElasticSearch).
+
+To finish the installation of KNative Serving, you must create a KNativeServing Object. In the *utils* folder you will find the *serving.yaml* file.
+
+[source,bash]
+----
+oc create -f serving.yaml
+----
+
+You must also install the KafkaSource CRD:
+
+[source,bash]
+----
+oc apply -f https://storage.googleapis.com/knative-releases/eventing-contrib/latest/kafka-source.yaml
+----
+
+
+== Kafka Installation
+
+Create a new project named *kafka*.
+
+From the OperatorHub, install the *Strimzi* operator, which will simplify the Kafka installation. The operator must be installed in the *kafka* namespace.
+
+Using the operator, deploy a new Kafka cluster. For this demo you can use the default configuration proposed by the operator. You will then have a Kafka cluster with bootstrap address *my-cluster-kafka-bootstrap.kafka:9092*
+
+Using the operator, create a new topic named *storage*. You can set replication at 3, and partitioning also at 3.
+
+=== Optional: Kafdrop
+
+Kafdrop is a UI than allows you to mange your Kafka cluster. you can install it bu using the provided YAML file in the *utils* folder:
+
+[source,bash]
+----
+oc create -f kafdrop.yaml
+----
+
+From Kafdrop you can also create topics, look at messages,...
+
+It will deploy it and create a Route to access the UI.
+
+== Notifications configuration
+
+The easiest way is to use Postman. in the *utils* folder you will find a collection of all the requests you can use.
+
+First, set your credentials (Access key and Secret key from the *demo-xray* user). In Postman you have to edit the Collection parameters (authorization tab). If you don't want to do this globally you will have to add those keys to the Authorization tab of all the requests.
+
+* Create a Kafka topic: that’s a simple POST request to the gateway (using the external route address), passing the required parameters:
+
+[source]
+----
+POST http://your.ceph.rgw.url/?Action=CreateTopic&Name=storage&push-endpoint=kafka://my-cluster-kafka-bootstrap.kafka:9092&kafka-ack-level=broker
+----
+
+It will return the topic information in the form of arn:aws:sns:rook-obj::storage
+
+* Create the notification: that’s a PUT request to the gateway on the bucket where you want to have notifications enabled. In our example it is *xray-data-in*:
+
+[source]
+----
+PUT http://your.ceph.rgw.url/xray-data-in?notification
+----
+
+with the parameters passed as XML in the body of the request (including the topic you just created):
+
+[source,XML]
+----
+<NotificationConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+ <TopicConfiguration>
+ <Id>storage</Id>
+ <Topic>arn:aws:sns:rook-obj::storage</Topic>
+ </TopicConfiguration>
+</NotificationConfiguration>
+----
+
+== Pipeline Creation
+
+=== Project preparation
+
+Create the xray project:
+
+[source, bash]
+----
+oc new-project xray
+----
+
+You will need to prepare a *secret* that will be used by the application to access the storage. Modify the file *secret.yaml* with the Access key and Secret key for the demo-xray user. Then create the secret:
+
+[source, bash]
+----
+oc create -f secret.yaml
+----
+
+=== Deploy the Service (Serverless)
+
+Modify the file *service-xray.yaml* with the address of your RGW endpoint. If you have used the names from this demo it should be *http://rook-ceph-rgw-rook-obj.rook-ceph*
+
+Create the Service:
+
+[source, bash]
+----
+oc create -f service-xray.yaml
+----
+
+=== Deploy the KafkaSource Eventing
+
+This KNative component will consume messages from the Kafka *storage* topic and pass the event to the previously created service.
+
+Create the KafkaSource:
+
+[source, bash]
+----
+oc create -f kafkasource.yaml
+----
+
+== Demoing the pipeline
+
+In the *utils* folder you will find the notebook *xray-demo.ipynb*. It will allow you to upload images to the xray-data-in bucket, and see what happens in the other buckets. You can of course use any S3 client to connect and upload images.
+
+Sample images to run the demo are provided in the *utils/demo_img* folder.
+
+When using this in a demo, you can show the Pods getting created and terminated as you upload images.
+
+== Optional: second eventing service
+
+If you want you can deploy another service that will only display the event coming in. It can be used to demonstrate how different services can coexist and consume the same topic for different processing.
+
+Two files are provided, *service-event-display.yaml* and *kafkasource-event.yaml*.
+
+They can be deployed in the same *xray* project, or in another one (in this case you will have to modify the files to change the namespace).

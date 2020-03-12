@@ -1,0 +1,3 @@
+This folder includes all the material to reproduce the demo described here: link:https://medium.com/analytics-vidhya/automated-data-pipeline-using-ceph-notifications-and-kserving-5e1e9b996661[read the post on Medium]
+
+Read the full walkthrough: link:build-demo.adoc[]
