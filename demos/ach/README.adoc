@@ -1,3 +1,0 @@
-# ACH process
-
-This demo shows how to implement the ACH process leveraging Ceph notifications, Kafka and KNative.
