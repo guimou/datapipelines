@@ -19,11 +19,17 @@ spec:
       containers:
       - env:
         - name: AWS_ACCESS_KEY_ID
-          value: 0C9X34QIN7205RG42HR0
+          valueFrom:
+            secretKeyRef:
+              name: s3-secret
+              key: AWS_ACCESS_KEY_ID 
         - name: AWS_SECRET_ACCESS_KEY
-          value: WhOOqzq58MpoH5H2b5zDBhb70pQzp2myWpGKmzbC
+          valueFrom:
+            secretKeyRef:
+              name: s3-secret
+              key: AWS_SECRET_ACCESS_KEY 
         - name: service_point
-          value: http://s3-rook-ceph.apps.perf3.ocs.lab.eng.blr.redhat.com/
+          value: 'replace_me'
         image: quay.io/guimou/ach-transactions-generator:latest
         imagePullPolicy: Always
         name: gen
