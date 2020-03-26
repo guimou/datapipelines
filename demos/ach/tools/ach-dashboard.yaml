@@ -1,0 +1,814 @@
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDashboard
+metadata:
+  labels:
+    app: grafana
+  name: ach-dashboard
+  namespace: my-monitoring
+spec:
+  json: |
+    {
+      "annotations": {
+        "list": [
+          {
+            "builtIn": 1,
+            "datasource": "-- Grafana --",
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "iteration": 1585250212651,
+      "links": [],
+      "panels": [
+        {
+          "bgColor": null,
+          "bgURL": "https://github.com/guimou/datapipelines/raw/master/demos/ach/tools/img/ACH%20workflow%20-%20Simplified%20-%20Dashboard%20schematic.png",
+          "boxes": [
+            {
+              "angle": "0",
+              "color": "#1F60C4",
+              "colorHigh": "#f00",
+              "colorLow": "#0f0",
+              "colorMedium": "#fa1",
+              "decimal": 1,
+              "fontsize": "30",
+              "hasOrb": false,
+              "isBlinking": false,
+              "orbHideText": false,
+              "orbLocation": "Left",
+              "orbSize": "10",
+              "prefixSize": 10,
+              "serie": "transactions",
+              "suffixSize": 10,
+              "text": "N/A",
+              "thresholds": "20,60",
+              "usingThresholds": false,
+              "xpos": "65",
+              "ypos": "165"
+            },
+            {
+              "angle": 0,
+              "color": "#1F60C4",
+              "colorHigh": "#f00",
+              "colorLow": "#0f0",
+              "colorMedium": "#fa1",
+              "decimal": 1,
+              "fontsize": "30",
+              "hasOrb": false,
+              "isBlinking": false,
+              "orbHideText": false,
+              "orbLocation": "Left",
+              "orbSize": "10",
+              "prefixSize": 10,
+              "serie": "odfi_split",
+              "suffixSize": 10,
+              "text": "N/A",
+              "thresholds": "20,60",
+              "usingThresholds": false,
+              "xpos": "350",
+              "ypos": "100"
+            },
+            {
+              "angle": 0,
+              "color": "#1F60C4",
+              "colorHigh": "#f00",
+              "colorLow": "#0f0",
+              "colorMedium": "#fa1",
+              "decimal": 1,
+              "fontsize": "30",
+              "hasOrb": false,
+              "isBlinking": false,
+              "orbHideText": false,
+              "orbLocation": "Left",
+              "orbSize": "10",
+              "prefixSize": 10,
+              "serie": "rdfi_split",
+              "suffixSize": 10,
+              "text": "N/A",
+              "thresholds": "20,60",
+              "usingThresholds": false,
+              "xpos": "768",
+              "ypos": "100"
+            },
+            {
+              "angle": 0,
+              "color": "#1F60C4",
+              "colorHigh": "#f00",
+              "colorLow": "#0f0",
+              "colorMedium": "#fa1",
+              "decimal": 1,
+              "fontsize": "30",
+              "hasOrb": false,
+              "isBlinking": false,
+              "orbHideText": false,
+              "orbLocation": "Left",
+              "orbSize": "10",
+              "prefixSize": 10,
+              "serie": "rdfi_process",
+              "suffixSize": 10,
+              "text": "N/A",
+              "thresholds": "20,60",
+              "usingThresholds": false,
+              "xpos": "770",
+              "ypos": "325"
+            }
+          ],
+          "datasource": "MySQL",
+          "gridPos": {
+            "h": 12,
+            "w": 12,
+            "x": 0,
+            "y": 0
+          },
+          "id": 14,
+          "links": [],
+          "options": {},
+          "targets": [
+            {
+              "format": "time_series",
+              "group": [
+                {
+                  "params": [
+                    "1h",
+                    "none"
+                  ],
+                  "type": "time"
+                }
+              ],
+              "metricColumn": "none",
+              "rawQuery": true,
+              "rawSql": "SELECT\n  time,\n  sum(entry) AS \"transactions\"\nFROM merchant_upload",
+              "refId": "A",
+              "select": [
+                [
+                  {
+                    "params": [
+                      "entry"
+                    ],
+                    "type": "column"
+                  },
+                  {
+                    "params": [
+                      "sum"
+                    ],
+                    "type": "aggregate"
+                  },
+                  {
+                    "params": [
+                      "transactions"
+                    ],
+                    "type": "alias"
+                  }
+                ]
+              ],
+              "table": "merchant_upload",
+              "timeColumn": "time",
+              "timeColumnType": "timestamp",
+              "where": []
+            },
+            {
+              "format": "time_series",
+              "group": [],
+              "metricColumn": "none",
+              "rawQuery": true,
+              "rawSql": "SELECT\n  time,\n  sum(entry) AS \"odfi_split\"\nFROM odfi_split",
+              "refId": "B",
+              "select": [
+                [
+                  {
+                    "params": [
+                      "entry"
+                    ],
+                    "type": "column"
+                  }
+                ]
+              ],
+              "table": "merchant_upload",
+              "timeColumn": "time",
+              "timeColumnType": "timestamp",
+              "where": [
+                {
+                  "name": "$__timeFilter",
+                  "params": [],
+                  "type": "macro"
+                }
+              ]
+            },
+            {
+              "format": "time_series",
+              "group": [],
+              "metricColumn": "none",
+              "rawQuery": true,
+              "rawSql": "SELECT\n  time,\n  sum(entry) AS \"rdfi_split\"\nFROM rdfi_split",
+              "refId": "C",
+              "select": [
+                [
+                  {
+                    "params": [
+                      "entry"
+                    ],
+                    "type": "column"
+                  }
+                ]
+              ],
+              "table": "merchant_upload",
+              "timeColumn": "time",
+              "timeColumnType": "timestamp",
+              "where": [
+                {
+                  "name": "$__timeFilter",
+                  "params": [],
+                  "type": "macro"
+                }
+              ]
+            },
+            {
+              "format": "time_series",
+              "group": [],
+              "metricColumn": "none",
+              "rawQuery": true,
+              "rawSql": "SELECT\n  time,\n  sum(entry) AS \"rdfi_process\"\nFROM rdfi_process",
+              "refId": "D",
+              "select": [
+                [
+                  {
+                    "params": [
+                      "entry"
+                    ],
+                    "type": "column"
+                  }
+                ]
+              ],
+              "table": "merchant_upload",
+              "timeColumn": "time",
+              "timeColumnType": "timestamp",
+              "where": [
+                {
+                  "name": "$__timeFilter",
+                  "params": [],
+                  "type": "macro"
+                }
+              ]
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Realtime pipeline view",
+          "type": "larona-epict-panel"
+        },
+        {
+          "aliasColors": {},
+          "bars": true,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "MySQL",
+          "fill": 1,
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 12,
+            "y": 0
+          },
+          "id": 12,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": false,
+            "total": false,
+            "values": false
+          },
+          "lines": false,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {},
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "format": "time_series",
+              "group": [],
+              "metricColumn": "none",
+              "rawQuery": false,
+              "rawSql": "SELECT\n  time AS \"time\",\n  balance\nFROM bank_balance\nWHERE\n  $__timeFilter(time)\nORDER BY time",
+              "refId": "A",
+              "select": [
+                [
+                  {
+                    "params": [
+                      "balance"
+                    ],
+                    "type": "column"
+                  }
+                ]
+              ],
+              "table": "bank_balance",
+              "timeColumn": "time",
+              "timeColumnType": "timestamp",
+              "where": [
+                {
+                  "name": "$__timeFilter",
+                  "params": [],
+                  "type": "macro"
+                }
+              ]
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Transactions value",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": "Total amount",
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "columns": [
+            {
+              "text": "Current",
+              "value": "current"
+            }
+          ],
+          "datasource": "prometheus",
+          "fontSize": "100%",
+          "gridPos": {
+            "h": 12,
+            "w": 8,
+            "x": 12,
+            "y": 7
+          },
+          "id": 6,
+          "links": [],
+          "options": {},
+          "pageSize": null,
+          "scroll": true,
+          "showHeader": true,
+          "sort": {
+            "col": 1,
+            "desc": true
+          },
+          "styles": [
+            {
+              "alias": "Time",
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "pattern": "Time",
+              "type": "date"
+            },
+            {
+              "alias": "",
+              "colorMode": "row",
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "decimals": 0,
+              "pattern": "Metric",
+              "thresholds": [
+                "0",
+                "0",
+                ".9"
+              ],
+              "type": "string",
+              "unit": "none"
+            },
+            {
+              "alias": "",
+              "colorMode": "row",
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 0,
+              "link": false,
+              "pattern": "Value",
+              "thresholds": [
+                "0",
+                "1"
+              ],
+              "type": "number",
+              "unit": "none"
+            }
+          ],
+          "targets": [
+            {
+              "expr": "kube_deployment_status_replicas{namespace=~\"$namespace\"}",
+              "format": "time_series",
+              "instant": true,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{ deployment }}",
+              "refId": "A"
+            },
+            {
+              "expr": "kube_job_status_active{namespace=~\"$namespace\"}",
+              "format": "time_series",
+              "instant": true,
+              "intervalFactor": 1,
+              "legendFormat": "{{job_name}}",
+              "refId": "B"
+            }
+          ],
+          "title": "Deployments and Jobs",
+          "transform": "timeseries_to_rows",
+          "type": "table"
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$datasource",
+          "fill": 10,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 7,
+            "w": 4,
+            "x": 0,
+            "y": 12
+          },
+          "id": 10,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 0,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": true,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "sum(pod:container_cpu_usage:sum{namespace=\"$namespace\"}) by (pod)",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "{{pod}}",
+              "legendLink": null,
+              "refId": "A",
+              "step": 10
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "CPU Usage",
+          "tooltip": {
+            "shared": false,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$datasource",
+          "fill": 10,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 7,
+            "w": 4,
+            "x": 4,
+            "y": 12
+          },
+          "id": 4,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 0,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": true,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "sum(container_memory_working_set_bytes{namespace=\"$namespace\"}) by (pod)",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "{{pod}}",
+              "legendLink": null,
+              "refId": "A",
+              "step": 10
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "RAM Usage",
+          "tooltip": {
+            "shared": false,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "cacheTimeout": null,
+          "colorBackground": false,
+          "colorValue": false,
+          "colors": [
+            "#299c46",
+            "rgba(237, 129, 40, 0.89)",
+            "#d44a3a"
+          ],
+          "datasource": "prometheus",
+          "format": "none",
+          "gauge": {
+            "maxValue": 20,
+            "minValue": 0,
+            "show": true,
+            "thresholdLabels": true,
+            "thresholdMarkers": true
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 4,
+            "x": 8,
+            "y": 12
+          },
+          "id": 2,
+          "interval": null,
+          "links": [],
+          "mappingType": 1,
+          "mappingTypes": [
+            {
+              "name": "value to text",
+              "value": 1
+            },
+            {
+              "name": "range to text",
+              "value": 2
+            }
+          ],
+          "maxDataPoints": 100,
+          "nullPointMode": "connected",
+          "nullText": null,
+          "options": {},
+          "postfix": "",
+          "postfixFontSize": "50%",
+          "prefix": "",
+          "prefixFontSize": "50%",
+          "rangeMaps": [
+            {
+              "from": "null",
+              "text": "N/A",
+              "to": "null"
+            }
+          ],
+          "sparkline": {
+            "fillColor": "rgba(31, 118, 189, 0.18)",
+            "full": false,
+            "lineColor": "rgb(31, 120, 193)",
+            "show": true
+          },
+          "tableColumn": "",
+          "targets": [
+            {
+              "expr": "sum(kube_pod_container_status_running{namespace=~\"$namespace\"})",
+              "format": "time_series",
+              "instant": false,
+              "intervalFactor": 1,
+              "legendFormat": "{{ deployment }}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": "10,15,20",
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Pods running",
+          "type": "singlestat",
+          "valueFontSize": "80%",
+          "valueMaps": [
+            {
+              "op": "=",
+              "text": "N/A",
+              "value": "null"
+            }
+          ],
+          "valueName": "current"
+        }
+      ],
+      "refresh": "5s",
+      "schemaVersion": 18,
+      "style": "dark",
+      "tags": [],
+      "templating": {
+        "list": [
+          {
+            "current": {
+              "text": "prometheus",
+              "value": "prometheus"
+            },
+            "hide": 2,
+            "includeAll": false,
+            "label": "Datasource",
+            "multi": false,
+            "name": "datasource",
+            "options": [],
+            "query": "prometheus",
+            "refresh": 1,
+            "regex": "",
+            "skipUrlSync": false,
+            "type": "datasource"
+          },
+          {
+            "current": {
+              "text": "ach",
+              "value": "ach"
+            },
+            "hide": 2,
+            "label": "Namespace",
+            "name": "namespace",
+            "options": [
+              {
+                "selected": true,
+                "text": "ach",
+                "value": "ach"
+              }
+            ],
+            "query": "ach",
+            "skipUrlSync": false,
+            "type": "constant"
+          }
+        ]
+      },
+      "time": {
+        "from": "now-5m",
+        "to": "now"
+      },
+      "timepicker": {
+        "refresh_intervals": [
+          "5s",
+          "10s",
+          "30s",
+          "1m",
+          "5m",
+          "15m",
+          "30m",
+          "1h",
+          "2h",
+          "1d"
+        ],
+        "time_options": [
+          "5m",
+          "15m",
+          "1h",
+          "6h",
+          "12h",
+          "24h",
+          "2d",
+          "7d",
+          "30d"
+        ]
+      },
+      "timezone": "",
+      "title": "ACH Demo",
+      "version": 0
+    }
+  name: ach-dashboard.json
+  plugins:
+  - name: larona-epict-panel
+    version: 1.2.2
