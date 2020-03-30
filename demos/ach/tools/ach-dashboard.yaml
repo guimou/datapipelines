@@ -24,7 +24,7 @@ spec:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
-      "iteration": 1585250212651,
+      "iteration": 1585594391945,
       "links": [],
       "panels": [
         {
@@ -392,7 +392,7 @@ spec:
           "scroll": true,
           "showHeader": true,
           "sort": {
-            "col": 1,
+            "col": 0,
             "desc": true
           },
           "styles": [
@@ -403,7 +403,7 @@ spec:
               "type": "date"
             },
             {
-              "alias": "",
+              "alias": "Deployment or job",
               "colorMode": "row",
               "colors": [
                 "rgba(245, 54, 54, 0.9)",
@@ -412,16 +412,15 @@ spec:
               ],
               "decimals": 0,
               "pattern": "Metric",
+              "preserveFormat": false,
               "thresholds": [
-                "0",
-                "0",
-                ".9"
+                ""
               ],
               "type": "string",
               "unit": "none"
             },
             {
-              "alias": "",
+              "alias": "Replicas",
               "colorMode": "row",
               "colors": [
                 "rgba(245, 54, 54, 0.9)",
@@ -434,7 +433,7 @@ spec:
               "pattern": "Value",
               "thresholds": [
                 "0",
-                "1"
+                "0.9"
               ],
               "type": "number",
               "unit": "none"
@@ -504,12 +503,30 @@ spec:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(pod:container_cpu_usage:sum{namespace=\"$namespace\"}) by (pod)",
+              "expr": "sum(pod:container_cpu_usage:sum{pod=~'kafkasource-odfi-split.*',namespace=\"$namespace\"})",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{pod}}",
+              "legendFormat": "kafkasource-odfi-split",
               "legendLink": null,
               "refId": "A",
+              "step": 10
+            },
+            {
+              "expr": "sum(pod:container_cpu_usage:sum{pod=~'kafkasource-rdfi-split.*',namespace=\"$namespace\"})",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "kafkasource-rdfi-split",
+              "legendLink": null,
+              "refId": "B",
+              "step": 10
+            },
+            {
+              "expr": "sum(pod:container_cpu_usage:sum{pod=~'kafkasource-rdfi-process.*',namespace=\"$namespace\"})",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "kafkasource-rdfi-process",
+              "legendLink": null,
+              "refId": "C",
               "step": 10
             }
           ],
@@ -595,12 +612,30 @@ spec:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(container_memory_working_set_bytes{namespace=\"$namespace\"}) by (pod)",
+              "expr": "sum(container_memory_working_set_bytes{pod=~'kafkasource-odfi-split.*',namespace=\"$namespace\"})",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{pod}}",
+              "legendFormat": "kafkasource-odfi-split",
               "legendLink": null,
               "refId": "A",
+              "step": 10
+            },
+            {
+              "expr": "sum(container_memory_working_set_bytes{pod=~'kafkasource-rdfi-split.*',namespace=\"$namespace\"})",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "kafkasource-rdfi-split",
+              "legendLink": null,
+              "refId": "B",
+              "step": 10
+            },
+            {
+              "expr": "sum(container_memory_working_set_bytes{pod=~'kafkasource-rdfi-process.*',namespace=\"$namespace\"})",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "kafkasource-rdfi-process",
+              "legendLink": null,
+              "refId": "C",
               "step": 10
             }
           ],
@@ -806,7 +841,8 @@ spec:
       },
       "timezone": "",
       "title": "ACH Demo",
-      "version": 0
+      "uid": "hakbeh9Wz",
+      "version": 1
     }
   name: ach-dashboard.json
   plugins:
