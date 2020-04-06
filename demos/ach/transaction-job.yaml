@@ -29,7 +29,7 @@ spec:
               name: s3-secret
               key: AWS_SECRET_ACCESS_KEY 
         - name: service_point
-          value: 'replace_me'
+          value: 'http://rook-ceph-rgw-rook-obj.rook-ceph'
         image: quay.io/guimou/ach-transactions-generator:latest
         imagePullPolicy: Always
         name: gen
