@@ -1,0 +1,29 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: risk-assesment-build
+spec:
+  resources:
+  - name: xrayedge-repo
+    type: git
+  - name: risk-assesment-image
+    type: image
+  tasks:
+  - name: risk-assesment-build
+    taskRef:
+      name: s2i-python-3
+      kind: ClusterTask
+    resources:
+      inputs:
+        - name: source
+          resource: xrayedge-repo
+      outputs:
+        - name: image
+          resource: risk-assesment-image
+    params:
+      - name: TLSVERIFY
+        value: "false"
+      - name: PATH_CONTEXT
+        value: "demos/xrayedge/containers/risk-assesment"
+      - name: MINOR_VERSION
+        value: "6"

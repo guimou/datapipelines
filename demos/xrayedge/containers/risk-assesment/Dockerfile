@@ -1,5 +1,7 @@
 FROM python:3.6
 
+RUN pip install --upgrade pip
+
 WORKDIR /usr/src/app
 
 COPY requirements.txt risk-assesment.py pneumonia_model.h5 FreeMono.ttf ./
