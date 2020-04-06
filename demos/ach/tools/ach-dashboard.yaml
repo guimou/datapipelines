@@ -24,7 +24,7 @@ spec:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
-      "iteration": 1585594391945,
+      "iteration": 1585761951245,
       "links": [],
       "panels": [
         {
@@ -260,7 +260,7 @@ spec:
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Realtime pipeline view",
+          "title": "Pipeline progress",
           "type": "larona-epict-panel"
         },
         {
@@ -333,7 +333,7 @@ spec:
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Transactions value",
+          "title": "Transactions combined amount",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -505,7 +505,8 @@ spec:
             {
               "expr": "sum(pod:container_cpu_usage:sum{pod=~'kafkasource-odfi-split.*',namespace=\"$namespace\"})",
               "format": "time_series",
-              "intervalFactor": 2,
+              "instant": false,
+              "intervalFactor": 1,
               "legendFormat": "kafkasource-odfi-split",
               "legendLink": null,
               "refId": "A",
@@ -514,7 +515,8 @@ spec:
             {
               "expr": "sum(pod:container_cpu_usage:sum{pod=~'kafkasource-rdfi-split.*',namespace=\"$namespace\"})",
               "format": "time_series",
-              "intervalFactor": 2,
+              "instant": false,
+              "intervalFactor": 1,
               "legendFormat": "kafkasource-rdfi-split",
               "legendLink": null,
               "refId": "B",
@@ -523,10 +525,49 @@ spec:
             {
               "expr": "sum(pod:container_cpu_usage:sum{pod=~'kafkasource-rdfi-process.*',namespace=\"$namespace\"})",
               "format": "time_series",
-              "intervalFactor": 2,
+              "instant": false,
+              "intervalFactor": 1,
               "legendFormat": "kafkasource-rdfi-process",
               "legendLink": null,
               "refId": "C",
+              "step": 10
+            },
+            {
+              "expr": "sum(pod:container_cpu_usage:sum{pod=~'create-.*',namespace=\"$namespace\"})",
+              "format": "time_series",
+              "instant": false,
+              "intervalFactor": 1,
+              "legendFormat": "create-transaction",
+              "legendLink": null,
+              "refId": "D",
+              "step": 10
+            },
+            {
+              "expr": "sum(pod:container_cpu_usage:sum{pod=~'odfi-split.*',namespace=\"$namespace\"})",
+              "format": "time_series",
+              "instant": false,
+              "intervalFactor": 1,
+              "legendFormat": "odfi-split",
+              "legendLink": null,
+              "refId": "E",
+              "step": 10
+            },
+            {
+              "expr": "sum(pod:container_cpu_usage:sum{pod=~'rdfi-split.*',namespace=\"$namespace\"})",
+              "format": "time_series",
+              "intervalFactor": 1,
+              "legendFormat": "rdfi-split",
+              "legendLink": null,
+              "refId": "F",
+              "step": 10
+            },
+            {
+              "expr": "sum(pod:container_cpu_usage:sum{pod=~'rdfi-process.*',namespace=\"$namespace\"})",
+              "format": "time_series",
+              "intervalFactor": 1,
+              "legendFormat": "rdfi-process",
+              "legendLink": null,
+              "refId": "G",
               "step": 10
             }
           ],
@@ -614,7 +655,7 @@ spec:
             {
               "expr": "sum(container_memory_working_set_bytes{pod=~'kafkasource-odfi-split.*',namespace=\"$namespace\"})",
               "format": "time_series",
-              "intervalFactor": 2,
+              "intervalFactor": 1,
               "legendFormat": "kafkasource-odfi-split",
               "legendLink": null,
               "refId": "A",
@@ -623,7 +664,7 @@ spec:
             {
               "expr": "sum(container_memory_working_set_bytes{pod=~'kafkasource-rdfi-split.*',namespace=\"$namespace\"})",
               "format": "time_series",
-              "intervalFactor": 2,
+              "intervalFactor": 1,
               "legendFormat": "kafkasource-rdfi-split",
               "legendLink": null,
               "refId": "B",
@@ -632,10 +673,46 @@ spec:
             {
               "expr": "sum(container_memory_working_set_bytes{pod=~'kafkasource-rdfi-process.*',namespace=\"$namespace\"})",
               "format": "time_series",
-              "intervalFactor": 2,
+              "intervalFactor": 1,
               "legendFormat": "kafkasource-rdfi-process",
               "legendLink": null,
               "refId": "C",
+              "step": 10
+            },
+            {
+              "expr": "sum(container_memory_working_set_bytes{pod=~'create-transaction.*',namespace=\"$namespace\"})",
+              "format": "time_series",
+              "intervalFactor": 1,
+              "legendFormat": "create-transaction",
+              "legendLink": null,
+              "refId": "D",
+              "step": 10
+            },
+            {
+              "expr": "sum(container_memory_working_set_bytes{pod=~'odfi-split.*',namespace=\"$namespace\"})",
+              "format": "time_series",
+              "intervalFactor": 1,
+              "legendFormat": "odfi-split",
+              "legendLink": null,
+              "refId": "E",
+              "step": 10
+            },
+            {
+              "expr": "sum(container_memory_working_set_bytes{pod=~'rdfi-split.*',namespace=\"$namespace\"})",
+              "format": "time_series",
+              "intervalFactor": 1,
+              "legendFormat": "rdfi-split",
+              "legendLink": null,
+              "refId": "F",
+              "step": 10
+            },
+            {
+              "expr": "sum(container_memory_working_set_bytes{pod=~'rdfi-process.*',namespace=\"$namespace\"})",
+              "format": "time_series",
+              "intervalFactor": 1,
+              "legendFormat": "rdfi-process",
+              "legendLink": null,
+              "refId": "G",
               "step": 10
             }
           ],
@@ -744,7 +821,7 @@ spec:
             {
               "expr": "sum(kube_pod_container_status_running{namespace=~\"$namespace\"})",
               "format": "time_series",
-              "instant": false,
+              "instant": true,
               "intervalFactor": 1,
               "legendFormat": "{{ deployment }}",
               "refId": "A"
