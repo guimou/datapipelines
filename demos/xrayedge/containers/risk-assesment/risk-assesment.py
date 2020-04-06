@@ -111,6 +111,7 @@ def load_image(bucket_name, img_path):
 def prediction(new_image):
     logging.info('prediction')
     try:
+        load_model_result = s3client.download_file("xrayedge-model",'pneumonia_model.h5', "./pneumonia_model.h5")
         model = tf.keras.models.load_model('./pneumonia_model.h5')
         logging.info('model loaded')
         pred = model.predict(new_image)
