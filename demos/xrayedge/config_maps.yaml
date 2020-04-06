@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: service-point
+  namespace: xrayedge
+data:
+  url: 'replace_me'
