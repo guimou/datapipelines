@@ -10,7 +10,7 @@ spec:
           autoscaling.knative.dev/target: '2'
     spec:
       containers:
-      - image: quay.io/guimou/ach-odfi-split:latest
+      - image: image-registry.openshift-image-registry.svc:5000/xrayedge/risk-assesment:latest
         env:
         - name: AWS_ACCESS_KEY_ID
           valueFrom:
@@ -46,8 +46,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: db-secret
-              key:  database-db
-           
+              key:  database-db    
         resources:
           limits:
             cpu: '2'

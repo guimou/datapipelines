@@ -4,26 +4,26 @@ metadata:
   name: risk-assesment-build
 spec:
   resources:
-  - name: xrayedge-repo
+  - name: git-repo
     type: git
-  - name: risk-assesment-image
+  - name: push-image
     type: image
   tasks:
-  - name: risk-assesment-build
+  - name: buildah
     taskRef:
-      name: s2i-python-3
-      kind: ClusterTask
+      name: build-image
+      kind: Task
     resources:
       inputs:
-        - name: source
-          resource: xrayedge-repo
+      - name: source
+        resource: git-repo
       outputs:
-        - name: image
-          resource: risk-assesment-image
+      - name: image
+        resource: push-image
     params:
-      - name: TLSVERIFY
-        value: "false"
-      - name: PATH_CONTEXT
-        value: "demos/xrayedge/containers/risk-assesment"
-      - name: MINOR_VERSION
-        value: "6"
+    - name: DOCKERFILE
+      value: './demos/xrayedge/containers/risk-assesment/Dockerfile'
+    - name: CONTEXT
+      value: './demos/xrayedge/containers/risk-assesment'
+    - name: TLSVERIFY
+      value: 'false'
