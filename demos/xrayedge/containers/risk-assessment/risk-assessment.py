@@ -192,7 +192,7 @@ def run_event(event):
         img_key = extracted_data['bucket_object']
         logging.info(bucket_eventName + ' ' + bucket_name + ' ' + img_key)
 
-        if bucket_eventName == 's3:ObjectCreated:*':
+        if 's3:ObjectCreated' in bucket_eventName:
             # Load image and make prediction
             new_image = load_image(bucket_name,img_key)
             result = prediction(new_image)
