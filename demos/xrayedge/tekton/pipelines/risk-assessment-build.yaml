@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Pipeline
 metadata:
-  name: risk-assesment-build
+  name: risk-assessment-build
 spec:
   resources:
   - name: git-repo
@@ -22,8 +22,8 @@ spec:
         resource: push-image
     params:
     - name: DOCKERFILE
-      value: './demos/xrayedge/containers/risk-assesment/Dockerfile'
+      value: './demos/xrayedge/containers/risk-assessment/Dockerfile'
     - name: CONTEXT
-      value: './demos/xrayedge/containers/risk-assesment'
+      value: './demos/xrayedge/containers/risk-assessment'
     - name: TLSVERIFY
       value: 'false'

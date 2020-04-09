@@ -1,7 +1,7 @@
 apiVersion: serving.knative.dev/v1 
 kind: Service
 metadata:
-  name: risk-assesment
+  name: risk-assessment
   namespace: xrayedge
 spec:
   template:
@@ -10,7 +10,7 @@ spec:
           autoscaling.knative.dev/target: '2'
     spec:
       containers:
-      - image: image-registry.openshift-image-registry.svc:5000/xrayedge/risk-assesment:latest
+      - image: image-registry.openshift-image-registry.svc:5000/xrayedge/risk-assessment:latest
         env:
         - name: AWS_ACCESS_KEY_ID
           valueFrom:

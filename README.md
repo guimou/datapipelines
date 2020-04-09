@@ -4,4 +4,4 @@ Various demos of data pipelines leveraging different tools: Ceph bucket notifica
 
 [ACH data pipeline](./demos/ach) : payments processing, the cloud native way!
 
-[XRay automated processing](./demos/xray) : pneumonia-risk assesment from x-ray images on a fully automated pipeline. 
+[XRay automated processing](./demos/xray) : pneumonia-risk assessment from x-ray images on a fully automated pipeline. 

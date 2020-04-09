@@ -1,12 +1,12 @@
 apiVersion: sources.knative.dev/v1alpha1
 kind: KafkaSource
 metadata:
-  name: risk-assesment
+  name: risk-assessment
 spec:
-  consumerGroup: risk-assesment
+  consumerGroup: risk-assessment
   bootstrapServers: my-cluster-kafka-bootstrap.kafka:9092
   topics: xrayedge-in
   sink:
     apiVersion: serving.knative.dev/v1alpha1
     kind: Service
-    name: risk-assesment
+    name: risk-assessment
