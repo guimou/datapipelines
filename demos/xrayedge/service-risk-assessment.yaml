@@ -8,6 +8,7 @@ spec:
     metadata:
         annotations:
           autoscaling.knative.dev/target: '2'
+          revisionTimestamp: ''
     spec:
       containers:
       - image: image-registry.openshift-image-registry.svc:5000/xrayedge/risk-assessment:latest

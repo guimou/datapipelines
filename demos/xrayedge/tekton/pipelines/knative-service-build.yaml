@@ -1,0 +1,34 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: knative-service-build
+spec:
+  resources:
+  - name: git-repo
+    type: git
+  - name: push-image
+    type: image
+  params:
+    - name: context
+      type: string
+      description: Path to context
+      default: './'
+  tasks:
+  - name: buildah
+    taskRef:
+      name: build-image
+      kind: Task
+    resources:
+      inputs:
+      - name: source
+        resource: git-repo
+      outputs:
+      - name: image
+        resource: push-image
+    params:
+    - name: DOCKERFILE
+      value: '$(params.context)/Dockerfile'
+    - name: CONTEXT
+      value: '$(params.context)'
+    - name: TLSVERIFY
+      value: 'false'
