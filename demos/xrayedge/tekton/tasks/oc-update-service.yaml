@@ -1,0 +1,28 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: oc-update-service
+spec:
+  inputs:
+    params:
+      - name: service-name
+        description: The name of the KNative service we want to update
+        type: string
+  results:
+    - name: current-timestamp
+      description: The current date time in YYYY-MM-DD_hh:mm:ss format
+  steps:
+    - name: get-timestamp
+      image: registry.access.redhat.com/ubi8-minimal
+      script: |
+        #!/usr/bin/env bash
+        date +F_%T | tee /workspace/current-timestamp
+    - name: patch-service
+      args:
+        - patch
+        - service.serving.knative.dev/$(params.service-name)
+        - --type=json
+        - -p'[{"op":"replace","path":"/spec/template/metadata/annotations/revisionTimestamp","value":"$(results.current-timestamp)" }]'
+      command:
+        - /usr/bin/oc
+      image: 'quay.io/openshift/origin-cli:latest'
