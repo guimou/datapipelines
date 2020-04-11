@@ -1,0 +1,11 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineRun
+metadata:
+  name: risk-assessment-refresh
+spec:
+  pipelineRef:
+    name: knative-service-refresh
+  params:
+    - name: service-name
+      value: risk-assessment
+  serviceAccountName: pipeline
