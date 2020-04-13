@@ -4,8 +4,10 @@ metadata:
   name: risk-assessment-refresh
 spec:
   pipelineRef:
-    name: knative-service-refresh
+    name: knative-service-risk-assessment-refresh
   params:
     - name: service-name
       value: risk-assessment
+    - name: model-version
+      value: v1
   serviceAccountName: pipeline

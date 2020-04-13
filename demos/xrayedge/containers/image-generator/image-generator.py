@@ -33,13 +33,13 @@ def copy_file(source, image_key, destination, image_name):
     }
     s3client.copy(copy_source, destination, image_name)
 
-def update_images_uploaded(image_name):
+def update_images_uploaded(image_name,model_name):
     try:
-        cnx = mysql.connector.connect(user='xrayedgeuser', password='xrayedgepassword',
-                                      host='achdb.ach-db',
-                                      database='achdb')
+        cnx = mysql.connector.connect(user=db_user, password=db_password,
+                                      host=db_host,
+                                      database=db_db)
         cursor = cnx.cursor()
-        query = 'INSERT INTO merchant_upload(time,name,entry) SELECT CURRENT_TIMESTAMP(),' + image_name + ', 1;'
+        query = 'INSERT INTO images_uploaded(time,name) SELECT CURRENT_TIMESTAMP(),' + image_name + ';'
         cursor.execute(query)
         cnx.commit()
         cursor.close()

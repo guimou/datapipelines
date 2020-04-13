@@ -13,6 +13,8 @@ spec:
       containers:
       - image: image-registry.openshift-image-registry.svc:5000/xrayedge/risk-assessment:latest
         env:
+        - name: model_version
+          value: 'v1'
         - name: AWS_ACCESS_KEY_ID
           valueFrom:
             secretKeyRef:
@@ -47,7 +49,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: db-secret
-              key:  database-db    
+              key:  database-db
         resources:
           limits:
             cpu: '2'

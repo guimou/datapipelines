@@ -26,6 +26,8 @@ db_password = os.environ['database-password']
 db_host = os.environ['database-host']
 db_db = os.environ['database-db']
 
+model_version = os.environ['model_version']
+
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 s3client = boto3.client('s3','us-east-1', endpoint_url=service_point,
@@ -166,13 +168,13 @@ def get_safe_ext(key):
     else:
         logging.error('Extension is invalid')
 
-def update_images_processed():
+def update_images_processed(image_name,model_version):
     try:
         cnx = mysql.connector.connect(user=db_user, password=db_password,
                                       host=db_host,
                                       database=db_db)
         cursor = cnx.cursor()
-        query = 'INSERT INTO images_processed(time,entry) SELECT CURRENT_TIMESTAMP(), 1;'
+        query = 'INSERT INTO images_processed(time,name,model) SELECT CURRENT_TIMESTAMP(), ' + image_name + ',' + model_version + ';'
         cursor.execute(query)
         cnx.commit()
         cursor.close()
@@ -189,6 +191,7 @@ def run_event(event):
         bucket_eventName = extracted_data['bucket_eventName']
         bucket_name = extracted_data['bucket_name']
         img_key = extracted_data['bucket_object']
+        img_name = img_key.split('/')[-1]
         logging.info(bucket_eventName + ' ' + bucket_name + ' ' + img_key)
 
         if 's3:ObjectCreated' in bucket_eventName:
@@ -212,11 +215,10 @@ def run_event(event):
             sent_data = s3client.put_object(Bucket=bucket_name+'-processed', Key=computed_image_key, Body=buffer)
             if sent_data['ResponseMetadata']['HTTPStatusCode'] != 200:
                 raise logging.error('Failed to upload image {} to bucket {}'.format(computed_image_key, bucket_name + '-processed'))
-            update_images_processed()
+            update_images_processed(computed_image_key,model_version)
             logging.info('Image processed')
 
             if result['pred'] < 0.80:
-                img_name = img_key.split('/')[-1]
                 anonymized_data = anonymize(img,img_name)
                 split_key = img_key.rsplit('/', 1)
                 if len(split_key) == 1:
