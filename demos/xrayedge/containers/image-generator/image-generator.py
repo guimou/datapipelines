@@ -26,12 +26,12 @@ s3client = boto3.client('s3', 'us-east-1', endpoint_url=service_point,
                         aws_secret_access_key=secret_key,
                         use_ssl=True if 'https' in service_point else False)
 
-def copy_file(source, destination, key):
+def copy_file(source, image_key, destination, image_name):
     copy_source = {
         'Bucket': source,
-        'Key': key
+        'Key': image_key
     }
-    s3client.copy(copy_source, destination, key)
+    s3client.copy(copy_source, destination, image_name)
 
 def update_images_uploaded(image_name):
     try:
@@ -69,6 +69,6 @@ while seconds_wait != 0:
     else:
         image_key = pneumonia_images[random.randint(0,len(pneumonia_images)-1)]
     image_name = image_key.split('/')[-1]
-    copy_file(bucket_source,bucket_destination,image_name)
+    copy_file(bucket_source,image_key,bucket_destination,image_name)
     update_images_uploaded(image_name)
     sleep(seconds_wait)
