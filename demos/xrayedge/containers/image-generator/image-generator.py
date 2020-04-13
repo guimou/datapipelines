@@ -69,6 +69,7 @@ while seconds_wait != 0:
     else:
         image_key = pneumonia_images[random.randint(0,len(pneumonia_images)-1)]
     image_name = image_key.split('/')[-1]
-    copy_file(bucket_source,image_key,bucket_destination,image_name)
-    update_images_uploaded(image_name)
-    sleep(int(seconds_wait))
+    # copy_file(bucket_source,image_key,bucket_destination,image_name)
+    # update_images_uploaded(image_name)
+    print("loop")
+    sleep(int(seconds_wait)+10)
