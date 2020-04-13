@@ -25,6 +25,8 @@ spec:
         - name: image-generator
           image: image-registry.openshift-image-registry.svc:5000/xrayedge/image-generator
           env:
+            - name: seconds_wait
+              value: '0'
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
@@ -59,9 +61,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: db-secret
-                  key:  database-db    
-            - name: seconds_wait
-              value: '0'
+                  key:  database-db
           resources:
             limits:
                 cpu: '2'

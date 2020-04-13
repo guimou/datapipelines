@@ -184,6 +184,22 @@ def update_images_processed(image_name,model_version):
         logging.error(f"Unexpected error: {e}")
         raise
 
+def update_images_anonymized(image_name):
+    try:
+        cnx = mysql.connector.connect(user=db_user, password=db_password,
+                                      host=db_host,
+                                      database=db_db)
+        cursor = cnx.cursor()
+        query = 'INSERT INTO images_anonymized(time,name) SELECT CURRENT_TIMESTAMP(), "' + image_name + '";'
+        cursor.execute(query)
+        cnx.commit()
+        cursor.close()
+        cnx.close()
+
+    except Exception as e:
+        logging.error(f"Unexpected error: {e}")
+        raise
+
 def run_event(event):
     logging.info(event.Data())
     try:
@@ -232,6 +248,8 @@ def run_event(event):
                 sent_data = s3client.put_object(Bucket='xrayedge-research-in', Key=anonymized_image_key, Body=buffer)
                 if sent_data['ResponseMetadata']['HTTPStatusCode'] != 200:
                     raise logging.error('Failed to upload image {} to bucket {}'.format(anonymized_image_key, 'xrayedge-research-in'))
+                update_images_anonymized(anonymized_image_key)
+                logging.info('Image anonymized')
 
     except Exception as e:
         logging.error(f"Unexpected error: {e}")
