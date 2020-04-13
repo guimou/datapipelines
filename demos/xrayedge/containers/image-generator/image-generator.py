@@ -33,7 +33,7 @@ def copy_file(source, image_key, destination, image_name):
     }
     s3client.copy(copy_source, destination, image_name)
 
-def update_images_uploaded(image_name,model_name):
+def update_images_uploaded(image_name):
     try:
         cnx = mysql.connector.connect(user=db_user, password=db_password,
                                       host=db_host,
