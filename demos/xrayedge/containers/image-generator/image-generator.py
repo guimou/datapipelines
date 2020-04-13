@@ -17,7 +17,7 @@ db_password = os.environ['database-password']
 db_host = os.environ['database-host']
 db_db = os.environ['database-db']
 
-seconds_wait = int(os.environ['seconds_wait'])
+seconds_wait = int(os.environ['seconds_wait'])/1000
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
