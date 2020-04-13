@@ -71,4 +71,4 @@ while seconds_wait != 0:
     image_name = image_key.split('/')[-1]
     copy_file(bucket_source,image_key,bucket_destination,image_name)
     update_images_uploaded(image_name)
-    sleep(seconds_wait)
+    sleep(int(seconds_wait))
