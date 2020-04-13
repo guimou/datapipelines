@@ -17,7 +17,7 @@ db_password = os.environ['database-password']
 db_host = os.environ['database-host']
 db_db = os.environ['database-db']
 
-seconds_wait = os.environ['seconds_wait']
+seconds_wait = int(os.environ['seconds_wait'])
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
@@ -72,4 +72,4 @@ while seconds_wait != 0:
     # copy_file(bucket_source,image_key,bucket_destination,image_name)
     # update_images_uploaded(image_name)
     print("loop")
-    sleep(int(seconds_wait)+10)
+    sleep(seconds_wait + 5)
