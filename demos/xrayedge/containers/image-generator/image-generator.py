@@ -11,10 +11,12 @@ import mysql.connector
 access_key = os.environ['AWS_ACCESS_KEY_ID']
 secret_key = os.environ['AWS_SECRET_ACCESS_KEY']
 service_point = os.environ['service_point']
-database_user = os.environ['MYSQL_USER']
-database_password = os.environ['MYSQL_PASSWORD']
-database_host = os.environ['MYSQL_HOST']
-database_db = os.environ['MYSQL_HOST']
+
+db_user = os.environ['database-user']
+db_password = os.environ['database-password']
+db_host = os.environ['database-host']
+db_db = os.environ['database-db']
+
 seconds_wait = os.environ['seconds_wait']
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
