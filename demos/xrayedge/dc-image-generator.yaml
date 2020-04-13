@@ -5,6 +5,14 @@ metadata:
 spec:
   triggers:
     - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+        - image-generator
+        from:
+          kind: ImageStreamTag
+          namespace: xrayedge
+          name: image-generator:latest
     - type: ConfigChange
   replicas: 1
   revisionHistoryLimit: 3

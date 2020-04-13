@@ -68,7 +68,7 @@ while seconds_wait != 0:
         image_key = normal_images[random.randint(0,len(normal_images)-1)]
     else:
         image_key = pneumonia_images[random.randint(0,len(pneumonia_images)-1)]
-    image_name = image_key.rsplit('/', 0)
+    image_name = image_key.split('/')[-1]
     copy_file(bucket_source,bucket_destination,image_name)
     update_images_uploaded(image_name)
     sleep(seconds_wait)
