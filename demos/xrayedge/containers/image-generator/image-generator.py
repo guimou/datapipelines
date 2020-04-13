@@ -73,3 +73,6 @@ while seconds_wait != 0:
     copy_file(bucket_source,image_key,bucket_destination,image_name)
     update_images_uploaded(image_name)
     sleep(seconds_wait + 5)
+
+# Dirty hack to keep container running even when no images are to be copied
+os.system("tail -f /dev/null")
