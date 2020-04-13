@@ -6,4 +6,4 @@ COPY . ./
 
 RUN pip install -r requirements.txt
 
-CMD ["python", "-u", "transaction_generator.py"]
+CMD ["python", "-u", "image-generator.py"]
