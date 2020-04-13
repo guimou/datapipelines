@@ -63,13 +63,13 @@ for image in s3client.list_objects(Bucket=bucket_source,Prefix='demo_base/NORMAL
 
 # Main loop
 while seconds_wait != 0:
+    print("copy image")
     rand_type = random.randint(1,10)
     if rand_type <= 8: # 80% of time, choose a normal image
         image_key = normal_images[random.randint(0,len(normal_images)-1)]
     else:
         image_key = pneumonia_images[random.randint(0,len(pneumonia_images)-1)]
     image_name = image_key.split('/')[-1]
-    # copy_file(bucket_source,image_key,bucket_destination,image_name)
-    # update_images_uploaded(image_name)
-    print("loop")
+    copy_file(bucket_source,image_key,bucket_destination,image_name)
+    update_images_uploaded(image_name)
     sleep(seconds_wait + 5)
