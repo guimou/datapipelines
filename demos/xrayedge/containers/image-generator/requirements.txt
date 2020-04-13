@@ -1,0 +1,2 @@
+boto3==1.9.*
+mysql-connector-python==8.0.*

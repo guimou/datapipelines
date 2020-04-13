@@ -1,6 +1,10 @@
-CREATE TABLE images_uploaded(time TIMESTAMP, entry INT(5));
-CREATE TABLE images_processed(time TIMESTAMP, entry INT(5));
-CREATE TABLE images_anonymized(time TIMESTAMP, entry INT(5));
+mysql -u root
+
+use xrayedgedb;
+
+CREATE TABLE images_uploaded(time TIMESTAMP, name VARCHAR(255), entry INT(5));
+CREATE TABLE images_processed(time TIMESTAMP, name VARCHAR(255), entry INT(5));
+CREATE TABLE images_anonymized(time TIMESTAMP, name VARCHAR(255), entry INT(5));
 
 SELECT * FROM images_uploaded;
 SELECT * FROM images_processed;
@@ -10,6 +14,6 @@ SELECT * FROM images_anonymized;
 DELETE FROM images_uploaded;
 DELETE FROM images_processed;
 DELETE FROM images_anonymized;
-INSERT INTO images_uploaded(time,entry) SELECT CURRENT_TIMESTAMP(), 0;
-INSERT INTO images_processed(time,entry) SELECT CURRENT_TIMESTAMP(), 0;
-INSERT INTO images_anonymized(time,entry) SELECT CURRENT_TIMESTAMP(), 0;
+INSERT INTO images_uploaded(time,name,entry) SELECT CURRENT_TIMESTAMP(), 'none', 0;
+INSERT INTO images_processed(time,name,entry) SELECT CURRENT_TIMESTAMP(), 'none', 0;
+INSERT INTO images_anonymized(time,name,entry) SELECT CURRENT_TIMESTAMP(), 'none', 0;
