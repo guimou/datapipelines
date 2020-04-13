@@ -39,7 +39,7 @@ def update_images_uploaded(image_name):
                                       host=db_host,
                                       database=db_db)
         cursor = cnx.cursor()
-        query = 'INSERT INTO images_uploaded(time,name) SELECT CURRENT_TIMESTAMP(),' + image_name + ';'
+        query = 'INSERT INTO images_uploaded(time,name) SELECT CURRENT_TIMESTAMP(),"' + image_name + '";'
         cursor.execute(query)
         cnx.commit()
         cursor.close()

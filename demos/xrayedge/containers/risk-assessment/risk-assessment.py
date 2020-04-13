@@ -174,7 +174,7 @@ def update_images_processed(image_name,model_version):
                                       host=db_host,
                                       database=db_db)
         cursor = cnx.cursor()
-        query = 'INSERT INTO images_processed(time,name,model) SELECT CURRENT_TIMESTAMP(), ' + image_name + ',' + model_version + ';'
+        query = 'INSERT INTO images_processed(time,name,model) SELECT CURRENT_TIMESTAMP(), "' + image_name + '","' + model_version + '";'
         cursor.execute(query)
         cnx.commit()
         cursor.close()
