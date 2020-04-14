@@ -234,7 +234,7 @@ def run_event(event):
             update_images_processed(computed_image_key,model_version)
             logging.info('Image processed')
 
-            if result['pred'] < 0.80:
+            if (result['pred'] < 0.80 and  result['pred'] > 0.60):
                 anonymized_data = anonymize(img,img_name)
                 split_key = img_key.rsplit('/', 1)
                 if len(split_key) == 1:

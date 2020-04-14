@@ -126,7 +126,7 @@ spec:
           "withCredentials": false
         }
       ],
-      "refresh": "",
+      "refresh": "5s",
       "schemaVersion": 18,
       "style": "dark",
       "tags": [],
@@ -162,10 +162,10 @@ spec:
           "30d"
         ]
       },
-      "timezone": "",
+      "timezone": "utc",
       "title": "Last Images",
       "uid": "lAAwqejZz",
-      "version": 5
+      "version": 6
     }
   name: xrayedge-images-dashboard.json
   plugins:

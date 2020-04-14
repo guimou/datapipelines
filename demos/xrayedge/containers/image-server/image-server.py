@@ -23,7 +23,7 @@ def get_last_image(bucket_name):
                                       host=db_host,
                                       database=db_db)
         cursor = cnx.cursor()
-        query = 'SELECT name FROM ' + bucket_table[bucket_name] + ' ORDER BY TIME LIMIT 1;'
+        query = 'SELECT name FROM ' + bucket_table[bucket_name] + ' ORDER BY time DESC LIMIT 1;'
         cursor.execute(query)
         result = cursor.fetchone()
         cursor.close()
