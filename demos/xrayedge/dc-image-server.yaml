@@ -19,7 +19,7 @@ spec:
   template:
     metadata:
       labels:
-        name: image-generator
+        name: image-server
     spec:
       containers:
         - name: image-server

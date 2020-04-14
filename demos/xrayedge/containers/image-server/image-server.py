@@ -22,7 +22,7 @@ def get_last_image(bucket_name):
         cursor = cnx.cursor()
         query = 'SELECT name FROM ' + bucket_table[bucket_name] + ' ORDER BY TIME LIMIT 1;'
         cursor.execute(query)
-        result = cursor.fetchall()
+        result = cursor.fetchone()
         cursor.close()
         cnx.close()
 
@@ -30,7 +30,7 @@ def get_last_image(bucket_name):
         logging.error(f"Unexpected error: {e}")
         raise
 
-    return result
+    return result[0]
 
 
 IFRAME_TEMPLATE = Template("""

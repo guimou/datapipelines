@@ -8,3 +8,5 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 5000
+  selector:
+    name: image-server
