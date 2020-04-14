@@ -5,6 +5,7 @@ metadata:
   namespace: xrayedge
 data:
   url: 'replace_me'
+  url-external: 'replace_me'
 ---
 apiVersion: v1
 kind: ConfigMap

@@ -1,10 +1,12 @@
 import logging
-import sys
 import os
-from flask import Flask, redirect
+import sys
 from string import Template
 
+from flask import Flask, redirect
+
 import mysql.connector
+from flask_cors import CORS
 
 db_user = os.environ['database-user']
 db_password = os.environ['database-password']
@@ -37,6 +39,8 @@ def get_last_image(bucket_name):
 LOCATION_TEMPLATE = Template("${service_point}/${bucket_name}/${image_name}")
 
 app = Flask(__name__)
+CORS(app)
+
 @app.route('/')
 def homepage():
     return "Hello world"
@@ -52,6 +56,4 @@ def last_image(bucket_name):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
-
-
 
