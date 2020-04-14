@@ -3,7 +3,7 @@ import os
 import sys
 from string import Template
 
-from flask import Flask, redirect
+from flask import Flask
 
 import mysql.connector
 from flask_cors import CORS
@@ -36,7 +36,8 @@ def get_last_image(bucket_name):
     return result[0]
 
 
-LOCATION_TEMPLATE = Template("${service_point}/${bucket_name}/${image_name}")
+LOCATION_TEMPLATE = Template("""
+    <img src="${service_point}/${bucket_name}/${image_name}"></img>""")
 
 app = Flask(__name__)
 CORS(app)
@@ -48,9 +49,9 @@ def homepage():
 @app.route('/last_image/<bucket_name>')
 def last_image(bucket_name):
     image_name = get_last_image(bucket_name)   
-    location = LOCATION_TEMPLATE.substitute(service_point=service_point, bucket_name=bucket_name, image_name=image_name)
+    html = LOCATION_TEMPLATE.substitute(service_point=service_point, bucket_name=bucket_name, image_name=image_name)
 
-    return redirect(location, code=302)
+    return html
 
 
 

@@ -24,7 +24,7 @@ spec:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
-      "iteration": 1586835041447,
+      "iteration": 1586842468550,
       "links": [],
       "panels": [
         {
@@ -37,24 +37,25 @@ spec:
           "header_js": "{}",
           "id": 24,
           "links": [],
-          "method": "iframe",
+          "method": "GET",
           "mode": "html",
           "options": {},
-          "params_js": "{}",
+          "params_js": "{\n __now:Date.now(),\n}",
           "request": "http",
-          "responseType": "text",
+          "responseType": "arraybuffer",
           "showErrors": true,
-          "showTime": false,
+          "showTime": true,
           "showTimeFormat": "LTS",
           "showTimePrefix": null,
           "showTimeValue": "request",
-          "skipSameURL": false,
+          "skipSameURL": true,
+          "targets": [],
           "templateResponse": true,
           "timeFrom": null,
           "timeShift": null,
           "title": "Panel Title",
           "type": "ryantxu-ajax-panel",
-          "url": "http://image-server-xrayedge.apps.perf3.ocs.lab.eng.blr.redhat.com/last_image/xrayedge-in",
+          "url": "https://image-server-xrayedge.apps.perf3.ocs.lab.eng.blr.redhat.com/last_image/xrayedge-in",
           "withCredentials": false
         },
         {
@@ -136,7 +137,7 @@ spec:
         {
           "content": "<img src=\"http://s3-rook-ceph.apps.perf3.ocs.lab.eng.blr.redhat.com/xrayedge-in/demo_Marie%20Carrol_5845_1961-08-12_2015-11-13.jpeg\"></img>\n\n\n\n",
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 4,
             "x": 20,
             "y": 0
