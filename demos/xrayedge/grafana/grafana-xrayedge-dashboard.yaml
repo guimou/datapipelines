@@ -24,7 +24,7 @@ spec:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
-      "iteration": 1586879033417,
+      "iteration": 1586897004908,
       "links": [],
       "panels": [
         {
@@ -298,7 +298,15 @@ spec:
           },
           "header_js": "{}",
           "id": 24,
-          "links": [],
+          "links": [
+            {
+              "dashboard": "Last Images",
+              "params": "",
+              "title": "Last Images",
+              "type": "dashboard",
+              "url": "/d/lAAwqejZz/last-images"
+            }
+          ],
           "method": "iframe",
           "mode": "html",
           "options": {},
@@ -394,6 +402,44 @@ spec:
           "title": "Last 10 processed images",
           "transform": "table",
           "type": "table"
+        },
+        {
+          "gridPos": {
+            "h": 7,
+            "w": 4,
+            "x": 20,
+            "y": 7
+          },
+          "header_js": "{}",
+          "id": 25,
+          "links": [
+            {
+              "dashboard": "Last Images",
+              "params": "",
+              "title": "Last Images",
+              "type": "dashboard",
+              "url": "/d/lAAwqejZz/last-images"
+            }
+          ],
+          "method": "iframe",
+          "mode": "html",
+          "options": {},
+          "params_js": "{\n __now:Date.now(),\n}",
+          "request": "http",
+          "responseType": "text",
+          "showErrors": true,
+          "showTime": true,
+          "showTimeFormat": "LTS",
+          "showTimePrefix": null,
+          "showTimeValue": "request",
+          "skipSameURL": false,
+          "templateResponse": true,
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Last processed image",
+          "type": "ryantxu-ajax-panel",
+          "url": "https://image-server-xrayedge.apps.perf3.ocs.lab.eng.blr.redhat.com/last_image/xrayedge-in-processed",
+          "withCredentials": false
         },
         {
           "aliasColors": {},
@@ -740,6 +786,44 @@ spec:
           "type": "table"
         },
         {
+          "gridPos": {
+            "h": 7,
+            "w": 4,
+            "x": 20,
+            "y": 14
+          },
+          "header_js": "{}",
+          "id": 26,
+          "links": [
+            {
+              "dashboard": "Last Images",
+              "params": "",
+              "title": "Last Images",
+              "type": "dashboard",
+              "url": "/d/lAAwqejZz/last-images"
+            }
+          ],
+          "method": "iframe",
+          "mode": "html",
+          "options": {},
+          "params_js": "{\n __now:Date.now(),\n}",
+          "request": "http",
+          "responseType": "text",
+          "showErrors": true,
+          "showTime": true,
+          "showTimeFormat": "LTS",
+          "showTimePrefix": null,
+          "showTimeValue": "request",
+          "skipSameURL": false,
+          "templateResponse": true,
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Last anonymized image",
+          "type": "ryantxu-ajax-panel",
+          "url": "https://image-server-xrayedge.apps.perf3.ocs.lab.eng.blr.redhat.com/last_image/xrayedge-research-in",
+          "withCredentials": false
+        },
+        {
           "columns": [
             {
               "text": "Current",
@@ -1028,7 +1112,7 @@ spec:
       "timezone": "utc",
       "title": "XRay Edge Demo",
       "uid": "hakbeh9Wz",
-      "version": 1
+      "version": 2
     }
   name: xrayedge-dashboard.json
   plugins:

@@ -36,8 +36,11 @@ def get_last_image(bucket_name):
     return result[0]
 
 
-LOCATION_TEMPLATE = Template("""
-    <img src="${service_point}/${bucket_name}/${image_name}"></img>""")
+LOCATION_TEMPLATE_SMALL = Template("""
+    <img src="${service_point}/${bucket_name}/${image_name}" style="width:260px;"></img>""")
+
+LOCATION_TEMPLATE_BIG = Template("""
+    <img src="${service_point}/${bucket_name}/${image_name}" style="width:600px;"></img>""")
 
 app = Flask(__name__)
 CORS(app)
@@ -46,11 +49,16 @@ CORS(app)
 def homepage():
     return "Hello world"
 
-@app.route('/last_image/<bucket_name>')
-def last_image(bucket_name):
+@app.route('/last_image_small/<bucket_name>')
+def last_image_small(bucket_name):
     image_name = get_last_image(bucket_name)   
-    html = LOCATION_TEMPLATE.substitute(service_point=service_point, bucket_name=bucket_name, image_name=image_name)
+    html = LOCATION_TEMPLATE_SMALL.substitute(service_point=service_point, bucket_name=bucket_name, image_name=image_name)
+    return html
 
+@app.route('/last_image_big/<bucket_name>')
+def last_image_big(bucket_name):
+    image_name = get_last_image(bucket_name)   
+    html = LOCATION_TEMPLATE_BIG.substitute(service_point=service_point, bucket_name=bucket_name, image_name=image_name)
     return html
 
 
