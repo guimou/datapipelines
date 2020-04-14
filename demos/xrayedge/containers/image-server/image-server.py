@@ -44,7 +44,7 @@ def homepage():
 @app.route('/last_image/<bucket_name>')
 def last_image(bucket_name):
     image_name = get_last_image(bucket_name)   
-    location = LOCATION_TEMPLATE.substitute(bucket_name=bucket_name,image_name=image_name)
+    location = LOCATION_TEMPLATE.substitute(service_point=service_point, bucket_name=bucket_name, image_name=image_name)
 
     return redirect(location, code=302)
 
