@@ -33,8 +33,8 @@ def get_last_image(bucket_name):
     return result[0]
 
 
-IFRAME_TEMPLATE = Template("""
-    <iframe src="http://s3-rook-ceph.apps.perf3.ocs.lab.eng.blr.redhat.com/${bucket_name}/${image_name}" frameborder="0" ></iframe>""")
+HTML_TEMPLATE = Template("""
+    <img src="http://s3-rook-ceph.apps.perf3.ocs.lab.eng.blr.redhat.com/${bucket_name}/${image_name}"></img>""")
 
 app = Flask(__name__)
 @app.route('/')
@@ -44,9 +44,9 @@ def homepage():
 @app.route('/last_image/<bucket_name>')
 def last_image(bucket_name):
     image_name = get_last_image(bucket_name)   
-    iframe = IFRAME_TEMPLATE.substitute(bucket_name=bucket_name,image_name=image_name)
+    html = HTML_TEMPLATE.substitute(bucket_name=bucket_name,image_name=image_name)
 
-    return iframe
+    return html
 
 
 if __name__ == '__main__':

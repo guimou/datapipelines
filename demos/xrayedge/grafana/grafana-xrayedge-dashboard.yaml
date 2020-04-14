@@ -24,9 +24,208 @@ spec:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
-      "iteration": 1586813110799,
+      "iteration": 1586835041447,
       "links": [],
       "panels": [
+        {
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 0
+          },
+          "header_js": "{}",
+          "id": 24,
+          "links": [],
+          "method": "iframe",
+          "mode": "html",
+          "options": {},
+          "params_js": "{}",
+          "request": "http",
+          "responseType": "text",
+          "showErrors": true,
+          "showTime": false,
+          "showTimeFormat": "LTS",
+          "showTimePrefix": null,
+          "showTimeValue": "request",
+          "skipSameURL": false,
+          "templateResponse": true,
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Panel Title",
+          "type": "ryantxu-ajax-panel",
+          "url": "http://image-server-xrayedge.apps.perf3.ocs.lab.eng.blr.redhat.com/last_image/xrayedge-in",
+          "withCredentials": false
+        },
+        {
+          "columns": [],
+          "datasource": "MySQL",
+          "fontSize": "100%",
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 12,
+            "y": 0
+          },
+          "id": 18,
+          "links": [],
+          "options": {},
+          "pageSize": null,
+          "scroll": true,
+          "showHeader": true,
+          "sort": {
+            "col": 0,
+            "desc": true
+          },
+          "styles": [
+            {
+              "alias": "Time",
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "pattern": "time",
+              "type": "date"
+            },
+            {
+              "alias": "",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "decimals": 2,
+              "pattern": "/.*/",
+              "thresholds": [],
+              "type": "number",
+              "unit": "short"
+            }
+          ],
+          "targets": [
+            {
+              "format": "table",
+              "group": [],
+              "metricColumn": "none",
+              "rawQuery": true,
+              "rawSql": "SELECT * FROM images_uploaded ORDER by time LIMIT 10",
+              "refId": "A",
+              "select": [
+                [
+                  {
+                    "params": [
+                      "value"
+                    ],
+                    "type": "column"
+                  }
+                ]
+              ],
+              "timeColumn": "time",
+              "where": [
+                {
+                  "name": "$__timeFilter",
+                  "params": [],
+                  "type": "macro"
+                }
+              ]
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Last 10 uploaded images",
+          "transform": "table",
+          "type": "table"
+        },
+        {
+          "content": "<img src=\"http://s3-rook-ceph.apps.perf3.ocs.lab.eng.blr.redhat.com/xrayedge-in/demo_Marie%20Carrol_5845_1961-08-12_2015-11-13.jpeg\"></img>\n\n\n\n",
+          "gridPos": {
+            "h": 8,
+            "w": 4,
+            "x": 20,
+            "y": 0
+          },
+          "id": 22,
+          "links": [],
+          "mode": "html",
+          "options": {},
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Last uploaded image",
+          "type": "text"
+        },
+        {
+          "columns": [],
+          "datasource": "MySQL",
+          "fontSize": "100%",
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 12,
+            "y": 7
+          },
+          "id": 19,
+          "links": [],
+          "options": {},
+          "pageSize": null,
+          "scroll": true,
+          "showHeader": true,
+          "sort": {
+            "col": 0,
+            "desc": true
+          },
+          "styles": [
+            {
+              "alias": "Time",
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "pattern": "time",
+              "type": "date"
+            },
+            {
+              "alias": "",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "decimals": 2,
+              "pattern": "/.*/",
+              "thresholds": [],
+              "type": "number",
+              "unit": "short"
+            }
+          ],
+          "targets": [
+            {
+              "format": "table",
+              "group": [],
+              "metricColumn": "none",
+              "rawQuery": true,
+              "rawSql": "SELECT time,name FROM images_processed ORDER by time LIMIT 10",
+              "refId": "A",
+              "select": [
+                [
+                  {
+                    "params": [
+                      "value"
+                    ],
+                    "type": "column"
+                  }
+                ]
+              ],
+              "timeColumn": "time",
+              "where": [
+                {
+                  "name": "$__timeFilter",
+                  "params": [],
+                  "type": "macro"
+                }
+              ]
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Last 10 processed images",
+          "transform": "table",
+          "type": "table"
+        },
         {
           "bgColor": null,
           "bgURL": "https://github.com/guimou/datapipelines/raw/master/demos/xrayedge/grafana/xrayedge-dashboard-panel.png",
@@ -103,7 +302,7 @@ spec:
             "h": 12,
             "w": 12,
             "x": 0,
-            "y": 0
+            "y": 8
           },
           "id": 14,
           "links": [],
@@ -221,9 +420,9 @@ spec:
             "h": 7,
             "w": 8,
             "x": 12,
-            "y": 0
+            "y": 14
           },
-          "id": 18,
+          "id": 20,
           "links": [],
           "options": {},
           "pageSize": null,
@@ -261,7 +460,7 @@ spec:
               "group": [],
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT * FROM images_uploaded ORDER by time LIMIT 10",
+              "rawSql": "SELECT * FROM images_anonymized ORDER by time LIMIT 10",
               "refId": "A",
               "select": [
                 [
@@ -285,100 +484,7 @@ spec:
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Last 10 uploaded images",
-          "transform": "table",
-          "type": "table"
-        },
-        {
-          "content": "<img src=\"http://s3-rook-ceph.apps.perf3.ocs.lab.eng.blr.redhat.com/xrayedge-in/demo_Marie%20Carrol_5845_1961-08-12_2015-11-13.jpeg\"></img>\n\n\n\n",
-          "gridPos": {
-            "h": 7,
-            "w": 4,
-            "x": 20,
-            "y": 0
-          },
-          "id": 22,
-          "links": [],
-          "mode": "html",
-          "options": {},
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Last uploaded image",
-          "type": "text"
-        },
-        {
-          "columns": [],
-          "datasource": "MySQL",
-          "fontSize": "100%",
-          "gridPos": {
-            "h": 7,
-            "w": 8,
-            "x": 12,
-            "y": 7
-          },
-          "id": 19,
-          "links": [],
-          "options": {},
-          "pageSize": null,
-          "scroll": true,
-          "showHeader": true,
-          "sort": {
-            "col": 0,
-            "desc": true
-          },
-          "styles": [
-            {
-              "alias": "Time",
-              "dateFormat": "YYYY-MM-DD HH:mm:ss",
-              "pattern": "time",
-              "type": "date"
-            },
-            {
-              "alias": "",
-              "colorMode": null,
-              "colors": [
-                "rgba(245, 54, 54, 0.9)",
-                "rgba(237, 129, 40, 0.89)",
-                "rgba(50, 172, 45, 0.97)"
-              ],
-              "decimals": 2,
-              "pattern": "/.*/",
-              "thresholds": [],
-              "type": "number",
-              "unit": "short"
-            }
-          ],
-          "targets": [
-            {
-              "format": "table",
-              "group": [],
-              "metricColumn": "none",
-              "rawQuery": true,
-              "rawSql": "SELECT time,name FROM images_processed ORDER by time LIMIT 10",
-              "refId": "A",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "value"
-                    ],
-                    "type": "column"
-                  }
-                ]
-              ],
-              "timeColumn": "time",
-              "where": [
-                {
-                  "name": "$__timeFilter",
-                  "params": [],
-                  "type": "macro"
-                }
-              ]
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Last 10 processed images",
+          "title": "Last 10 anonymized images",
           "transform": "table",
           "type": "table"
         },
@@ -394,7 +500,7 @@ spec:
             "h": 5,
             "w": 4,
             "x": 0,
-            "y": 12
+            "y": 20
           },
           "id": 10,
           "legend": {
@@ -486,7 +592,7 @@ spec:
             "h": 5,
             "w": 4,
             "x": 4,
-            "y": 12
+            "y": 20
           },
           "id": 4,
           "legend": {
@@ -587,7 +693,7 @@ spec:
             "h": 5,
             "w": 4,
             "x": 8,
-            "y": 12
+            "y": 20
           },
           "id": 2,
           "interval": null,
@@ -651,82 +757,6 @@ spec:
           "valueName": "current"
         },
         {
-          "columns": [],
-          "datasource": "MySQL",
-          "fontSize": "100%",
-          "gridPos": {
-            "h": 7,
-            "w": 8,
-            "x": 12,
-            "y": 14
-          },
-          "id": 20,
-          "links": [],
-          "options": {},
-          "pageSize": null,
-          "scroll": true,
-          "showHeader": true,
-          "sort": {
-            "col": 0,
-            "desc": true
-          },
-          "styles": [
-            {
-              "alias": "Time",
-              "dateFormat": "YYYY-MM-DD HH:mm:ss",
-              "pattern": "time",
-              "type": "date"
-            },
-            {
-              "alias": "",
-              "colorMode": null,
-              "colors": [
-                "rgba(245, 54, 54, 0.9)",
-                "rgba(237, 129, 40, 0.89)",
-                "rgba(50, 172, 45, 0.97)"
-              ],
-              "decimals": 2,
-              "pattern": "/.*/",
-              "thresholds": [],
-              "type": "number",
-              "unit": "short"
-            }
-          ],
-          "targets": [
-            {
-              "format": "table",
-              "group": [],
-              "metricColumn": "none",
-              "rawQuery": true,
-              "rawSql": "SELECT * FROM images_anonymized ORDER by time LIMIT 10",
-              "refId": "A",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "value"
-                    ],
-                    "type": "column"
-                  }
-                ]
-              ],
-              "timeColumn": "time",
-              "where": [
-                {
-                  "name": "$__timeFilter",
-                  "params": [],
-                  "type": "macro"
-                }
-              ]
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Last 10 anonymized images",
-          "transform": "table",
-          "type": "table"
-        },
-        {
           "columns": [
             {
               "text": "Current",
@@ -739,7 +769,7 @@ spec:
             "h": 4,
             "w": 6,
             "x": 0,
-            "y": 17
+            "y": 25
           },
           "id": 6,
           "links": [],
@@ -821,7 +851,7 @@ spec:
             "h": 4,
             "w": 6,
             "x": 6,
-            "y": 17
+            "y": 25
           },
           "id": 16,
           "legend": {
@@ -1015,7 +1045,7 @@ spec:
       "timezone": "utc",
       "title": "XRay Edge Demo",
       "uid": "hakbeh9Wz",
-      "version": 2
+      "version": 1
     }
   name: xrayedge-dashboard.json
   plugins:
