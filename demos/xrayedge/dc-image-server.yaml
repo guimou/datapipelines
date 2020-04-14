@@ -45,6 +45,8 @@ spec:
                 secretKeyRef:
                   name: db-secret
                   key:  database-db
+          ports:
+            - containerPort: 5000
           resources:
             limits:
                 cpu: '2'
