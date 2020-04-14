@@ -37,7 +37,7 @@ spec:
       "panels": [
         {
           "gridPos": {
-            "h": 12,
+            "h": 15,
             "w": 8,
             "x": 0,
             "y": 0
@@ -45,7 +45,7 @@ spec:
           "header_js": "{}",
           "id": 2,
           "links": [],
-          "method": "GET",
+          "method": "iframe",
           "mode": "html",
           "options": {},
           "params_js": "{\n __now:Date.now(),\n}",
@@ -62,12 +62,12 @@ spec:
           "timeShift": null,
           "title": "Last uploaded image",
           "type": "ryantxu-ajax-panel",
-          "url": "https://image-server-xrayedge.apps.perf3.ocs.lab.eng.blr.redhat.com/last_image/xrayedge-in",
+          "url": "https://image-server-xrayedge.apps.perf3.ocs.lab.eng.blr.redhat.com/last_image_big/xrayedge-in",
           "withCredentials": false
         },
         {
           "gridPos": {
-            "h": 12,
+            "h": 15,
             "w": 8,
             "x": 8,
             "y": 0
@@ -75,7 +75,7 @@ spec:
           "header_js": "{}",
           "id": 3,
           "links": [],
-          "method": "GET",
+          "method": "iframe",
           "mode": "html",
           "options": {},
           "params_js": "{\n __now:Date.now(),\n}",
@@ -92,12 +92,12 @@ spec:
           "timeShift": null,
           "title": "Last processed image",
           "type": "ryantxu-ajax-panel",
-          "url": "https://image-server-xrayedge.apps.perf3.ocs.lab.eng.blr.redhat.com/last_image/xrayedge-in-processed",
+          "url": "https://image-server-xrayedge.apps.perf3.ocs.lab.eng.blr.redhat.com/last_image_big/xrayedge-in-processed",
           "withCredentials": false
         },
         {
           "gridPos": {
-            "h": 12,
+            "h": 15,
             "w": 8,
             "x": 16,
             "y": 0
@@ -105,7 +105,7 @@ spec:
           "header_js": "{}",
           "id": 4,
           "links": [],
-          "method": "GET",
+          "method": "iframe",
           "mode": "html",
           "options": {},
           "params_js": "{\n __now:Date.now(),\n}",
@@ -122,11 +122,11 @@ spec:
           "timeShift": null,
           "title": "Last anonymized image",
           "type": "ryantxu-ajax-panel",
-          "url": "https://image-server-xrayedge.apps.perf3.ocs.lab.eng.blr.redhat.com/last_image/xrayedge-research-in",
+          "url": "https://image-server-xrayedge.apps.perf3.ocs.lab.eng.blr.redhat.com/last_image_big/xrayedge-research-in",
           "withCredentials": false
         }
       ],
-      "refresh": "5s",
+      "refresh": "",
       "schemaVersion": 18,
       "style": "dark",
       "tags": [],
@@ -165,7 +165,7 @@ spec:
       "timezone": "",
       "title": "Last Images",
       "uid": "lAAwqejZz",
-      "version": 3
+      "version": 5
     }
   name: xrayedge-images-dashboard.json
   plugins:

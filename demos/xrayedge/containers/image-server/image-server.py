@@ -40,7 +40,7 @@ LOCATION_TEMPLATE_SMALL = Template("""
     <img src="${service_point}/${bucket_name}/${image_name}" style="width:260px;"></img>""")
 
 LOCATION_TEMPLATE_BIG = Template("""
-    <img src="${service_point}/${bucket_name}/${image_name}" style="width:600px;"></img>""")
+    <img src="${service_point}/${bucket_name}/${image_name}" style="width:575px;"></img>""")
 
 app = Flask(__name__)
 CORS(app)
