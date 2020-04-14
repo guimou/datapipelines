@@ -1,0 +1,18 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineRun
+metadata:
+  name: image-server-build
+spec:
+  pipelineRef:
+    name: image-build
+  resources:
+    - name: git-repo
+      resourceRef:
+        name: xrayedge-repo
+    - name: push-image
+      resourceRef:
+        name: image-server-image
+  params:
+    - name: context
+      value: './demos/xrayedge/containers/image-server'
+  serviceAccountName: pipeline

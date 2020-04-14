@@ -14,3 +14,11 @@ metadata:
 spec:
   lookupPolicy:
     local: false
+---
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: image-server
+spec:
+  lookupPolicy:
+    local: false

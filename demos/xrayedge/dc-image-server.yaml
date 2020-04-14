@@ -1,0 +1,60 @@
+kind: DeploymentConfig
+apiVersion: apps.openshift.io/v1
+metadata:
+  name: image-server
+spec:
+  triggers:
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+        - image-server
+        from:
+          kind: ImageStreamTag
+          namespace: xrayedge
+          name: image-server:latest
+    - type: ConfigChange
+  replicas: 1
+  revisionHistoryLimit: 3
+  template:
+    metadata:
+      labels:
+        name: image-generator
+    spec:
+      containers:
+        - name: image-server
+          image: image-registry.openshift-image-registry.svc:5000/xrayedge/image-server
+          env:
+            - name: database-user
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key:  database-user
+            - name: database-password
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key:  database-password
+            - name: database-host
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key:  database-host
+            - name: database-db
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key:  database-db
+          resources:
+            limits:
+                cpu: '2'
+                memory: 1G
+            requests:
+              cpu: 400m
+              memory: 100M
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
