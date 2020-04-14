@@ -1,7 +1,7 @@
 import logging
 import sys
 import os
-from flask import Flask
+from flask import Flask, redirect
 from string import Template
 
 import mysql.connector
@@ -10,6 +10,7 @@ db_user = os.environ['database-user']
 db_password = os.environ['database-password']
 db_host = os.environ['database-host']
 db_db = os.environ['database-db']
+service_point = service_point = os.environ['service_point']
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
@@ -33,8 +34,7 @@ def get_last_image(bucket_name):
     return result[0]
 
 
-HTML_TEMPLATE = Template("""
-    <img src="http://s3-rook-ceph.apps.perf3.ocs.lab.eng.blr.redhat.com/${bucket_name}/${image_name}"></img>""")
+LOCATION_TEMPLATE = Template("${service_point}/${bucket_name}/${image_name}")
 
 app = Flask(__name__)
 @app.route('/')
@@ -44,9 +44,10 @@ def homepage():
 @app.route('/last_image/<bucket_name>')
 def last_image(bucket_name):
     image_name = get_last_image(bucket_name)   
-    html = HTML_TEMPLATE.substitute(bucket_name=bucket_name,image_name=image_name)
+    location = LOCATION_TEMPLATE.substitute(bucket_name=bucket_name,image_name=image_name)
 
-    return html
+    return redirect(location, code=302)
+
 
 
 if __name__ == '__main__':

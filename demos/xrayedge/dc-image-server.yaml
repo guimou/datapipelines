@@ -45,6 +45,11 @@ spec:
                 secretKeyRef:
                   name: db-secret
                   key:  database-db
+            - name: service_point
+              valueFrom:
+                configMapKeyRef:
+                  name: service-point
+                  key: url
           ports:
             - containerPort: 5000
           resources:
