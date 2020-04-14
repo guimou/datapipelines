@@ -24,12 +24,12 @@ spec:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
-      "iteration": 1585761951245,
+      "iteration": 1586813110799,
       "links": [],
       "panels": [
         {
           "bgColor": null,
-          "bgURL": "https://github.com/guimou/datapipelines/raw/master/demos/xrayedge/grafana/xrayedge-dashboard-panel",
+          "bgURL": "https://github.com/guimou/datapipelines/raw/master/demos/xrayedge/grafana/xrayedge-dashboard-panel.png",
           "boxes": [
             {
               "angle": "0",
@@ -45,13 +45,13 @@ spec:
               "orbLocation": "Left",
               "orbSize": "10",
               "prefixSize": 10,
-              "serie": "transactions",
+              "serie": "images_uploaded",
               "suffixSize": 10,
               "text": "N/A",
               "thresholds": "20,60",
               "usingThresholds": false,
               "xpos": "65",
-              "ypos": "165"
+              "ypos": "75"
             },
             {
               "angle": 0,
@@ -67,13 +67,13 @@ spec:
               "orbLocation": "Left",
               "orbSize": "10",
               "prefixSize": 10,
-              "serie": "odfi_split",
+              "serie": "images_processed",
               "suffixSize": 10,
               "text": "N/A",
               "thresholds": "20,60",
               "usingThresholds": false,
-              "xpos": "350",
-              "ypos": "100"
+              "xpos": "255",
+              "ypos": "75"
             },
             {
               "angle": 0,
@@ -89,35 +89,13 @@ spec:
               "orbLocation": "Left",
               "orbSize": "10",
               "prefixSize": 10,
-              "serie": "rdfi_split",
+              "serie": "images_anonymized",
               "suffixSize": 10,
               "text": "N/A",
               "thresholds": "20,60",
               "usingThresholds": false,
-              "xpos": "768",
-              "ypos": "100"
-            },
-            {
-              "angle": 0,
-              "color": "#1F60C4",
-              "colorHigh": "#f00",
-              "colorLow": "#0f0",
-              "colorMedium": "#fa1",
-              "decimal": 1,
-              "fontsize": "30",
-              "hasOrb": false,
-              "isBlinking": false,
-              "orbHideText": false,
-              "orbLocation": "Left",
-              "orbSize": "10",
-              "prefixSize": 10,
-              "serie": "rdfi_process",
-              "suffixSize": 10,
-              "text": "N/A",
-              "thresholds": "20,60",
-              "usingThresholds": false,
-              "xpos": "770",
-              "ypos": "325"
+              "xpos": "460",
+              "ypos": "298"
             }
           ],
           "datasource": "MySQL",
@@ -144,7 +122,7 @@ spec:
               ],
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  time,\n  sum(entry) AS \"transactions\"\nFROM merchant_upload",
+              "rawSql": "SELECT\n  time,\n  count(name) AS \"images_uploaded\"\nFROM images_uploaded",
               "refId": "A",
               "select": [
                 [
@@ -178,7 +156,7 @@ spec:
               "group": [],
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  time,\n  sum(entry) AS \"odfi_split\"\nFROM odfi_split",
+              "rawSql": "SELECT\n  time,\n  count(name) AS \"images_processed\"\nFROM images_processed",
               "refId": "B",
               "select": [
                 [
@@ -206,36 +184,8 @@ spec:
               "group": [],
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  time,\n  sum(entry) AS \"rdfi_split\"\nFROM rdfi_split",
+              "rawSql": "SELECT\n  time,\n  count(name) AS \"images_anonymized\"\nFROM images_anonymized",
               "refId": "C",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "entry"
-                    ],
-                    "type": "column"
-                  }
-                ]
-              ],
-              "table": "merchant_upload",
-              "timeColumn": "time",
-              "timeColumnType": "timestamp",
-              "where": [
-                {
-                  "name": "$__timeFilter",
-                  "params": [],
-                  "type": "macro"
-                }
-              ]
-            },
-            {
-              "format": "time_series",
-              "group": [],
-              "metricColumn": "none",
-              "rawQuery": true,
-              "rawSql": "SELECT\n  time,\n  sum(entry) AS \"rdfi_process\"\nFROM rdfi_process",
-              "refId": "D",
               "select": [
                 [
                   {
@@ -264,128 +214,16 @@ spec:
           "type": "larona-epict-panel"
         },
         {
-          "aliasColors": {},
-          "bars": true,
-          "dashLength": 10,
-          "dashes": false,
+          "columns": [],
           "datasource": "MySQL",
-          "fill": 1,
+          "fontSize": "100%",
           "gridPos": {
             "h": 7,
             "w": 8,
             "x": 12,
             "y": 0
           },
-          "id": 12,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": false,
-            "total": false,
-            "values": false
-          },
-          "lines": false,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {},
-          "percentage": false,
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "format": "time_series",
-              "group": [],
-              "metricColumn": "none",
-              "rawQuery": false,
-              "rawSql": "SELECT\n  time AS \"time\",\n  balance\nFROM bank_balance\nWHERE\n  $__timeFilter(time)\nORDER BY time",
-              "refId": "A",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "balance"
-                    ],
-                    "type": "column"
-                  }
-                ]
-              ],
-              "table": "bank_balance",
-              "timeColumn": "time",
-              "timeColumnType": "timestamp",
-              "where": [
-                {
-                  "name": "$__timeFilter",
-                  "params": [],
-                  "type": "macro"
-                }
-              ]
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Transactions combined amount",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": "Total amount",
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": false
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "columns": [
-            {
-              "text": "Current",
-              "value": "current"
-            }
-          ],
-          "datasource": "prometheus",
-          "fontSize": "100%",
-          "gridPos": {
-            "h": 12,
-            "w": 8,
-            "x": 12,
-            "y": 7
-          },
-          "id": 6,
+          "id": 18,
           "links": [],
           "options": {},
           "pageSize": null,
@@ -399,67 +237,149 @@ spec:
             {
               "alias": "Time",
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
-              "pattern": "Time",
+              "pattern": "time",
               "type": "date"
             },
             {
-              "alias": "Deployment or job",
-              "colorMode": "row",
+              "alias": "",
+              "colorMode": null,
               "colors": [
                 "rgba(245, 54, 54, 0.9)",
                 "rgba(237, 129, 40, 0.89)",
                 "rgba(50, 172, 45, 0.97)"
               ],
-              "decimals": 0,
-              "pattern": "Metric",
-              "preserveFormat": false,
-              "thresholds": [
-                ""
-              ],
-              "type": "string",
-              "unit": "none"
-            },
-            {
-              "alias": "Replicas",
-              "colorMode": "row",
-              "colors": [
-                "rgba(245, 54, 54, 0.9)",
-                "rgba(237, 129, 40, 0.89)",
-                "rgba(50, 172, 45, 0.97)"
-              ],
-              "dateFormat": "YYYY-MM-DD HH:mm:ss",
-              "decimals": 0,
-              "link": false,
-              "pattern": "Value",
-              "thresholds": [
-                "0",
-                "0.9"
-              ],
+              "decimals": 2,
+              "pattern": "/.*/",
+              "thresholds": [],
               "type": "number",
-              "unit": "none"
+              "unit": "short"
             }
           ],
           "targets": [
             {
-              "expr": "kube_deployment_status_replicas{namespace=~\"$namespace\"}",
-              "format": "time_series",
-              "instant": true,
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "{{ deployment }}",
-              "refId": "A"
-            },
-            {
-              "expr": "kube_job_status_active{namespace=~\"$namespace\"}",
-              "format": "time_series",
-              "instant": true,
-              "intervalFactor": 1,
-              "legendFormat": "{{job_name}}",
-              "refId": "B"
+              "format": "table",
+              "group": [],
+              "metricColumn": "none",
+              "rawQuery": true,
+              "rawSql": "SELECT * FROM images_uploaded ORDER by time LIMIT 10",
+              "refId": "A",
+              "select": [
+                [
+                  {
+                    "params": [
+                      "value"
+                    ],
+                    "type": "column"
+                  }
+                ]
+              ],
+              "timeColumn": "time",
+              "where": [
+                {
+                  "name": "$__timeFilter",
+                  "params": [],
+                  "type": "macro"
+                }
+              ]
             }
           ],
-          "title": "Deployments and Jobs",
-          "transform": "timeseries_to_rows",
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Last 10 uploaded images",
+          "transform": "table",
+          "type": "table"
+        },
+        {
+          "content": "<img src=\"http://s3-rook-ceph.apps.perf3.ocs.lab.eng.blr.redhat.com/xrayedge-in/demo_Marie%20Carrol_5845_1961-08-12_2015-11-13.jpeg\"></img>\n\n\n\n",
+          "gridPos": {
+            "h": 7,
+            "w": 4,
+            "x": 20,
+            "y": 0
+          },
+          "id": 22,
+          "links": [],
+          "mode": "html",
+          "options": {},
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Last uploaded image",
+          "type": "text"
+        },
+        {
+          "columns": [],
+          "datasource": "MySQL",
+          "fontSize": "100%",
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 12,
+            "y": 7
+          },
+          "id": 19,
+          "links": [],
+          "options": {},
+          "pageSize": null,
+          "scroll": true,
+          "showHeader": true,
+          "sort": {
+            "col": 0,
+            "desc": true
+          },
+          "styles": [
+            {
+              "alias": "Time",
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "pattern": "time",
+              "type": "date"
+            },
+            {
+              "alias": "",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "decimals": 2,
+              "pattern": "/.*/",
+              "thresholds": [],
+              "type": "number",
+              "unit": "short"
+            }
+          ],
+          "targets": [
+            {
+              "format": "table",
+              "group": [],
+              "metricColumn": "none",
+              "rawQuery": true,
+              "rawSql": "SELECT time,name FROM images_processed ORDER by time LIMIT 10",
+              "refId": "A",
+              "select": [
+                [
+                  {
+                    "params": [
+                      "value"
+                    ],
+                    "type": "column"
+                  }
+                ]
+              ],
+              "timeColumn": "time",
+              "where": [
+                {
+                  "name": "$__timeFilter",
+                  "params": [],
+                  "type": "macro"
+                }
+              ]
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Last 10 processed images",
+          "transform": "table",
           "type": "table"
         },
         {
@@ -471,7 +391,7 @@ spec:
           "fill": 10,
           "fillGradient": 0,
           "gridPos": {
-            "h": 7,
+            "h": 5,
             "w": 4,
             "x": 0,
             "y": 12
@@ -482,7 +402,7 @@ spec:
             "current": false,
             "max": false,
             "min": false,
-            "show": true,
+            "show": false,
             "total": false,
             "values": false
           },
@@ -503,71 +423,13 @@ spec:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(pod:container_cpu_usage:sum{pod=~'kafkasource-odfi-split.*',namespace=\"$namespace\"})",
+              "expr": "sum(pod:container_cpu_usage:sum{namespace=\"$namespace\"})",
               "format": "time_series",
               "instant": false,
               "intervalFactor": 1,
-              "legendFormat": "kafkasource-odfi-split",
+              "legendFormat": " CPU",
               "legendLink": null,
               "refId": "A",
-              "step": 10
-            },
-            {
-              "expr": "sum(pod:container_cpu_usage:sum{pod=~'kafkasource-rdfi-split.*',namespace=\"$namespace\"})",
-              "format": "time_series",
-              "instant": false,
-              "intervalFactor": 1,
-              "legendFormat": "kafkasource-rdfi-split",
-              "legendLink": null,
-              "refId": "B",
-              "step": 10
-            },
-            {
-              "expr": "sum(pod:container_cpu_usage:sum{pod=~'kafkasource-rdfi-process.*',namespace=\"$namespace\"})",
-              "format": "time_series",
-              "instant": false,
-              "intervalFactor": 1,
-              "legendFormat": "kafkasource-rdfi-process",
-              "legendLink": null,
-              "refId": "C",
-              "step": 10
-            },
-            {
-              "expr": "sum(pod:container_cpu_usage:sum{pod=~'create-.*',namespace=\"$namespace\"})",
-              "format": "time_series",
-              "instant": false,
-              "intervalFactor": 1,
-              "legendFormat": "create-transaction",
-              "legendLink": null,
-              "refId": "D",
-              "step": 10
-            },
-            {
-              "expr": "sum(pod:container_cpu_usage:sum{pod=~'odfi-split.*',namespace=\"$namespace\"})",
-              "format": "time_series",
-              "instant": false,
-              "intervalFactor": 1,
-              "legendFormat": "odfi-split",
-              "legendLink": null,
-              "refId": "E",
-              "step": 10
-            },
-            {
-              "expr": "sum(pod:container_cpu_usage:sum{pod=~'rdfi-split.*',namespace=\"$namespace\"})",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "rdfi-split",
-              "legendLink": null,
-              "refId": "F",
-              "step": 10
-            },
-            {
-              "expr": "sum(pod:container_cpu_usage:sum{pod=~'rdfi-process.*',namespace=\"$namespace\"})",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "rdfi-process",
-              "legendLink": null,
-              "refId": "G",
               "step": 10
             }
           ],
@@ -621,7 +483,7 @@ spec:
           "fill": 10,
           "fillGradient": 0,
           "gridPos": {
-            "h": 7,
+            "h": 5,
             "w": 4,
             "x": 4,
             "y": 12
@@ -632,7 +494,7 @@ spec:
             "current": false,
             "max": false,
             "min": false,
-            "show": true,
+            "show": false,
             "total": false,
             "values": false
           },
@@ -653,66 +515,12 @@ spec:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(container_memory_working_set_bytes{pod=~'kafkasource-odfi-split.*',namespace=\"$namespace\"})",
+              "expr": "sum(container_memory_working_set_bytes{namespace=\"$namespace\"})",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "kafkasource-odfi-split",
+              "legendFormat": "RAM",
               "legendLink": null,
               "refId": "A",
-              "step": 10
-            },
-            {
-              "expr": "sum(container_memory_working_set_bytes{pod=~'kafkasource-rdfi-split.*',namespace=\"$namespace\"})",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "kafkasource-rdfi-split",
-              "legendLink": null,
-              "refId": "B",
-              "step": 10
-            },
-            {
-              "expr": "sum(container_memory_working_set_bytes{pod=~'kafkasource-rdfi-process.*',namespace=\"$namespace\"})",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "kafkasource-rdfi-process",
-              "legendLink": null,
-              "refId": "C",
-              "step": 10
-            },
-            {
-              "expr": "sum(container_memory_working_set_bytes{pod=~'create-transaction.*',namespace=\"$namespace\"})",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "create-transaction",
-              "legendLink": null,
-              "refId": "D",
-              "step": 10
-            },
-            {
-              "expr": "sum(container_memory_working_set_bytes{pod=~'odfi-split.*',namespace=\"$namespace\"})",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "odfi-split",
-              "legendLink": null,
-              "refId": "E",
-              "step": 10
-            },
-            {
-              "expr": "sum(container_memory_working_set_bytes{pod=~'rdfi-split.*',namespace=\"$namespace\"})",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "rdfi-split",
-              "legendLink": null,
-              "refId": "F",
-              "step": 10
-            },
-            {
-              "expr": "sum(container_memory_working_set_bytes{pod=~'rdfi-process.*',namespace=\"$namespace\"})",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "rdfi-process",
-              "legendLink": null,
-              "refId": "G",
               "step": 10
             }
           ],
@@ -736,7 +544,7 @@ spec:
           },
           "yaxes": [
             {
-              "format": "short",
+              "format": "bytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -776,7 +584,7 @@ spec:
             "thresholdMarkers": true
           },
           "gridPos": {
-            "h": 7,
+            "h": 5,
             "w": 4,
             "x": 8,
             "y": 12
@@ -811,7 +619,7 @@ spec:
             }
           ],
           "sparkline": {
-            "fillColor": "rgba(31, 118, 189, 0.18)",
+            "fillColor": "rgba(31, 96, 196, 0)",
             "full": false,
             "lineColor": "rgb(31, 120, 193)",
             "show": true
@@ -819,9 +627,9 @@ spec:
           "tableColumn": "",
           "targets": [
             {
-              "expr": "sum(kube_pod_container_status_running{namespace=~\"$namespace\"})",
+              "expr": "sum(kube_pod_container_status_running{pod=~\"risk-assessment.*\",namespace=~\"$namespace\"})",
               "format": "time_series",
-              "instant": true,
+              "instant": false,
               "intervalFactor": 1,
               "legendFormat": "{{ deployment }}",
               "refId": "A"
@@ -830,7 +638,7 @@ spec:
           "thresholds": "10,15,20",
           "timeFrom": null,
           "timeShift": null,
-          "title": "Pods running",
+          "title": "Containers running",
           "type": "singlestat",
           "valueFontSize": "80%",
           "valueMaps": [
@@ -841,6 +649,294 @@ spec:
             }
           ],
           "valueName": "current"
+        },
+        {
+          "columns": [],
+          "datasource": "MySQL",
+          "fontSize": "100%",
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 12,
+            "y": 14
+          },
+          "id": 20,
+          "links": [],
+          "options": {},
+          "pageSize": null,
+          "scroll": true,
+          "showHeader": true,
+          "sort": {
+            "col": 0,
+            "desc": true
+          },
+          "styles": [
+            {
+              "alias": "Time",
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "pattern": "time",
+              "type": "date"
+            },
+            {
+              "alias": "",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "decimals": 2,
+              "pattern": "/.*/",
+              "thresholds": [],
+              "type": "number",
+              "unit": "short"
+            }
+          ],
+          "targets": [
+            {
+              "format": "table",
+              "group": [],
+              "metricColumn": "none",
+              "rawQuery": true,
+              "rawSql": "SELECT * FROM images_anonymized ORDER by time LIMIT 10",
+              "refId": "A",
+              "select": [
+                [
+                  {
+                    "params": [
+                      "value"
+                    ],
+                    "type": "column"
+                  }
+                ]
+              ],
+              "timeColumn": "time",
+              "where": [
+                {
+                  "name": "$__timeFilter",
+                  "params": [],
+                  "type": "macro"
+                }
+              ]
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Last 10 anonymized images",
+          "transform": "table",
+          "type": "table"
+        },
+        {
+          "columns": [
+            {
+              "text": "Current",
+              "value": "current"
+            }
+          ],
+          "datasource": "prometheus",
+          "fontSize": "100%",
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 0,
+            "y": 17
+          },
+          "id": 6,
+          "links": [],
+          "options": {},
+          "pageSize": null,
+          "scroll": true,
+          "showHeader": true,
+          "sort": {
+            "col": 0,
+            "desc": true
+          },
+          "styles": [
+            {
+              "alias": "Time",
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "pattern": "Time",
+              "type": "date"
+            },
+            {
+              "alias": "Deployment",
+              "colorMode": "row",
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "decimals": 0,
+              "pattern": "Metric",
+              "preserveFormat": false,
+              "thresholds": [
+                ""
+              ],
+              "type": "string",
+              "unit": "none"
+            },
+            {
+              "alias": "Replicas",
+              "colorMode": "row",
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 0,
+              "link": false,
+              "pattern": "Value",
+              "thresholds": [
+                "0",
+                "0.9"
+              ],
+              "type": "number",
+              "unit": "none"
+            }
+          ],
+          "targets": [
+            {
+              "expr": "kube_deployment_status_replicas{deployment=~\"risk-assessment.*\",namespace=~\"$namespace\"}",
+              "format": "time_series",
+              "instant": true,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{ deployment }}",
+              "refId": "A"
+            }
+          ],
+          "title": "Deployments",
+          "transform": "timeseries_to_rows",
+          "type": "table"
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "MySQL",
+          "fill": 1,
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 6,
+            "y": 17
+          },
+          "id": 16,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {},
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "format": "time_series",
+              "group": [
+                {
+                  "params": [
+                    "$__interval",
+                    "none"
+                  ],
+                  "type": "time"
+                }
+              ],
+              "metricColumn": "model",
+              "rawQuery": true,
+              "rawSql": "SELECT\n  $__timeGroupAlias(time,$__interval),\n  model AS metric,\n  count(model) AS \"model\"\nFROM images_processed\nWHERE\n  $__timeFilter(time)\nGROUP BY 1,2\nORDER BY $__timeGroup(time,$__interval)",
+              "refId": "A",
+              "select": [
+                [
+                  {
+                    "params": [
+                      "value"
+                    ],
+                    "type": "column"
+                  },
+                  {
+                    "params": [
+                      "sum"
+                    ],
+                    "type": "aggregate"
+                  },
+                  {
+                    "params": [
+                      "value"
+                    ],
+                    "type": "alias"
+                  }
+                ]
+              ],
+              "table": "images_processed",
+              "timeColumn": "time",
+              "timeColumnType": "timestamp",
+              "where": [
+                {
+                  "name": "$__timeFilter",
+                  "params": [],
+                  "type": "macro"
+                }
+              ]
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Images processed by model version",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "decimals": 0,
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
         }
       ],
       "refresh": "5s",
@@ -868,8 +964,8 @@ spec:
           },
           {
             "current": {
-              "text": "ach",
-              "value": "ach"
+              "text": "xrayedge",
+              "value": "xrayedge"
             },
             "hide": 2,
             "label": "Namespace",
@@ -877,11 +973,11 @@ spec:
             "options": [
               {
                 "selected": true,
-                "text": "ach",
-                "value": "ach"
+                "text": "xrayedge",
+                "value": "xrayedge"
               }
             ],
-            "query": "ach",
+            "query": "xrayedge",
             "skipUrlSync": false,
             "type": "constant"
           }
@@ -916,12 +1012,14 @@ spec:
           "30d"
         ]
       },
-      "timezone": "",
+      "timezone": "utc",
       "title": "XRay Edge Demo",
       "uid": "hakbeh9Wz",
-      "version": 1
+      "version": 2
     }
   name: xrayedge-dashboard.json
   plugins:
   - name: larona-epict-panel
     version: 1.2.2
+  - name: ryantxu-ajax-panel
+    version: 0.0.7-dev

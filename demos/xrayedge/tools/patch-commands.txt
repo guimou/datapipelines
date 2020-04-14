@@ -1,0 +1,5 @@
+oc patch dc image-generator --type=json -p '[{"op":"replace","path":"/spec/template/spec/containers/0/env/0/value","value":"0.2"}]'
+
+tkn pipeline start knative-service-risk-assessment-refresh -p service-name=risk-assessment -p model-version=v2
+
+tkn task start oc-update-image-generator-dc -p seconds_wait=1
