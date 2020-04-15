@@ -24,8 +24,12 @@ def get_last_image(bucket_name):
                                       database=db_db)
         cursor = cnx.cursor()
         query = 'SELECT name FROM ' + bucket_table[bucket_name] + ' ORDER BY time DESC LIMIT 1;'
-        cursor.execute(query)
-        result = cursor.fetchone()
+        row_counts = cursor.execute(query)
+        if row_counts > 0:
+            data = cursor.fetchone()
+            result = data[0]
+        else:
+            result = ""
         cursor.close()
         cnx.close()
 
@@ -33,7 +37,7 @@ def get_last_image(bucket_name):
         logging.error(f"Unexpected error: {e}")
         raise
 
-    return result[0]
+    return result
 
 
 LOCATION_TEMPLATE_SMALL = Template("""
@@ -51,14 +55,20 @@ def homepage():
 
 @app.route('/last_image_small/<bucket_name>')
 def last_image_small(bucket_name):
-    image_name = get_last_image(bucket_name)   
-    html = LOCATION_TEMPLATE_SMALL.substitute(service_point=service_point, bucket_name=bucket_name, image_name=image_name)
+    image_name = get_last_image(bucket_name)
+    if image_name != "":   
+        html = LOCATION_TEMPLATE_SMALL.substitute(service_point=service_point, bucket_name=bucket_name, image_name=image_name)
+    else:
+        html = '<h2 style="text-align: left; color: white">No Result</h2>'
     return html
 
 @app.route('/last_image_big/<bucket_name>')
 def last_image_big(bucket_name):
     image_name = get_last_image(bucket_name)   
-    html = LOCATION_TEMPLATE_BIG.substitute(service_point=service_point, bucket_name=bucket_name, image_name=image_name)
+    if image_name != "":   
+        html = LOCATION_TEMPLATE_BIG.substitute(service_point=service_point, bucket_name=bucket_name, image_name=image_name)
+    else:
+        html = '<h2 style="text-align: left; color: white">No Result</h2>'
     return html
 
 

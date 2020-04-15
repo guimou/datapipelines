@@ -24,7 +24,7 @@ spec:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
-      "iteration": 1586897998801,
+      "iteration": 1586910570920,
       "links": [],
       "panels": [
         {
@@ -447,7 +447,7 @@ spec:
           "dashLength": 10,
           "dashes": false,
           "datasource": "$datasource",
-          "fill": 10,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 5,
@@ -461,12 +461,13 @@ spec:
             "current": false,
             "max": false,
             "min": false,
-            "show": false,
+            "rightSide": false,
+            "show": true,
             "total": false,
             "values": false
           },
           "lines": true,
-          "linewidth": 0,
+          "linewidth": 1,
           "links": [],
           "nullPointMode": "null as zero",
           "options": {
@@ -476,9 +477,14 @@ spec:
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
-          "seriesOverrides": [],
+          "seriesOverrides": [
+            {
+              "alias": "RAM",
+              "yaxis": 2
+            }
+          ],
           "spaceLength": 10,
-          "stack": true,
+          "stack": false,
           "steppedLine": false,
           "targets": [
             {
@@ -490,13 +496,20 @@ spec:
               "legendLink": null,
               "refId": "A",
               "step": 10
+            },
+            {
+              "expr": "sum(container_memory_working_set_bytes{namespace=\"$namespace\"})",
+              "format": "time_series",
+              "intervalFactor": 1,
+              "legendFormat": "RAM",
+              "refId": "B"
             }
           ],
           "thresholds": [],
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "CPU Usage",
+          "title": "CPU  and RAM Usage",
           "tooltip": {
             "shared": false,
             "sort": 0,
@@ -520,12 +533,12 @@ spec:
               "show": true
             },
             {
-              "format": "short",
+              "format": "bytes",
               "label": null,
               "logBase": 1,
               "max": null,
-              "min": null,
-              "show": false
+              "min": "0",
+              "show": true
             }
           ],
           "yaxis": {
@@ -1112,7 +1125,7 @@ spec:
       "timezone": "utc",
       "title": "XRay Edge Demo",
       "uid": "hakbeh9Wz",
-      "version": 3
+      "version": 4
     }
   name: xrayedge-dashboard.json
   plugins:

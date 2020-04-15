@@ -3,7 +3,7 @@ mysql -u root
 use xrayedgedb;
 
 CREATE TABLE images_uploaded(time TIMESTAMP, name VARCHAR(255));
-CREATE TABLE images_processed(time TIMESTAMP, name VARCHAR(255), model VARCHAR(10));
+CREATE TABLE images_processed(time TIMESTAMP, name VARCHAR(255), model VARCHAR(10), label VARCHAR(20));
 CREATE TABLE images_anonymized(time TIMESTAMP, name VARCHAR(255));
 
 SELECT * FROM images_uploaded;

@@ -168,13 +168,13 @@ def get_safe_ext(key):
     else:
         logging.error('Extension is invalid')
 
-def update_images_processed(image_name,model_version):
+def update_images_processed(image_name,model_version,label):
     try:
         cnx = mysql.connector.connect(user=db_user, password=db_password,
                                       host=db_host,
                                       database=db_db)
         cursor = cnx.cursor()
-        query = 'INSERT INTO images_processed(time,name,model) SELECT CURRENT_TIMESTAMP(), "' + image_name + '","' + model_version + '";'
+        query = 'INSERT INTO images_processed(time,name,model,label) SELECT CURRENT_TIMESTAMP(), "' + image_name + '","' + model_version + '","' + label + '";'
         cursor.execute(query)
         cnx.commit()
         cursor.close()
@@ -231,7 +231,7 @@ def run_event(event):
             sent_data = s3client.put_object(Bucket=bucket_name+'-processed', Key=computed_image_key, Body=buffer)
             if sent_data['ResponseMetadata']['HTTPStatusCode'] != 200:
                 raise logging.error('Failed to upload image {} to bucket {}'.format(computed_image_key, bucket_name + '-processed'))
-            update_images_processed(computed_image_key,model_version)
+            update_images_processed(computed_image_key,model_version,result['label'])
             logging.info('Image processed')
 
             if (result['pred'] < 0.80 and  result['pred'] > 0.60):
