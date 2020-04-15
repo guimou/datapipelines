@@ -24,7 +24,7 @@ spec:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
-      "iteration": 1586916517917,
+      "iteration": 1586921903342,
       "links": [],
       "panels": [
         {
@@ -50,7 +50,7 @@ spec:
               "text": "N/A",
               "thresholds": "20,60",
               "usingThresholds": false,
-              "xpos": "65",
+              "xpos": "60",
               "ypos": "75"
             },
             {
@@ -72,7 +72,7 @@ spec:
               "text": "N/A",
               "thresholds": "20,60",
               "usingThresholds": false,
-              "xpos": "255",
+              "xpos": "250",
               "ypos": "75"
             },
             {
@@ -94,7 +94,7 @@ spec:
               "text": "N/A",
               "thresholds": "20,60",
               "usingThresholds": false,
-              "xpos": "460",
+              "xpos": "470",
               "ypos": "298"
             }
           ],
@@ -110,7 +110,7 @@ spec:
           "options": {},
           "targets": [
             {
-              "format": "table",
+              "format": "time_series",
               "group": [
                 {
                   "params": [
@@ -122,7 +122,7 @@ spec:
               ],
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT IFNULL((SELECT count(name) AS \"images_processed\"\nFROM images_processed),\"214\")",
+              "rawSql": "SELECT time,count(name)-1 AS \"images_uploaded\"\nFROM images_uploaded",
               "refId": "A",
               "select": [
                 [
@@ -152,11 +152,11 @@ spec:
               "where": []
             },
             {
-              "format": "table",
+              "format": "time_series",
               "group": [],
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT IFNULL((SELECT\n  count(name) AS \"images_processed\"\nFROM images_processed),\"0\")",
+              "rawSql": "SELECT time,count(name)-1 AS \"images_processed\"\nFROM images_processed",
               "refId": "B",
               "select": [
                 [
@@ -180,11 +180,11 @@ spec:
               ]
             },
             {
-              "format": "table",
+              "format": "time_series",
               "group": [],
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT IFNULL((SELECT\n  count(name) AS \"images_anonymized\"\nFROM images_anonymized),\"0\")",
+              "rawSql": "SELECT time,count(name)-1 AS \"images_anonymized\"\nFROM images_anonymized",
               "refId": "C",
               "select": [
                 [
@@ -261,7 +261,7 @@ spec:
               "group": [],
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT * FROM images_uploaded ORDER by time DESC LIMIT 10",
+              "rawSql": "SELECT * FROM images_uploaded WHERE name != '' ORDER by time DESC LIMIT 10",
               "refId": "A",
               "select": [
                 [
@@ -375,7 +375,7 @@ spec:
               "group": [],
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT time,name FROM images_processed ORDER by time DESC LIMIT 10",
+              "rawSql": "SELECT time,name FROM images_processed WHERE name != '' ORDER by time DESC LIMIT 10",
               "refId": "A",
               "select": [
                 [
@@ -461,7 +461,7 @@ spec:
             "current": false,
             "max": false,
             "min": false,
-            "rightSide": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -526,7 +526,7 @@ spec:
           "yaxes": [
             {
               "format": "short",
-              "label": null,
+              "label": "CPU",
               "logBase": 1,
               "max": null,
               "min": 0,
@@ -534,7 +534,7 @@ spec:
             },
             {
               "format": "bytes",
-              "label": null,
+              "label": "RAM",
               "logBase": 1,
               "max": null,
               "min": "0",
@@ -566,7 +566,7 @@ spec:
           },
           "gridPos": {
             "h": 5,
-            "w": 4,
+            "w": 3,
             "x": 4,
             "y": 12
           },
@@ -633,7 +633,7 @@ spec:
         },
         {
           "aliasColors": {},
-          "bars": true,
+          "bars": false,
           "dashLength": 10,
           "dashes": false,
           "datasource": "MySQL",
@@ -641,21 +641,23 @@ spec:
           "fillGradient": 0,
           "gridPos": {
             "h": 5,
-            "w": 4,
-            "x": 8,
+            "w": 5,
+            "x": 7,
             "y": 12
           },
           "id": 4,
           "legend": {
+            "alignAsTable": false,
             "avg": false,
             "current": false,
             "max": false,
             "min": false,
-            "show": false,
+            "rightSide": true,
+            "show": true,
             "total": false,
             "values": false
           },
-          "lines": false,
+          "lines": true,
           "linewidth": 0,
           "links": [],
           "nullPointMode": "null as zero",
@@ -684,7 +686,7 @@ spec:
               ],
               "metricColumn": "label",
               "rawQuery": true,
-              "rawSql": "SELECT\n  $__timeGroupAlias(time,$__interval),\n  label AS metric,\n  count(label) AS \"label\"\nFROM images_processed\nWHERE\n  $__timeFilter(time)\nGROUP BY 1,2\nORDER BY $__timeGroup(time,$__interval)",
+              "rawSql": "SELECT\n  $__timeGroupAlias(time,$__interval),\n  label AS metric,\n  count(label)\nFROM images_processed\nWHERE\n  $__timeFilter(time)\n  and\n  label != ''\nGROUP BY 1,2\nORDER BY $__timeGroup(time,$__interval)",
               "refId": "A",
               "select": [
                 [
@@ -804,7 +806,7 @@ spec:
               "group": [],
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT * FROM images_anonymized ORDER by time DESC LIMIT 10",
+              "rawSql": "SELECT * FROM images_anonymized WHERE name != '' ORDER by time DESC LIMIT 10",
               "refId": "A",
               "select": [
                 [
@@ -881,7 +883,7 @@ spec:
           "fontSize": "100%",
           "gridPos": {
             "h": 4,
-            "w": 6,
+            "w": 7,
             "x": 0,
             "y": 17
           },
@@ -963,8 +965,8 @@ spec:
           "fill": 1,
           "gridPos": {
             "h": 4,
-            "w": 6,
-            "x": 6,
+            "w": 5,
+            "x": 7,
             "y": 17
           },
           "id": 16,
@@ -973,6 +975,7 @@ spec:
             "current": false,
             "max": false,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": false
@@ -1004,7 +1007,7 @@ spec:
               ],
               "metricColumn": "model",
               "rawQuery": true,
-              "rawSql": "SELECT\n  $__timeGroupAlias(time,$__interval),\n  model AS metric,\n  count(model) AS \"model\"\nFROM images_processed\nWHERE\n  $__timeFilter(time)\nGROUP BY 1,2\nORDER BY $__timeGroup(time,$__interval)",
+              "rawSql": "SELECT\n  $__timeGroupAlias(time,$__interval),\n  model AS metric,\n  count(model) AS \"model\"\nFROM images_processed\nWHERE\n  $__timeFilter(time)\n  and\n  model != ''\nGROUP BY 1,2\nORDER BY $__timeGroup(time,$__interval)",
               "refId": "A",
               "select": [
                 [
@@ -1159,7 +1162,7 @@ spec:
       "timezone": "utc",
       "title": "XRay Edge Demo",
       "uid": "hakbeh9Wz",
-      "version": 5
+      "version": 6
     }
   name: xrayedge-dashboard.json
   plugins:

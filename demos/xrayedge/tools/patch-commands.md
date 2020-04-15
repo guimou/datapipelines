@@ -6,6 +6,12 @@
 oc patch dc image-generator --type=json -p '[{"op":"replace","path":"/spec/template/spec/containers/0/env/0/value","value":"1"}]'
 ```
 
+## Patch risk-assessment with revision
+
+```bash
+oc patch service.serving.knative.dev/risk-assessment --type=json -p '[{"op":"replace","path":"/spec/template/metadata/annotations/revisionTimestamp","value":"'"$(date +%F_%T)"'"},{"op":"replace","path":"/spec/template/spec/containers/0/env/0/value","value":"v2"}]'
+```
+
 ## Update image-generator with seconds_wait (tkn version of previous one)
 
 ```bash
