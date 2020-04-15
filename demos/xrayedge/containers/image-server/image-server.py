@@ -24,9 +24,9 @@ def get_last_image(bucket_name):
                                       database=db_db)
         cursor = cnx.cursor()
         query = 'SELECT name FROM ' + bucket_table[bucket_name] + ' ORDER BY time DESC LIMIT 1;'
-        row_counts = cursor.execute(query)
+        cursor.execute(query)
         data = cursor.fetchone()
-        if row_counts:
+        if data is not None:
             result = data[0]
         else:
             result = ""
