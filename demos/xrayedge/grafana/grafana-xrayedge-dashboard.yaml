@@ -110,7 +110,7 @@ spec:
           "options": {},
           "targets": [
             {
-              "format": "time_series",
+              "format": "table",
               "group": [
                 {
                   "params": [
@@ -122,7 +122,7 @@ spec:
               ],
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  time,\n  count(name) AS \"images_uploaded\"\nFROM images_uploaded",
+              "rawSql": "SELECT IFNULL((SELECT count(name) AS \"images_processed\"\nFROM images_processed),\"214\")",
               "refId": "A",
               "select": [
                 [
@@ -152,11 +152,11 @@ spec:
               "where": []
             },
             {
-              "format": "time_series",
+              "format": "table",
               "group": [],
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  time,\n  count(name) AS \"images_processed\"\nFROM images_processed",
+              "rawSql": "SELECT IFNULL((SELECT\n  count(name) AS \"images_processed\"\nFROM images_processed),\"0\")",
               "refId": "B",
               "select": [
                 [
@@ -180,11 +180,11 @@ spec:
               ]
             },
             {
-              "format": "time_series",
+              "format": "table",
               "group": [],
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  time,\n  count(name) AS \"images_anonymized\"\nFROM images_anonymized",
+              "rawSql": "SELECT IFNULL((SELECT\n  count(name) AS \"images_anonymized\"\nFROM images_anonymized),\"0\")",
               "refId": "C",
               "select": [
                 [
@@ -547,97 +547,6 @@ spec:
           }
         },
         {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$datasource",
-          "fill": 10,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 5,
-            "w": 4,
-            "x": 4,
-            "y": 12
-          },
-          "id": 4,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": false,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 0,
-          "links": [],
-          "nullPointMode": "null as zero",
-          "options": {
-            "dataLinks": []
-          },
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": true,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "sum(container_memory_working_set_bytes{namespace=\"$namespace\"})",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "RAM",
-              "legendLink": null,
-              "refId": "A",
-              "step": 10
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "RAM Usage",
-          "tooltip": {
-            "shared": false,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "bytes",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": false
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
           "cacheTimeout": null,
           "colorBackground": false,
           "colorValue": false,
@@ -649,7 +558,7 @@ spec:
           "datasource": "prometheus",
           "format": "none",
           "gauge": {
-            "maxValue": 20,
+            "maxValue": 10,
             "minValue": 0,
             "show": true,
             "thresholdLabels": true,
@@ -658,7 +567,7 @@ spec:
           "gridPos": {
             "h": 5,
             "w": 4,
-            "x": 8,
+            "x": 4,
             "y": 12
           },
           "id": 2,
@@ -707,10 +616,10 @@ spec:
               "refId": "A"
             }
           ],
-          "thresholds": "10,15,20",
+          "thresholds": "5,8,10",
           "timeFrom": null,
           "timeShift": null,
-          "title": "Containers running",
+          "title": "Risk assessment containers running",
           "type": "singlestat",
           "valueFontSize": "80%",
           "valueMaps": [
@@ -721,6 +630,131 @@ spec:
             }
           ],
           "valueName": "current"
+        },
+        {
+          "aliasColors": {},
+          "bars": true,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "MySQL",
+          "fill": 10,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 5,
+            "w": 4,
+            "x": 8,
+            "y": 12
+          },
+          "id": 4,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": false,
+            "total": false,
+            "values": false
+          },
+          "lines": false,
+          "linewidth": 0,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": true,
+          "steppedLine": false,
+          "targets": [
+            {
+              "format": "time_series",
+              "group": [
+                {
+                  "params": [
+                    "$__interval",
+                    "none"
+                  ],
+                  "type": "time"
+                }
+              ],
+              "metricColumn": "label",
+              "rawQuery": true,
+              "rawSql": "SELECT\n  $__timeGroupAlias(time,$__interval),\n  label AS metric,\n  count(label)\nFROM images_processed\nWHERE\n  $__timeFilter(time)\nGROUP BY 1,2\nORDER BY $__timeGroup(time,$__interval)",
+              "refId": "A",
+              "select": [
+                [
+                  {
+                    "params": [
+                      "label"
+                    ],
+                    "type": "column"
+                  },
+                  {
+                    "params": [
+                      "count"
+                    ],
+                    "type": "aggregate"
+                  }
+                ]
+              ],
+              "table": "images_processed",
+              "timeColumn": "time",
+              "timeColumnType": "timestamp",
+              "where": [
+                {
+                  "name": "$__timeFilter",
+                  "params": [],
+                  "type": "macro"
+                }
+              ]
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Risk distribution",
+          "tooltip": {
+            "shared": false,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "decimals": 0,
+              "format": "none",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
         },
         {
           "columns": [],
