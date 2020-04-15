@@ -24,7 +24,7 @@ spec:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
-      "iteration": 1586910570920,
+      "iteration": 1586916517917,
       "links": [],
       "panels": [
         {
@@ -684,7 +684,7 @@ spec:
               ],
               "metricColumn": "label",
               "rawQuery": true,
-              "rawSql": "SELECT\n  $__timeGroupAlias(time,$__interval),\n  label AS metric,\n  count(label)\nFROM images_processed\nWHERE\n  $__timeFilter(time)\nGROUP BY 1,2\nORDER BY $__timeGroup(time,$__interval)",
+              "rawSql": "SELECT\n  $__timeGroupAlias(time,$__interval),\n  label AS metric,\n  count(label) AS \"label\"\nFROM images_processed\nWHERE\n  $__timeFilter(time)\nGROUP BY 1,2\nORDER BY $__timeGroup(time,$__interval)",
               "refId": "A",
               "select": [
                 [
@@ -1159,7 +1159,7 @@ spec:
       "timezone": "utc",
       "title": "XRay Edge Demo",
       "uid": "hakbeh9Wz",
-      "version": 4
+      "version": 5
     }
   name: xrayedge-dashboard.json
   plugins:
