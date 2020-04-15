@@ -59,7 +59,7 @@ def last_image_small(bucket_name):
     if image_name != "":   
         html = LOCATION_TEMPLATE_SMALL.substitute(service_point=service_point, bucket_name=bucket_name, image_name=image_name)
     else:
-        html = '<h2 style="font-family: Roboto,Helvetica Neue,Arial,sans-serif;text-align: center; color: white">No Result</h2>'
+        html = '<h2 style="font-family: Roboto,Helvetica Neue,Arial,sans-serif;text-align: center; color: white">no image to show</h2>'
     return html
 
 @app.route('/last_image_big/<bucket_name>')
@@ -68,7 +68,7 @@ def last_image_big(bucket_name):
     if image_name != "":   
         html = LOCATION_TEMPLATE_BIG.substitute(service_point=service_point, bucket_name=bucket_name, image_name=image_name)
     else:
-        html = '<h2 style="font-family: Roboto,Helvetica Neue,Arial,sans-serif;text-align: center; color: white">No Result</h2>'
+        html = '<h2 style="font-family: Roboto,Helvetica Neue,Arial,sans-serif;text-align: center; color: white">no image to show</h2>'
     return html
 
 
