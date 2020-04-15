@@ -261,7 +261,7 @@ spec:
               "group": [],
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT * FROM images_uploaded ORDER by time LIMIT 10",
+              "rawSql": "SELECT * FROM images_uploaded ORDER by time DESC LIMIT 10",
               "refId": "A",
               "select": [
                 [
@@ -375,7 +375,7 @@ spec:
               "group": [],
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT time,name FROM images_processed ORDER by time LIMIT 10",
+              "rawSql": "SELECT time,name FROM images_processed ORDER by time DESC LIMIT 10",
               "refId": "A",
               "select": [
                 [
@@ -770,7 +770,7 @@ spec:
               "group": [],
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT * FROM images_anonymized ORDER by time LIMIT 10",
+              "rawSql": "SELECT * FROM images_anonymized ORDER by time DESC LIMIT 10",
               "refId": "A",
               "select": [
                 [
