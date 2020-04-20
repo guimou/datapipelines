@@ -1,0 +1,9 @@
+= Datapipelines
+
+This repo contains various demos of data pipelines leveraging different tools: Ceph bucket notifications, Kafka, KNative Serving and Eventing,...
+
+link:./demos/ach[ACH data pipeline] : payments processing, the cloud native way!
+
+link:./demos/xrayedge[XRay automated processing] : pneumonia-risk assessment from x-ray images on a fully automated pipeline. 
+
+link:./demos/xray[XRay automated processing (first version)] : older version, maybe less refined processes. 

@@ -1,10 +1,10 @@
-# ACH process
+= ACH process
 
 This demo shows how to implement an ACH payment process, leveraging Ceph notifications, Kafka and KNative.
 
 What you will find here:
 
-* [Slides](Automate%20and%20scale%20your%20data%20pipelines%20the%20Cloud%20Native%20Way.pdf) from a presentation of this demo. The full video of the presentation is available [here](http://youtu.be/) (link to come)
+* link:Automate%20and%20scale%20your%20data%20pipelines%20the%20Cloud%20Native%20Way.pdf[Slides] from a presentation of this demo. The full video of the presentation is available https://www.openshift.com/blog/openshift-commons-briefing-automate-and-scale-your-data-pipelines-the-cloud-native-way-with-guillaume-moutier-red-hat[here]
 * topics.yaml: definition of the Kafka topics needed in the demo
 * secret.yaml: used to provide your Ceph Access and Secret Keys to the other containers
 * service-....yaml: definition of the services that are used to process the data at the different steps
