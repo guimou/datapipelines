@@ -102,8 +102,11 @@ def extract_data(msg):
 
 def load_image(bucket_name, img_path):
     logging.info('load_image')
+    logging.info(bucket_name)
+    logging.info(img_path)
     obj = s3client.get_object(Bucket=bucket_name, Key=img_path)
-    img = tf.keras.preprocessing.image.load_img(BytesIO(obj['Body'].read()), target_size=(150, 150))
+    img_stream = io.BytesIO(obj['Body'].read())
+    img = tf.keras.preprocessing.image.load_img(img_stream, target_size=(150, 150))
     img_tensor = tf.keras.preprocessing.image.img_to_array(img)                    # (height, width, channels)
     img_tensor = np.expand_dims(img_tensor, axis=0)         # (1, height, width, channels), add a dimension because the model expects this shape: (batch_size, height, width, channels)
     img_tensor /= 255.                                      # imshow expects values in the range [0, 1]
