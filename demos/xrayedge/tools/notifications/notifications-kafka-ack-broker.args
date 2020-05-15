@@ -1,0 +1,5 @@
+-b notifications-kafka-ack-broker
+-ke my-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092    
+-n notifications-ack-broker
+-t xrayedge-notifications-broker
+-al broker

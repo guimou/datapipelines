@@ -1,0 +1,65 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: notify-template
+objects: 
+  - apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: "${{NAME}}"
+    spec:
+      parallelism: 1
+      template:
+        metadata: 
+          name: "${{NAME}}"
+        spec: 
+          containers:
+            - image: shonpaz123/notify
+              imagePullPolicy: IfNotPresent
+              name: "${{NAME}}"
+              args:
+                      ["--endpoint-url", "${{ENDPOINT_URL}}",
+                       "--access-key",   "${{ACCESS_KEY}}", 
+                       "--secret-key",   "${{SECRET_KEY}}",
+                       "--bucket",       "${{BUCKET_NAME}}",
+                       "--kafka-endpoint", "${{KAFKA_ENDPOINT}}", 
+                       "--topic",        "${{TOPIC}}"]
+          restartPolicy: Never
+          
+parameters: 
+  - name: TOPIC
+    displayName: SNS TOPIC NAME
+    description: Represents the sns topic in which rgw will sent notifications to
+    value: "topic"
+
+  - name: ACCESS_KEY
+    displayName: AWS ACCESS KEY
+    description: Represents aws acceess secret key used for S3 credentials
+    value: "accesskey-changeme"
+
+  - name: SECRET_KEY
+    displayName: AWS SECRET KEY
+    description: Represents aws secret secret key used for S3 credentials
+    value: "secretkey-changeme"
+
+  - name: ENDPOINT_URL 
+    displayName: ENDPOINT URL 
+    description: Represents the endpoint url for S3 operations 
+    value: "endpointurl-changeme"
+
+  - name: BUCKET_NAME
+    displayName: BUCKET NAME 
+    description: Represents the bucket name used for S3 operations 
+    value: "bucket-changeme"
+
+  - name: KAFKA_ENDPOINT
+    displayName: KAFKA ENDPOINT
+    description: Represents the endpoint url for kafka cluster 
+    value: "kafkaurl-changeme"
+
+  - name: NAME
+    displayName: NAME 
+    description: Name of the job
+
+
+

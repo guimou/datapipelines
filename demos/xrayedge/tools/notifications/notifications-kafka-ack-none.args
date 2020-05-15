@@ -1,0 +1,5 @@
+-b notifications-kafka-ack-none
+-ke my-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092    
+-n notifications-ack-none
+-t xrayedge-notifications
+-al none

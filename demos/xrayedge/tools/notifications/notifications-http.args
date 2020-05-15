@@ -1,0 +1,4 @@
+-b notifications-http
+-he nginx-echo-headers-notifications-benchmark.apps.perf3.ocs.lab.eng.blr.redhat.com
+-t http-notifications
+-n http-notifications
