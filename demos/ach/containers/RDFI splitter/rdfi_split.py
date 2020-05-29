@@ -20,6 +20,11 @@ access_key = os.environ['AWS_ACCESS_KEY_ID']
 secret_key = os.environ['AWS_SECRET_ACCESS_KEY']
 service_point = os.environ['service_point']
 
+db_user = os.environ['database-user']
+db_password = os.environ['database-password']
+db_host = os.environ['database-host']
+db_db = os.environ['database-db']
+
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 s3client = boto3.client('s3', 'us-east-1', endpoint_url=service_point,
@@ -173,9 +178,9 @@ def create_ach_files(content):
 
 def update_rdfi_split():
     try:
-        cnx = mysql.connector.connect(user='achuser', password='achpassword',
-                                      host='achdb.ach-db',
-                                      database='achdb')
+        cnx = mysql.connector.connect(user=db_user, password=db_password,
+                                      host=db_host,
+                                      database=db_db)
         cursor = cnx.cursor()
         query = 'INSERT INTO rdfi_split(time,entry) SELECT CURRENT_TIMESTAMP(), 1;'
         cursor.execute(query)

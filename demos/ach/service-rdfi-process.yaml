@@ -24,6 +24,26 @@ spec:
               key: AWS_SECRET_ACCESS_KEY 
         - name: service_point
           value: 'replace_me'
+        - name: database-user
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: database-user
+        - name: database-password
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: database-password
+        - name: database-host
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: database-host
+        - name: database-db
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: database-db
         resources:
           limits:
             cpu: '2'
