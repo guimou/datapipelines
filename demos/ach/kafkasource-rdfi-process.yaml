@@ -5,9 +5,12 @@ metadata:
   namespace: ach
 spec:
   consumerGroup: rdfi-process
-  bootstrapServers: my-cluster-kafka-bootstrap.kafka:9092
-  topics: rdfi
+  bootstrapServers:
+    - my-cluster-kafka-bootstrap.kafka:9092
+  topics:
+    - rdfi
   sink:
-    apiVersion: serving.knative.dev/v1alpha1
-    kind: Service
-    name: rdfi-process
+    ref:
+      apiVersion: serving.knative.dev/v1alpha1
+      kind: Service
+      name: rdfi-process

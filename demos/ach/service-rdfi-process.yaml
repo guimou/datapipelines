@@ -23,7 +23,10 @@ spec:
               name: s3-secret
               key: AWS_SECRET_ACCESS_KEY 
         - name: service_point
-          value: 'replace_me'
+          valueFrom:
+            secretKeyRef:
+              name: s3-secret
+              key: service_point 
         - name: database-user
           valueFrom:
             secretKeyRef:

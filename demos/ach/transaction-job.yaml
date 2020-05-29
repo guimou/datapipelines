@@ -29,7 +29,30 @@ spec:
               name: s3-secret
               key: AWS_SECRET_ACCESS_KEY 
         - name: service_point
-          value: 'http://rook-ceph-rgw-rook-obj.rook-ceph'
+          valueFrom:
+            secretKeyRef:
+              name: s3-secret
+              key: service_point 
+        - name: database-user
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: database-user
+        - name: database-password
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: database-password
+        - name: database-host
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: database-host
+        - name: database-db
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: database-db
         image: quay.io/guimou/ach-transactions-generator:latest
         imagePullPolicy: Always
         name: gen

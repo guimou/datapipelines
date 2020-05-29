@@ -1,16 +1,8 @@
 apiVersion: integreatly.org/v1alpha1
 kind: GrafanaDataSource
 metadata:
-  creationTimestamp: '2020-03-09T16:48:54Z'
-  finalizers:
-    - grafana.cleanup
-  generation: 4
-  name: example-grafanadatasource
-  namespace: my-monitoring
-  resourceVersion: '63926294'
-  selfLink: >-
-    /apis/integreatly.org/v1alpha1/namespaces/my-monitoring/grafanadatasources/example-grafanadatasource
-  uid: 26ca5537-445f-4ddb-9231-6b19a2de0fd7
+  name: prometheus-grafanadatasource
+  namespace: ach
 spec:
   datasources:
     - basicAuthUser: internal
@@ -18,8 +10,11 @@ spec:
       secureJsonData: {}
       name: prometheus
       url: 'https://prometheus-k8s.openshift-monitoring.svc:9091'
-      basicAuthPassword: >-
-        YfLY7QXaFHvFwz9MEOUG+Gy2Cw6NTHiHqviRg2R2Q6iAWTjAlDCVRIPkf3+M29Vss6PROWV8ShP0yM2aNe+ld2HAJadCoCc6HJVXLqUEUGEt8STe6Ip0H2EP5dd665bkps88bi2pwwrPF0lwX1I6hRVbNd6ruDmqu97AxB4Jv31DIlYMnNkqS0jCWAW7Cw3f5OYyFgh4ui1fuNxqkPRFSOWnjlLr7dAdPh5dI3BDf2J72OapTPpGwAP/6Y0tOOAjQZZ1DLGNW4/eb7SU+8VhrKuq1oMRETXrbp0M5ZVJFsuxF1WBQXdkDHkFOBmGSBVqoT2TnWlcRzKtdywttZ0T
+      basicAuthPassword:
+        valueFrom:
+          secretKeyRef:
+              name: prometheus-secret
+              key: session_secret
       jsonData:
         timeInterval: 5s
         tlsSkipVerify: true
@@ -27,7 +22,4 @@ spec:
       version: 1
       type: prometheus
       orgId: 1
-  name: example-datasources.yaml
-status:
-  lastConfig: bc4a90ad7c37a1bf1587dc299e74e738
-  phase: 2
+  name: prometheus-grafanadatasource.yaml

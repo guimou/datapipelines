@@ -4,10 +4,13 @@ metadata:
   name: rdfi-split
   namespace: ach
 spec:
+  bootstrapServers:
+    - 'my-cluster-kafka-bootstrap.kafka:9092'
   consumerGroup: rdfi-split
-  bootstrapServers: my-cluster-kafka-bootstrap.kafka:9092
-  topics: odfi
   sink:
-    apiVersion: serving.knative.dev/v1alpha1
-    kind: Service
-    name: rdfi-split
+    ref:
+      apiVersion: serving.knative.dev/v1alpha1
+      kind: Service
+      name: rdfi-split
+  topics:
+    - odfi

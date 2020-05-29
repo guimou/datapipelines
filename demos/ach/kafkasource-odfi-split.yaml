@@ -5,9 +5,12 @@ metadata:
   namespace: ach
 spec:
   consumerGroup: odfi-split
-  bootstrapServers: my-cluster-kafka-bootstrap.kafka:9092
-  topics: merchant-upload
+  bootstrapServers:
+    - my-cluster-kafka-bootstrap.kafka:9092
+  topics:
+    - merchant-upload
   sink:
-    apiVersion: serving.knative.dev/v1alpha1
-    kind: Service
-    name: odfi-split
+    ref:
+      apiVersion: serving.knative.dev/v1alpha1
+      kind: Service
+      name: odfi-split

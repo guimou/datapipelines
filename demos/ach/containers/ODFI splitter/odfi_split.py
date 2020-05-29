@@ -54,16 +54,18 @@ class CloudeventsServer(object):
             def do_POST(self):
                 logging.info('POST received')
                 content_type = self.headers.get('Content-Type')
+                logging.info(content_type)
                 content_len = int(self.headers.get('Content-Length'))
+                logging.info(content_len)
                 headers = dict(self.headers)
+                logging.info(headers)
                 data = self.rfile.read(content_len)
                 data = data.decode('utf-8')
-                logging.info(content_type)
                 logging.info(data)
 
-                if content_type != 'application/json':
-                    logging.info('Not JSON')
-                    data = io.StringIO(data)
+                #if content_type != 'application/json':
+                #    logging.info('Not JSON')
+                #    data = io.StringIO(data)
 
                 try:
                     event = v02.Event()

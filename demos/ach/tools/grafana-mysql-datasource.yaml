@@ -2,13 +2,13 @@ apiVersion: integreatly.org/v1alpha1
 kind: GrafanaDataSource
 metadata:
   name: mysql-grafanadatasource
-  namespace: my-monitoring
+  namespace: ach
 spec:
   datasources:
     - type: mysql
       name: MySQL
       access: proxy
-      url: achdb.ach-db
+      url: ach-db.ach
       database: achdb
       user: achuser
       password: achpassword

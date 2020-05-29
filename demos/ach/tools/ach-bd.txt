@@ -1,4 +1,4 @@
-CREATE TABLE bank_balance(time TIMESTAMP, amount DECIMAL(12,2));
+CREATE TABLE bank_balance(time TIMESTAMP, balance DECIMAL(12,2));
 CREATE TABLE merchant_upload(time TIMESTAMP, entry INT(5));
 CREATE TABLE odfi_split(time TIMESTAMP, entry INT(5));
 CREATE TABLE rdfi_split(time TIMESTAMP, entry INT(5));

@@ -4,7 +4,7 @@ metadata:
   labels:
     app: grafana
   name: ach-dashboard
-  namespace: my-monitoring
+  namespace: ach
 spec:
   json: |
     {
@@ -24,7 +24,7 @@ spec:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
-      "iteration": 1585761951245,
+      "iteration": 1590771464091,
       "links": [],
       "panels": [
         {
@@ -441,7 +441,7 @@ spec:
           ],
           "targets": [
             {
-              "expr": "kube_deployment_status_replicas{namespace=~\"$namespace\"}",
+              "expr": "kube_deployment_status_replicas{namespace=~\"$namespace\",deployment!~\"grafana.*\"}",
               "format": "time_series",
               "instant": true,
               "interval": "",
