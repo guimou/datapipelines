@@ -75,9 +75,9 @@ class CloudeventsServer(object):
                 logging.info(content_type)
                 logging.info(data)
 
-                if content_type != 'application/json':
-                    logging.info('Not JSON')
-                    data = io.StringIO(data)
+                #if content_type != 'application/json':
+                #    logging.info('Not JSON')
+                #    data = io.StringIO(data)
 
                 try:
                     event = v02.Event()
