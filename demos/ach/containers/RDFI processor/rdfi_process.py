@@ -138,9 +138,9 @@ def update_balance(transactions_amount):
 
 def update_rdfi_process():
     try:
-        cnx = mysql.connector.connect(user='achuser', password='achpassword',
-                                      host='achdb.ach-db',
-                                      database='achdb')
+        cnx = mysql.connector.connect(user=db_user, password=db_password,
+                                      host=db_host,
+                                      database=db_db)
         cursor = cnx.cursor()
         query = 'INSERT INTO rdfi_process(time,entry) SELECT CURRENT_TIMESTAMP(), 1;'
         cursor.execute(query)
