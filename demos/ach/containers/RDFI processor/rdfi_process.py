@@ -73,7 +73,7 @@ class CloudeventsServer(object):
                 #    logging.error(f"Event error: {e}")
                 #    raise
                 
-                event = data['Records'][0]
+                event = eval(data)['Records'][0]
                 logging.info(event)
                 func(event)
                 self.send_response(204)
