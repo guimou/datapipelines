@@ -67,13 +67,13 @@ class CloudeventsServer(object):
                 #    logging.info('Not JSON')
                 #    data = io.StringIO(data)
 
-                try:
-                    event = v02.Event()
-                    event = m.FromRequest(event, headers, data, json.loads)
-                except Exception as e:
-                    logging.error(f"Event error: {e}")
-                    raise
-
+                #try:
+                #    event = v02.Event()
+                #    event = m.FromRequest(event, headers, data, json.loads)
+                #except Exception as e:
+                #    logging.error(f"Event error: {e}")
+                #    raise
+                event = data['Records'][0]
                 logging.info(event)
                 func(event)
                 self.send_response(204)
