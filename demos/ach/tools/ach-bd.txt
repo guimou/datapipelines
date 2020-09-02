@@ -1,3 +1,17 @@
+Log into the DB pod:
+--------------------
+oc rsh <pod_name (ach-db-xxxxxxx)>
+
+Connect to the database:
+------------------------
+mysql -u root
+
+Connect to the schema:
+----------------------
+USE achdb;
+
+Database init:
+--------------
 CREATE TABLE bank_balance(time TIMESTAMP, balance DECIMAL(12,2));
 CREATE TABLE merchant_upload(time TIMESTAMP, entry INT(5));
 CREATE TABLE odfi_split(time TIMESTAMP, entry INT(5));
@@ -10,6 +24,8 @@ SELECT * FROM odfi_split;
 SELECT * FROM rdfi_split;
 SELECT * FROM rdfi_process;
 
+Database reset:
+---------------
 
 DELETE FROM bank_balance;
 DELETE FROM merchant_upload;
