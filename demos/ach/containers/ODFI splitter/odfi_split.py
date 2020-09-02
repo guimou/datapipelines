@@ -141,7 +141,7 @@ def update_odfi_split():
 
 def run_event(event):
     try:
-        extracted_data = extract_data(event.Data())
+        extracted_data = extract_data(event)
         bucket_eventName = extracted_data['bucket_eventName']
         bucket_name = extracted_data['bucket_name']
         object_key = extracted_data['object_key']
