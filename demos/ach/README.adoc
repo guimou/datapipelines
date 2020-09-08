@@ -13,10 +13,10 @@ What you will find here:
 
 In the **containers** folder you will find the code to generate different container images:
 
-* Transactions generator: creates random transactions, put them in an ACH file, and send it to the ach-merchant-upload bucket.
-* ODFI splitter: upon notification, retrieves ACH file from the ach-merchant-upload bucket, extracts the origin bank number, and puts the files in the associated buckets (ach-odfi-060000x)
-* RDI splitter: upon notification, retrieves ACH file from the ach-odfi-060000x bucket, extracts transactions by RDFI number, generates new ACH files and puts them in the associated buckets (ach-rdfi-060000x)
-* RDI processor: upon notification, retrieves ACH file from the ach-rdfi-060000x bucket, extracts transactions and add the amounts to the total (saved in small external database)
+* Transactions generator: creates random transactions, put them in an ACH file, and send it to the **ach-merchant-upload** bucket.
+* ODFI splitter: upon notification, retrieves ACH file from the ach-merchant-upload bucket, extracts the origin bank number, and puts the files in the associated buckets (**ach-odfi-060000x**)
+* RDI splitter: upon notification, retrieves ACH file from the ach-odfi-060000x bucket, extracts transactions by RDFI number, generates new ACH files and puts them in the associated buckets (**ach-rdfi-060000x**)
+* RDI processor: upon notification, retrieves ACH file from the **ach-rdfi-060000x** buckets, extracts transactions and add the amounts to the total (saved in small external database)
 
 In the **tools** folder you will also find:
 
