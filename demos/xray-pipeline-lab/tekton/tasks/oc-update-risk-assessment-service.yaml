@@ -1,0 +1,26 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: oc-update-risk-assessment-service
+spec:
+  inputs:
+    params:
+      - description: The name of the KNative service we want to update
+        name: service-name
+        type: string
+      - description: The version of the model
+        name: model-version
+        type: string
+  steps:
+    - image: 'quay.io/openshift/origin-cli:latest'
+      name: patch-service
+      resources: {}
+      script: >
+        oc patch service.serving.knative.dev/$(inputs.params.service-name)
+        --type=json -p
+        '[
+        {"op":"replace","path":"/spec/template/metadata/annotations/revisionTimestamp",
+        "value":"'"$(date +%F_%T)"'"},
+        {"op":"replace","path":"/spec/template/spec/containers/0/env/0/value",
+        "value":"$(inputs.params.model-version)"}
+        ]'

@@ -1,0 +1,5 @@
+tensorflow==2.3.*
+boto3==1.14.*
+pillow==7.2.*
+cloudevents==1.2.*
+mysql-connector-python==8.0.*

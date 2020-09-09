@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: service-point
+data:
+  url: 'replace_me'
+  url-external: 'replace_me'
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: database-host
+data:
+  url: 'replace_me'

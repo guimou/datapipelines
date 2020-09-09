@@ -1,0 +1,16 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: knative-service-refresh
+spec:
+  params:
+  - name: service-name
+    type: string
+  tasks:
+    - name: service-refresh
+      taskRef:
+        kind: Task
+        name: oc-update-service
+      params:
+        - name: service-name
+          value: $(params.service-name)
