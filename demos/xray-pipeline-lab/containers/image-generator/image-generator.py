@@ -22,8 +22,8 @@ s3client = boto3.client('s3', 'us-east-1', endpoint_url=service_point,
                         use_ssl=True if 'https' in service_point else False)
 
 # Buckets
-bucket_source = os.environ['bucket_source']
-bucket_destination = os.environ['bucket_destination']
+bucket_source = os.environ['bucket-source']
+bucket_destination = os.environ['bucket-base-name']
 
 # Helper database
 db_user = os.environ['database-user']
@@ -38,7 +38,7 @@ seconds_wait = float(os.environ['seconds_wait'])
 # Code #
 ########
 def copy_file(source, image_key, destination, image_name):
-    """Simple abstraction function to copy an object from a bucket to another one.""" 
+    """Copies an object from a source bucket to a destination bucket.""" 
 
     copy_source = {
         'Bucket': source,
@@ -47,6 +47,8 @@ def copy_file(source, image_key, destination, image_name):
     s3client.copy(copy_source, destination, image_name)
 
 def update_images_uploaded(image_name):
+    """Inserts image name and timestamp into the helper database."""
+
     try:
         cnx = mysql.connector.connect(user=db_user, password=db_password,
                                       host=db_host,
@@ -62,7 +64,7 @@ def update_images_uploaded(image_name):
         logging.error(f"Unexpected error: {e}")
         raise
 
-# Read source images lists
+# Populate source images lists
 pneumonia_images=[]
 for image in s3client.list_objects(Bucket=bucket_source,Prefix='demo_base/PNEUMONIA/')['Contents']:
     pneumonia_images.append(image['Key'])
@@ -71,8 +73,8 @@ for image in s3client.list_objects(Bucket=bucket_source,Prefix='demo_base/NORMAL
     normal_images.append(image['Key'])
 
 # Main loop
-while seconds_wait != 0:
-    print("copy image")
+while seconds_wait != 0: #This allows the container to keep running but not send any image if parameter is set to 0
+    logging.info("copy image")
     rand_type = random.randint(1,10)
     if rand_type <= 8: # 80% of time, choose a normal image
         image_key = normal_images[random.randint(0,len(normal_images)-1)]

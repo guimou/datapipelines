@@ -1,96 +1,122 @@
-import http.server
 import io
-import json
 import logging
 import os
-import random
-import socketserver
 import sys
 from hashlib import blake2b
 from io import BytesIO
 
 import boto3
-import mysql.connector
 import numpy as np
 import tensorflow as tf
+from cloudevents.http import from_http
+from flask import Flask, request
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
-from cloudevents.sdk import marshaller
-from cloudevents.sdk.event import v02
 
-access_key = os.environ['AWS_ACCESS_KEY_ID']
-secret_key = os.environ['AWS_SECRET_ACCESS_KEY']
-service_point = os.environ['service_point']
-
-db_user = os.environ['database-user']
-db_password = os.environ['database-password']
-db_host = os.environ['database-host']
-db_db = os.environ['database-db']
-
-model_version = os.environ['model_version']
+import mysql.connector
+from flask_cors import CORS
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
+##############
+## Vars init #
+##############
+# Object storage
+access_key = os.environ['AWS_ACCESS_KEY_ID']
+secret_key = os.environ['AWS_SECRET_ACCESS_KEY']
+service_point = os.environ['service_point']
 s3client = boto3.client('s3','us-east-1', endpoint_url=service_point,
                        aws_access_key_id = access_key,
                        aws_secret_access_key = secret_key,
                         use_ssl = True if 'https' in service_point else False)
 
-m = marshaller.NewDefaultHTTPMarshaller()
+# Bucket base name
+bucket_base_name = os.environ['bucket-base-name']
 
+# Helper database
+db_user = os.environ['database-user']
+db_password = os.environ['database-password']
+db_host = os.environ['database-host']
+db_db = os.environ['database-db']
 
-class ForkedHTTPServer(socketserver.ForkingMixIn, http.server.HTTPServer):
-    """Handle requests with fork."""
+# Inference model version
+model_version = os.environ['model_version']
 
+########
+# Code #
+########
+# Main Flask app
+app = Flask(__name__)
+CORS(app)
 
-class CloudeventsServer(object):
-    """Listen for incoming HTTP cloudevents requests.
-    cloudevents request is simply a HTTP Post request following a well-defined
-    of how to pass the event data.
-    """
-    def __init__(self, port=8080):
-        self.port = port
+@app.route("/", methods=["POST"])
+def home():
+    # Retrieve the CloudEvent
+    event = from_http(request.headers, request.get_data())
+    logging.info(event)
+    
+    # Process the event
+    process_event(event)
 
-    def start_receiver(self, func):
-        """Start listening to HTTP requests
-        :param func: the callback to call upon a cloudevents request
-        :type func: cloudevent -> none
-        """
-        class BaseHttp(http.server.BaseHTTPRequestHandler):
-            def do_POST(self):
-                logging.info('POST received')
-                content_type = self.headers.get('Content-Type')
-                content_len = int(self.headers.get('Content-Length'))
-                headers = dict(self.headers)
-                data = self.rfile.read(content_len)
-                data = data.decode('utf-8')
-                logging.info(content_type)
-                logging.info(data)
+    return "", 204
 
-                if content_type != 'application/json':
-                    logging.info('Not JSON')
-                    data = io.StringIO(data)
+def process_event(event):
+    """Main function to process an event received by the container image."""
 
-                try:
-                    event = v02.Event()
-                    event = m.FromRequest(event, headers, data, json.loads)
-                except Exception as e:
-                    logging.error(f"Event error: {e}")
-                    raise   
+    logging.info(event['data'])
+    try:
+        # Retrieve event info
+        extracted_data = extract_data(event['data'])
+        bucket_eventName = extracted_data['bucket_eventName']
+        bucket_name = extracted_data['bucket_name']
+        img_key = extracted_data['bucket_object']
+        img_name = img_key.split('/')[-1]
+        logging.info(bucket_eventName + ' ' + bucket_name + ' ' + img_key)
 
-                logging.info(event)
-                func(event)
-                self.send_response(204)
-                self.end_headers()
-                return
+        if 's3:ObjectCreated' in bucket_eventName:
+            # Load image and make prediction
+            new_image = load_image(bucket_name,img_key)
+            result = prediction(new_image)
+            logging.info('result=' + result['label'])
 
-        socketserver.TCPServer.allow_reuse_address = True
-        with ForkedHTTPServer(("", self.port), BaseHttp) as httpd:
-            try:
-                logging.info("serving at port {}".format(self.port))
-                httpd.serve_forever()
-            except:
-                httpd.server_close()
-                raise
+            # Get original image and print prediction on it
+            image_object = s3client.get_object(Bucket=bucket_name,Key=img_key)
+            img = Image.open(BytesIO(image_object['Body'].read()))
+            draw = ImageDraw.Draw(img)
+            font = ImageFont.truetype('FreeMono.ttf', 50)
+            draw.text((0, 0), result['label'], (255), font=font)
+
+            # Save image with "-processed" appended to name
+            computed_image_key = os.path.splitext(img_key)[0] + '-processed.' + os.path.splitext(img_key)[-1].strip('.')
+            buffer = BytesIO()
+            img.save(buffer, get_safe_ext(computed_image_key))
+            buffer.seek(0)
+            sent_data = s3client.put_object(Bucket=bucket_base_name+'-processed', Key=computed_image_key, Body=buffer)
+            if sent_data['ResponseMetadata']['HTTPStatusCode'] != 200:
+                raise logging.error('Failed to upload image {} to bucket {}'.format(computed_image_key, bucket_base_name + '-processed'))
+            update_images_processed(computed_image_key,model_version,result['label'])
+            logging.info('Image processed')
+
+            # If "unsure" of prediction, anonymize image
+            if (result['pred'] < 0.80 and  result['pred'] > 0.60):
+                anonymized_data = anonymize(img,img_name)
+                split_key = img_key.rsplit('/', 1)
+                if len(split_key) == 1:
+                    anonymized_image_key = anonymized_data['anon_img_name']
+                else:
+                    anonymized_image_key = split_key[0] + '/' + anonymized_data['anon_img_name']
+                anonymized_img = anonymized_data['img_anon']
+                buffer = BytesIO()
+                anonymized_img.save(buffer, get_safe_ext(anonymized_image_key))
+                buffer.seek(0)
+                sent_data = s3client.put_object(Bucket=bucket_base_name+'-anonymized', Key=anonymized_image_key, Body=buffer)
+                if sent_data['ResponseMetadata']['HTTPStatusCode'] != 200:
+                    raise logging.error('Failed to upload image {} to bucket {}'.format(anonymized_image_key, bucket_base_name+'-anonymized'))
+                update_images_anonymized(anonymized_image_key)
+                logging.info('Image anonymized')
+
+    except Exception as e:
+        logging.error(f"Unexpected error: {e}")
+        raise
 
 def extract_data(msg):
     logging.info('extract_data')
@@ -203,61 +229,8 @@ def update_images_anonymized(image_name):
         logging.error(f"Unexpected error: {e}")
         raise
 
-def run_event(event):
-    logging.info(event.Data())
-    try:
-        extracted_data = extract_data(event.Data())
-        bucket_eventName = extracted_data['bucket_eventName']
-        bucket_name = extracted_data['bucket_name']
-        img_key = extracted_data['bucket_object']
-        img_name = img_key.split('/')[-1]
-        logging.info(bucket_eventName + ' ' + bucket_name + ' ' + img_key)
-
-        if 's3:ObjectCreated' in bucket_eventName:
-            # Load image and make prediction
-            new_image = load_image(bucket_name,img_key)
-            result = prediction(new_image)
-            logging.info('result=' + result['label'])
-
-            # Get original image and print prediction on it
-            image_object = s3client.get_object(Bucket=bucket_name,Key=img_key)
-            img = Image.open(BytesIO(image_object['Body'].read()))
-            draw = ImageDraw.Draw(img)
-            font = ImageFont.truetype('FreeMono.ttf', 50)
-            draw.text((0, 0), result['label'], (255), font=font)
-
-            # Save image with "-processed" appended to name
-            computed_image_key = os.path.splitext(img_key)[0] + '-processed.' + os.path.splitext(img_key)[-1].strip('.')
-            buffer = BytesIO()
-            img.save(buffer, get_safe_ext(computed_image_key))
-            buffer.seek(0)
-            sent_data = s3client.put_object(Bucket=bucket_name+'-processed', Key=computed_image_key, Body=buffer)
-            if sent_data['ResponseMetadata']['HTTPStatusCode'] != 200:
-                raise logging.error('Failed to upload image {} to bucket {}'.format(computed_image_key, bucket_name + '-processed'))
-            update_images_processed(computed_image_key,model_version,result['label'])
-            logging.info('Image processed')
-
-            if (result['pred'] < 0.80 and  result['pred'] > 0.60):
-                anonymized_data = anonymize(img,img_name)
-                split_key = img_key.rsplit('/', 1)
-                if len(split_key) == 1:
-                    anonymized_image_key = anonymized_data['anon_img_name']
-                else:
-                    anonymized_image_key = split_key[0] + '/' + anonymized_data['anon_img_name']
-                anonymized_img = anonymized_data['img_anon']
-                buffer = BytesIO()
-                anonymized_img.save(buffer, get_safe_ext(anonymized_image_key))
-                buffer.seek(0)
-                sent_data = s3client.put_object(Bucket='xrayedge-research-in', Key=anonymized_image_key, Body=buffer)
-                if sent_data['ResponseMetadata']['HTTPStatusCode'] != 200:
-                    raise logging.error('Failed to upload image {} to bucket {}'.format(anonymized_image_key, 'xrayedge-research-in'))
-                update_images_anonymized(anonymized_image_key)
-                logging.info('Image anonymized')
-
-    except Exception as e:
-        logging.error(f"Unexpected error: {e}")
-        raise
 
 
-client = CloudeventsServer()
-client.start_receiver(run_event)
+# Launch Flask server
+if __name__ == '__main__':
+    app.run(host='0.0.0.0')

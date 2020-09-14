@@ -62,6 +62,16 @@ spec:
                 secretKeyRef:
                   name: db-secret
                   key:  database-db
+            - name: bucket-base-name
+              valueFrom:
+                configMapKeyRef:
+                  name: buckets-config
+                  key: bucket-base-name
+            - name: bucket-source
+              valueFrom:
+                configMapKeyRef:
+                  name: buckets-config
+                  key: bucket-source
           resources:
             limits:
                 cpu: '2'

@@ -50,6 +50,11 @@ spec:
                 configMapKeyRef:
                   name: service-point
                   key: url-external
+            - name: bucket-base-name
+              valueFrom:
+                configMapKeyRef:
+                  name: buckets-config
+                  key: bucket-base-name
           ports:
             - containerPort: 5000
           resources:

@@ -7,7 +7,7 @@ spec:
   template:
     metadata:
         annotations:
-          autoscaling.knative.dev/target: '2'
+          autoscaling.knative.dev/target: '1'
           revisionTimestamp: ''
     spec:
       containers:
@@ -50,6 +50,11 @@ spec:
             secretKeyRef:
               name: db-secret
               key:  database-db
+        - name: bucket-base-name
+          valueFrom:
+            configMapKeyRef:
+              name: buckets-config
+              key: bucket-base-name
         resources:
           limits:
             cpu: '2'

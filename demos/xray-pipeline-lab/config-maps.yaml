@@ -12,3 +12,11 @@ metadata:
   name: database-host
 data:
   url: 'replace_me'
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: buckets-config
+data:
+  bucket-source: 'replace_me'
+  bucket-base-name: 'replace_me'
