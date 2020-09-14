@@ -1,7 +1,21 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: xraylabdb
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: ocs-storagecluster-ceph-rbd
+  volumeMode: Filesystem
+---
 kind: DeploymentConfig
 apiVersion: apps.openshift.io/v1
 metadata:
-  name: xrayedgedb
+  name: xraylabdb
 spec:
   strategy:
     type: Recreate
@@ -24,17 +38,13 @@ spec:
   revisionHistoryLimit: 3
   test: false
   selector:
-    name: xrayedgedb
+    name: xraylabdb
   template:
     metadata:
       creationTimestamp: null
       labels:
-        name: xrayedgedb
+        name: xraylabdb
     spec:
-      volumes:
-        - name: xrayedgedb-data
-          persistentVolumeClaim:
-            claimName: xrayedgedb
       containers:
         - resources:
             limits:
@@ -67,33 +77,38 @@ spec:
             - name: MYSQL_USER
               valueFrom:
                 secretKeyRef:
-                  name: xrayedgedb
+                  name: db-secret
                   key: database-user
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: xrayedgedb
+                  name: db-secret
                   key: database-password
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: xrayedgedb
+                  name: db-secret
                   key: database-root-password
             - name: MYSQL_DATABASE
               valueFrom:
                 secretKeyRef:
-                  name: xrayedgedb
-                  key: database-name
+                  name: db-secret
+                  key: database-db
           ports:
             - containerPort: 3306
               protocol: TCP
           imagePullPolicy: IfNotPresent
           volumeMounts:
-            - name: xrayedgedb-data
+            - name: xraylabdb-data
               mountPath: /var/lib/mysql/data
           terminationMessagePolicy: File
           image: >-
-            image-registry.openshift-image-registry.svc:5000/openshift/mariadb
+            image-registry.openshift-image-registry.svc:5000/openshift/mariadb:10.2
+      volumes:
+        - name: xraylabdb-data
+          persistentVolumeClaim:
+            claimName: xraylabdb
+            storageClassName: 
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst

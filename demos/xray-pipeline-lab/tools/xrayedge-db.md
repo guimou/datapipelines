@@ -7,7 +7,7 @@ mysql -u root
 ```
 
 ```sql
-USE xrayedgedb;
+USE xraylabdb;
 ```
 
 # Reinitialize the environment
@@ -35,4 +35,5 @@ INSERT INTO images_anonymized(time,name) SELECT CURRENT_TIMESTAMP(), '';
 SELECT * FROM images_uploaded;
 SELECT * FROM images_processed;
 SELECT * FROM images_anonymized;
+
 ```

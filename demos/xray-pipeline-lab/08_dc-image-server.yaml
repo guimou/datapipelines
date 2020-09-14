@@ -1,47 +1,29 @@
 kind: DeploymentConfig
 apiVersion: apps.openshift.io/v1
 metadata:
-  name: image-generator
+  name: image-server
 spec:
   triggers:
     - type: ImageChange
       imageChangeParams:
         automatic: true
         containerNames:
-        - image-generator
+        - image-server
         from:
           kind: ImageStreamTag
-          namespace: xrayedge
-          name: image-generator:latest
+          name: image-server:latest
     - type: ConfigChange
   replicas: 1
   revisionHistoryLimit: 3
   template:
     metadata:
       labels:
-        name: image-generator
+        name: image-server
     spec:
       containers:
-        - name: image-generator
-          image: image-registry.openshift-image-registry.svc:5000/xrayedge/image-generator
+        - name: image-server
+          image: image-server:latest
           env:
-            - name: seconds_wait
-              value: '0'
-            - name: AWS_ACCESS_KEY_ID
-              valueFrom:
-                secretKeyRef:
-                  name: s3-secret
-                  key: AWS_ACCESS_KEY_ID
-            - name: AWS_SECRET_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: s3-secret
-                  key: AWS_SECRET_ACCESS_KEY
-            - name: service_point
-              valueFrom:
-                configMapKeyRef:
-                  name: service-point
-                  key: url
             - name: database-user
               valueFrom:
                 secretKeyRef:
@@ -62,16 +44,18 @@ spec:
                 secretKeyRef:
                   name: db-secret
                   key:  database-db
+            - name: service_point
+              valueFrom:
+                configMapKeyRef:
+                  name: service-point
+                  key: url-external
             - name: bucket-base-name
               valueFrom:
                 configMapKeyRef:
                   name: buckets-config
                   key: bucket-base-name
-            - name: bucket-source
-              valueFrom:
-                configMapKeyRef:
-                  name: buckets-config
-                  key: bucket-source
+          ports:
+            - containerPort: 5000
           resources:
             limits:
                 cpu: '2'

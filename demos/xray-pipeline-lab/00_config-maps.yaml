@@ -11,7 +11,7 @@ kind: ConfigMap
 metadata:
   name: database-host
 data:
-  url: 'replace_me'
+  url: xraylabdb
 ---
 apiVersion: v1
 kind: ConfigMap

@@ -4,10 +4,9 @@ metadata:
   name: xrayedge-in
   labels:
     strimzi.io/cluster: my-cluster
-  namespace: kafka
 spec:
-  partitions: 3
-  replicas: 3
+  partitions: 1
+  replicas: 1
   config:
     retention.ms: 604800000
     segment.bytes: 1073741824
@@ -18,10 +17,9 @@ metadata:
   name: xrayedge-research-in
   labels:
     strimzi.io/cluster: my-cluster
-  namespace: kafka
 spec:
-  partitions: 3
-  replicas: 3
+  partitions: 1
+  replicas: 1
   config:
     retention.ms: 604800000
     segment.bytes: 1073741824
