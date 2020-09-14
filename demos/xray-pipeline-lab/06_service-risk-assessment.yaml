@@ -2,7 +2,6 @@ apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: risk-assessment
-  namespace: xrayedge
 spec:
   template:
     metadata:
@@ -11,7 +10,9 @@ spec:
           revisionTimestamp: ''
     spec:
       containers:
-      - image: image-registry.openshift-image-registry.svc:5000/xrayedge/risk-assessment:latest
+      - image: quay.io/guimou/xraylab-risk-assessment:latest
+        ports:
+              - containerPort: 5000
         env:
         - name: model_version
           value: 'v1'

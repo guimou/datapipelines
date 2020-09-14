@@ -1,8 +1,7 @@
 apiVersion: integreatly.org/v1alpha1
 kind: Grafana
 metadata:
-  name: xrayedge-grafana
-  namespace: xrayedge
+  name: xraylab-grafana
 spec:
   ingress:
     enabled: true

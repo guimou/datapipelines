@@ -3,7 +3,7 @@
 Before running those, make sure you are connected to the right project!
 
 ```bash
-oc project xrayedge
+oc project xraylab
 ```
 
 ## Patch image-generator with seconds_wait

@@ -16,6 +16,8 @@ kind: DeploymentConfig
 apiVersion: apps.openshift.io/v1
 metadata:
   name: xraylabdb
+  labels:
+    app: xraylabdb
 spec:
   strategy:
     type: Recreate
@@ -38,12 +40,11 @@ spec:
   revisionHistoryLimit: 3
   test: false
   selector:
-    name: xraylabdb
+    app: xraylabdb
   template:
     metadata:
-      creationTimestamp: null
       labels:
-        name: xraylabdb
+        app: xraylabdb
     spec:
       containers:
         - resources:
@@ -114,3 +115,17 @@ spec:
       dnsPolicy: ClusterFirst
       securityContext: {}
       schedulerName: default-scheduler
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: xraylabdb
+spec:
+  ports:
+    - name: mariadb
+      protocol: TCP
+      port: 3306
+      targetPort: 3306
+  selector:
+    app: xraylabdb
+

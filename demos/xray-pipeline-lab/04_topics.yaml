@@ -1,7 +1,7 @@
 apiVersion: kafka.strimzi.io/v1beta1
 kind: KafkaTopic
 metadata:
-  name: xrayedge-in
+  name: xray-images
   labels:
     strimzi.io/cluster: my-cluster
 spec:
@@ -10,16 +10,4 @@ spec:
   config:
     retention.ms: 604800000
     segment.bytes: 1073741824
----
-apiVersion: kafka.strimzi.io/v1beta1
-kind: KafkaTopic
-metadata:
-  name: xrayedge-research-in
-  labels:
-    strimzi.io/cluster: my-cluster
-spec:
-  partitions: 1
-  replicas: 1
-  config:
-    retention.ms: 604800000
-    segment.bytes: 1073741824
+

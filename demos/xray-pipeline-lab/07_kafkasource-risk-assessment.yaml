@@ -1,12 +1,15 @@
 apiVersion: sources.knative.dev/v1alpha1
 kind: KafkaSource
 metadata:
-  name: risk-assessment
+  name: xray-images
 spec:
   consumerGroup: risk-assessment
-  bootstrapServers: my-cluster-kafka-bootstrap.kafka:9092
-  topics: xrayedge-in
+  bootstrapServers:
+    - my-cluster-kafka-bootstrap:9092
+  topics:
+    - xray-images
   sink:
-    apiVersion: serving.knative.dev/v1alpha1
-    kind: Service
-    name: risk-assessment
+    ref: 
+      apiVersion: serving.knative.dev/v1alpha1
+      kind: Service
+      name: risk-assessment

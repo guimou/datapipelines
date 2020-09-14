@@ -3,8 +3,7 @@ kind: GrafanaDashboard
 metadata:
   labels:
     app: grafana
-  name: xrayedge-images-dashboard
-  namespace: xrayedge
+  name: xraylab-images-dashboard
 spec:
   json: |
     {

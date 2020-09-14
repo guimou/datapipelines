@@ -69,3 +69,15 @@ spec:
       dnsPolicy: ClusterFirst
       securityContext: {}
       schedulerName: default-scheduler
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: image-server
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+  selector:
+    name: image-server

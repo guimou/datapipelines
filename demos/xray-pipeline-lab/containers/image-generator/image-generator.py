@@ -66,10 +66,10 @@ def update_images_uploaded(image_name):
 
 # Populate source images lists
 pneumonia_images=[]
-for image in s3client.list_objects(Bucket=bucket_source,Prefix='demo_base/PNEUMONIA/')['Contents']:
+for image in s3client.list_objects(Bucket=bucket_source,Prefix='PNEUMONIA/')['Contents']:
     pneumonia_images.append(image['Key'])
 normal_images=[]
-for image in s3client.list_objects(Bucket=bucket_source,Prefix='demo_base/NORMAL/')['Contents']:
+for image in s3client.list_objects(Bucket=bucket_source,Prefix='NORMAL/')['Contents']:
     normal_images.append(image['Key'])
 
 # Main loop
