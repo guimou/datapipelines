@@ -28,7 +28,7 @@ spec:
       "panels": [
         {
           "bgColor": null,
-          "bgURL": "https://github.com/guimou/datapipelines/raw/master/demos/xray-pipeline-lab/grafana/xraylab-dashboard-panel.png",
+          "bgURL": "https://github.com/guimou/datapipelines/raw/main/demos/xray-pipeline-lab/grafana/xraylab-dashboard-panel.png",
           "boxes": [
             {
               "angle": "0",

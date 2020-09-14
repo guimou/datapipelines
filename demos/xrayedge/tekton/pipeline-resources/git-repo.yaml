@@ -8,4 +8,4 @@ spec:
   - name: url
     value: https://github.com/guimou/datapipelines.git
   - name: revision
-    value: master
+    value: main
