@@ -29,7 +29,7 @@ spec:
       "panels": [
         {
           "bgColor": null,
-          "bgURL": "https://github.com/guimou/datapipelines/raw/master/demos/ach/tools/img/ACH%20workflow%20-%20Simplified%20-%20Dashboard%20schematic.png",
+          "bgURL": "https://github.com/guimou/datapipelines/raw/main/demos/ach/tools/img/ACH%20workflow%20-%20Simplified%20-%20Dashboard%20schematic.png",
           "boxes": [
             {
               "angle": "0",
