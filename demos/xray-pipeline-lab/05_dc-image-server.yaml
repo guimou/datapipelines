@@ -81,3 +81,18 @@ spec:
       targetPort: 5000
   selector:
     name: image-server
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: image-server
+spec:
+  to:
+    kind: Service
+    name: image-server
+    weight: 100
+  port:
+    targetPort: 5000
+  tls:
+    termination: edge
+  wildcardPolicy: None
