@@ -1125,11 +1125,11 @@ objects:
               "options": [
                 {
                   "selected": true,
-                  "text": "xraylab",
-                  "value": "xraylab"
+                  "text": "${namespace}",
+                  "value": "${namespace}"
                 }
               ],
-              "query": "xraylab",
+              "query": "${namespace}",
               "skipUrlSync": false,
               "type": "constant"
             }
@@ -1180,5 +1180,7 @@ parameters:
   name: image_server_url
 - description: Bucket base name
   name: bucket_base_name
+- description: Project namespace
+  name: namespace
 labels:
   grafana: dashboard
