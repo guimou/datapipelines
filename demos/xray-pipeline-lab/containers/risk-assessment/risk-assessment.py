@@ -52,7 +52,6 @@ CORS(app)
 def home():
     # Retrieve the CloudEvent
     event = from_http(request.headers, request.get_data())
-    logging.info(event)
     
     # Process the event
     process_event(event.data)
