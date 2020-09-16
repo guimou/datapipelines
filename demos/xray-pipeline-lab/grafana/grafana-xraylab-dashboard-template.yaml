@@ -10,6 +10,7 @@ objects:
     labels:
       app: grafana
     name: xraylab-dashboard
+    uid: xraylabdashboard
   spec:
     json: |
       {
@@ -309,7 +310,7 @@ objects:
                 "params": "",
                 "title": "Last Images",
                 "type": "dashboard",
-                "url": "/d/lAAwqejZz/last-images"
+                "url": "/d/lastimagesdashboard/last-images"
               }
             ],
             "method": "iframe",
@@ -423,7 +424,7 @@ objects:
                 "params": "",
                 "title": "Last Images",
                 "type": "dashboard",
-                "url": "/d/lAAwqejZz/last-images"
+                "url": "/d/lastimagesdashboard/last-images"
               }
             ],
             "method": "iframe",
@@ -854,7 +855,7 @@ objects:
                 "params": "",
                 "title": "Last Images",
                 "type": "dashboard",
-                "url": "/d/lAAwqejZz/last-images"
+                "url": "/d/lastimagesdashboard/last-images"
               }
             ],
             "method": "iframe",
@@ -1116,8 +1117,8 @@ objects:
             },
             {
               "current": {
-                "text": "xraylab",
-                "value": "xraylab"
+                "text": "${namespace}",
+                "value": "${namespace}"
               },
               "hide": 2,
               "label": "Namespace",
@@ -1166,7 +1167,7 @@ objects:
         },
         "timezone": "utc",
         "title": "XRay Lab",
-        "uid": "hakbeh9Wz",
+        "uid": "xraylab-dashboard",
         "version": 6
       }
     name: xraylab-dashboard.json

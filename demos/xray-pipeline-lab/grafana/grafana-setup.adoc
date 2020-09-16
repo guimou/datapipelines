@@ -1,0 +1,59 @@
+= Setup the Grafana environment
+
+We will now implenent the Grafana dashboards we'll use to monitor our pipeline.
+
+The Grafana operator has already been installed for you in your namespace. We'll first create some resources that we need.
+
+== Data Sources
+
+=== MySQL Datasource
+The MySQL helper database contains informations (name, timestamps) on the uploaded, processed, and anomymized images. +
+We will display these informations on the dashboard.
+
+.Create the MySQL Datasource
+----
+oc apply -f grafana-mysql-datasource.yaml
+----
+
+=== Prometheus Datasource
+The OpenShit Prometheus database contains information on the deployments, pods, CPU,... +
+We will display these informations on the dashboard.
+
+.Create the Prometheus Datasource
+----
+oc apply -f grafana-prometheus-datasource.yaml
+----
+
+== Dashboards
+There are two different dashboards used in this lab. A general one displaying the pipeline, and one only showing the images at a greater scale.
+
+As those dashboards are defined through a JSON definition that cannot be easily customized with variables, we will use OpenShift Templates, process them with the right parameters, and apply them.
+
+=== Main dashboard
+The parameters you'll need to replace in these commands are:
+
+* `image_server_url`: the route to the image server deployment. It's an external route that your browser will directly connect to to retrieve and display the images.
+* `bucket_base_name`: the bucket base name you are using for this lab. It's used to form the location of the image to retrieve.
+* `namespace`: the name of you project. It's used to query the right metrics from Prometheus (Pods, CPU,...)
+
+.Create the main dashboard by processing the template
+[bash]
+----
+oc process -f grafana-xraylab-dashboard-template.yaml -p image_server_url=<replace_me> -p bucket_base_name=<replace_me> -p namespace=<replace_me> | oc apply -f -
+----
+
+Example: `oc process -f grafana-xraylab-dashboard-template.yaml -p image_server_url=https://image-server-my-namespace.apps.cluster-2f55.2f55.example.opentlc.com -p bucket_base_name=xray-images -p namespace=xray-demo | oc apply -f -`
+
+=== Images dashboard
+The parameters you'll need to replace in these commands are:
+
+* `image_server_url`: the route to the image server deployment. It's an external route that your browser will directly connect to to retrieve and display the images.
+* `bucket_base_name`: the bucket base name you are using for this lab. It's used to form the location of the image to retrieve.
+
+.Create the images dashboard by processing the template
+[bash]
+----
+oc process -f grafana-xraylab-images-dashboard-template.yaml -p image_server_url=<replace_me> -p bucket_base_name=<replace_me> | oc apply -f -
+----
+
+Example: `oc process -f grafana-xraylab-images-dashboard-template.yaml -p image_server_url=https://image-server-xray-demo.apps.perf3.ocs.lab.eng.blr.redhat.com -p bucket_base_name=xray-images | oc apply -f -`
