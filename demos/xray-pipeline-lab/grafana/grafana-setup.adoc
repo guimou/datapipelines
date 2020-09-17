@@ -21,6 +21,7 @@ The OpenShit Prometheus database contains information on the deployments, pods, 
 We will display these informations on the dashboard.
 
 .Create the Prometheus Datasource
+[bash]
 ----
 oc apply -f grafana-prometheus-datasource.yaml
 ----
@@ -43,7 +44,8 @@ The parameters you'll need to replace in these commands are:
 oc process -f grafana-xraylab-dashboard-template.yaml -p image_server_url=<replace_me> -p bucket_base_name=<replace_me> -p namespace=<replace_me> | oc apply -f -
 ----
 
-Example: `oc process -f grafana-xraylab-dashboard-template.yaml -p image_server_url=https://image-server-my-namespace.apps.cluster-2f55.2f55.example.opentlc.com -p bucket_base_name=xray-images -p namespace=xray-demo | oc apply -f -`
+Example: +
+`oc process -f grafana-xraylab-dashboard-template.yaml -p image_server_url=https://image-server-my-namespace.apps.cluster-2f55.2f55.example.opentlc.com -p bucket_base_name=xray-images -p namespace=xray-demo | oc apply -f -`
 
 === Images dashboard
 The parameters you'll need to replace in these commands are:
@@ -57,4 +59,5 @@ The parameters you'll need to replace in these commands are:
 oc process -f grafana-xraylab-images-dashboard-template.yaml -p image_server_url=<replace_me> -p bucket_base_name=<replace_me> | oc apply -f -
 ----
 
-Example: `oc process -f grafana-xraylab-images-dashboard-template.yaml -p image_server_url=https://image-server-xray-demo.apps.perf3.ocs.lab.eng.blr.redhat.com -p bucket_base_name=xray-images | oc apply -f -`
+Example: +
+ `oc process -f grafana-xraylab-images-dashboard-template.yaml -p image_server_url=https://image-server-xray-demo.apps.perf3.ocs.lab.eng.blr.redhat.com -p bucket_base_name=xray-images | oc apply -f -`
