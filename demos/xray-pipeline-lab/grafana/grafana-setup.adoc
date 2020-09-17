@@ -11,6 +11,7 @@ The MySQL helper database contains informations (name, timestamps) on the upload
 We will display these informations on the dashboard.
 
 .Create the MySQL Datasource
+[bash]
 ----
 oc apply -f grafana-mysql-datasource.yaml
 ----
