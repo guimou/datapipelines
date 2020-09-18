@@ -3,8 +3,8 @@ kind: ConfigMap
 metadata:
   name: service-point
 data:
-  url: 'replace_me'
-  url-external: 'replace_me'
+  url: 'replace_me' # No trailing /
+  url-external: 'replace_me' # No trailing /
 ---
 apiVersion: v1
 kind: ConfigMap

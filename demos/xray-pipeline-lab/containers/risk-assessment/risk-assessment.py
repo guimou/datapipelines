@@ -52,20 +52,19 @@ CORS(app)
 def home():
     # Retrieve the CloudEvent
     event = from_http(request.headers, request.get_data())
-    logging.info(event)
     
     # Process the event
-    process_event(event)
+    process_event(event.data)
 
     return "", 204
 
-def process_event(event):
-    """Main function to process an event received by the container image."""
+def process_event(data):
+    """Main function to process data received by the container image."""
 
-    logging.info(event['data'])
+    logging.info(data)
     try:
         # Retrieve event info
-        extracted_data = extract_data(event['data'])
+        extracted_data = extract_data(data)
         bucket_eventName = extracted_data['bucket_eventName']
         bucket_name = extracted_data['bucket_name']
         img_key = extracted_data['bucket_object']
@@ -118,13 +117,14 @@ def process_event(event):
         logging.error(f"Unexpected error: {e}")
         raise
 
-def extract_data(msg):
+def extract_data(data):
     logging.info('extract_data')
-    bucket_eventName=msg['eventName']
-    bucket_name=msg['s3']['bucket']['name']
-    bucket_object=msg['s3']['object']['key']
-    data = {'bucket_eventName':bucket_eventName, 'bucket_name':bucket_name, 'bucket_object':bucket_object}
-    return data
+    record=data['Records'][0]
+    bucket_eventName=record['eventName']
+    bucket_name=record['s3']['bucket']['name']
+    bucket_object=record['s3']['object']['key']
+    data_out = {'bucket_eventName':bucket_eventName, 'bucket_name':bucket_name, 'bucket_object':bucket_object}
+    return data_out
 
 def load_image(bucket_name, img_path):
     logging.info('load_image')

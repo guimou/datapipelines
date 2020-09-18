@@ -7,7 +7,7 @@ spec:
     - type: mysql
       name: MySQL
       access: proxy
-      url: xraylab
+      url: xraylabdb
       database: xraylabdb
       user: xraylab
       password: xraylab

@@ -1,0 +1,32 @@
+= Pre-Lab helpers
+This folder contains tools to deploy some elements prior to doing the lab.
+
+== Requirements
+You should have this pre-installed:
+
+* OpenShift 4.4 or more
+* OpenShift Container Storage 4.4 or more
+* AMQ Streans operator (tested with 1.5.3)
+* OpenDataHub operator (tested with 0.8.0)
+* OpenShift Serverless operator (tested with 1.8.0)
+
+== Tools
+=== ObjectStore and RGW
+If you are running OpenShift on AWS, OpenShift Container Storage won't have deployed an ObjectStore and the RadosGateway needed for bucket notifications. +
+You can deploy it by running: +
+
+[bash]
+----
+oc apply -f objectstore.yaml
+----
+
+=== Create a RadosGateway user
+radosgw-admin user create --uid="{user-name}" --display-name="{Display Name}"
+
+== KNative
+=== Serving
+
+=== Eventing
++ Install KafkaSource
+oc apply -f https://github.com/knative/eventing-contrib/releases/download/v0.17.2/kafka-source.yaml
+

@@ -10,6 +10,7 @@ objects:
     labels:
       app: grafana
     name: xraylab-dashboard
+    uid: xraylabdashboard
   spec:
     json: |
       {
@@ -309,7 +310,7 @@ objects:
                 "params": "",
                 "title": "Last Images",
                 "type": "dashboard",
-                "url": "/d/lAAwqejZz/last-images"
+                "url": "/d/lastimagesdashboard/last-images"
               }
             ],
             "method": "iframe",
@@ -423,7 +424,7 @@ objects:
                 "params": "",
                 "title": "Last Images",
                 "type": "dashboard",
-                "url": "/d/lAAwqejZz/last-images"
+                "url": "/d/lastimagesdashboard/last-images"
               }
             ],
             "method": "iframe",
@@ -854,7 +855,7 @@ objects:
                 "params": "",
                 "title": "Last Images",
                 "type": "dashboard",
-                "url": "/d/lAAwqejZz/last-images"
+                "url": "/d/lastimagesdashboard/last-images"
               }
             ],
             "method": "iframe",
@@ -1116,8 +1117,8 @@ objects:
             },
             {
               "current": {
-                "text": "xraylab",
-                "value": "xraylab"
+                "text": "${namespace}",
+                "value": "${namespace}"
               },
               "hide": 2,
               "label": "Namespace",
@@ -1125,11 +1126,11 @@ objects:
               "options": [
                 {
                   "selected": true,
-                  "text": "xraylab",
-                  "value": "xraylab"
+                  "text": "${namespace}",
+                  "value": "${namespace}"
                 }
               ],
-              "query": "xraylab",
+              "query": "${namespace}",
               "skipUrlSync": false,
               "type": "constant"
             }
@@ -1166,7 +1167,7 @@ objects:
         },
         "timezone": "utc",
         "title": "XRay Lab",
-        "uid": "hakbeh9Wz",
+        "uid": "xraylab-dashboard",
         "version": 6
       }
     name: xraylab-dashboard.json
@@ -1180,5 +1181,7 @@ parameters:
   name: image_server_url
 - description: Bucket base name
   name: bucket_base_name
+- description: Project namespace
+  name: namespace
 labels:
   grafana: dashboard

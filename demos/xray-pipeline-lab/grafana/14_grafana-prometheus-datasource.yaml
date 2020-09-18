@@ -10,7 +10,7 @@ spec:
       name: prometheus
       url: 'https://prometheus-k8s.openshift-monitoring.svc:9091'
       basicAuthPassword: >-
-        ktIXK8D9P66MwgdX3uATUF93+tMY4rb7tCmviG3XHdhIM3pcuIZil0z9hZ72XImx3WSmFJbcNLC46KjazrTnA7oZd2A2noIf2QvlYDcTTs+l9FcDRCT9Y/fAc6pgSMjulmmRvcsfr6RPaG/2YujMiU9E+9OlYmDQfxyllKbNshrC4GNm+Lbks/ITNgJC4ouwqoBm5R6wz1YCjiau4AAOAlMFp+I7kvGtjgrMwxcEnZjydpnEIavCderOCPmmI8msRibAgHP4rO7BBAL1xO6JyzEpm+K+p+wCXVl+gQB1McR3LEDJAEuKBpODT7vr6dxnFzUE2ETlXCiht2jLTIsg
+        Gmas1jowF1NrvlwY0AaUuv/S27vmwGT2p7eofDij7jNlWW+yWtq/db6aYZ37ccRnnIRFIc5P8JhKoW/gKpoO5K1m4eRvzE1v/OWwFNQOTlrAowX1o+ee3uwhO9F4lyAa7z68psna17yGCwe9y+JiocAsfJNYQaVsldJp+weO3sK74jVg4u0c0W+AZ44rrLGN07xNm3ZL3hg7FFIRBu9SAmOsJCHrOoQrSbrVGxXkobyttW/tw72r7o+eXdmlx7zRCiux0mkzGrCsY06X9HNkx57/cJL/bCU8JUnPVDipcQd6XslBEnjs/toJjgo/rAB8reqicRQ5DQkZpAiX+Nd0
       jsonData:
         timeInterval: 5s
         tlsSkipVerify: true
