@@ -21,23 +21,3 @@ Change "value" with the name of the model revision you wan to simulate. It only 
 ```bash
 oc patch service.serving.knative.dev/risk-assessment --type=json -p '[{"op":"replace","path":"/spec/template/metadata/annotations/revisionTimestamp","value":"'"$(date +%F_%T)"'"},{"op":"replace","path":"/spec/template/spec/containers/0/env/0/value","value":"v1"}]'
 ```
-
-## Update image-generator with seconds_wait (tkn version of the previous one)
-
-```bash
-tkn task start oc-update-image-generator-dc -p seconds_wait=1
-```
-
-## Change risk-assessment service version (tkn version of the previous one)
-
-```bash
-tkn pipeline start knative-service-risk-assessment-refresh -p service-name=risk-assessment -p model-version=v1
-```
-
-## Build image-server image
-
-Launches the pipeline that will build the image-server container image.
-
-```bash
-tkn pipeline start image-build -r git-repo=xrayedge-repo -r push-image=image-server-image -p context=./demos/xrayedge/containers/image-server
-```
