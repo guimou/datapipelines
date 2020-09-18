@@ -1,0 +1,10 @@
+kind: Project
+apiVersion: project.openshift.io/v1
+metadata:
+  name: knative-eventing
+---
+apiVersion: operator.knative.dev/v1alpha1
+kind: KnativeEventing
+metadata:
+    name: knative-eventing
+    namespace: knative-eventing

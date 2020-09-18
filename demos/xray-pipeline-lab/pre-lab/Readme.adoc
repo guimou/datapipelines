@@ -19,3 +19,14 @@ You can deploy it by running: +
 ----
 oc apply -f objectstore.yaml
 ----
+
+=== Create a RadosGateway user
+radosgw-admin user create --uid="{user-name}" --display-name="{Display Name}"
+
+== KNative
+=== Serving
+
+=== Eventing
++ Install KafkaSource
+oc apply -f https://github.com/knative/eventing-contrib/releases/download/v0.17.2/kafka-source.yaml
+
