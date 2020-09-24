@@ -5,7 +5,13 @@ To configure the database, follow these steps.
 .Connect to the database pod
 [bash]
 ----
-oc apply -f grafana-mysql-datasource.yaml
+oc rsh `oc get pods | grep xraylabdb | grep Running | awk '{print $1}'`
+----
+
+.Connect to MariaDB
+[bash]
+----
+mysql -u root
 ----
 
 .Select the xraylabdb database

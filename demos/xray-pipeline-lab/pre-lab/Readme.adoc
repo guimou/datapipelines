@@ -17,16 +17,21 @@ You can deploy it by running: +
 
 [bash]
 ----
-oc apply -f objectstore.yaml
+oc apply -f cephobjectstore.yaml
 ----
 
 === Create a RadosGateway user
 radosgw-admin user create --uid="{user-name}" --display-name="{Display Name}"
 
 == KNative
-=== Serving
+=== Serving and Eventing
+Use the operator to deploy KNative Serving and Eventing
 
-=== Eventing
-+ Install KafkaSource
+=== Eventing add-on
+KafkaSource is not part of Eventing yet. So you must install it manually.
+
+.Install Kafkasource
+[bash]
+----
 oc apply -f https://github.com/knative/eventing-contrib/releases/download/v0.17.2/kafka-source.yaml
-
+----
