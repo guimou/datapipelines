@@ -17,7 +17,7 @@ You can deploy it by running: +
 
 [bash]
 ----
-oc apply -f cephobjectstore.yaml
+oc apply -f 01_cephobjectstore.yaml
 ----
 
 === Deploy the toolbox
@@ -29,7 +29,10 @@ oc patch OCSInitialization ocsinit -n openshift-storage --type json --patch  '[{
 ----
 
 === Create a RadosGateway user
-radosgw-admin user create --uid="{user-name}" --display-name="{Display Name}"
+[bash]
+----
+oc exec -n openshift-storage `oc get pods -n openshift-storage | grep rook-ceph-tools | grep Running | awk '{print $1}'` -- radosgw-admin user create --uid="{user-name}" --display-name="{Display Name}"
+----
 
 == KNative
 === Serving and Eventing
