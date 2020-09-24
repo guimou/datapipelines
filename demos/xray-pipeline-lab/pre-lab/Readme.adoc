@@ -20,6 +20,14 @@ You can deploy it by running: +
 oc apply -f cephobjectstore.yaml
 ----
 
+=== Deploy the toolbox
+It will be used for the next step, to be able to create users.
+
+[bash]
+----
+oc patch OCSInitialization ocsinit -n openshift-storage --type json --patch  '[{ "op": "replace", "path": "/spec/enableCephTools", "value": true }]'
+----
+
 === Create a RadosGateway user
 radosgw-admin user create --uid="{user-name}" --display-name="{Display Name}"
 
