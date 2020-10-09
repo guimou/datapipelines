@@ -1,0 +1,13 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  annotations:
+    uses: ' data intensive applications, data processing, machine learning, artificial
+      intelligence'
+  name: openshift-storage.ceph.rook.io
+parameters:
+  objectStoreNamespace: openshift-storage
+  objectStoreName: s3a
+  region: us-east-1
+provisioner: openshift-storage.ceph.rook.io/bucket
+reclaimPolicy: Delete

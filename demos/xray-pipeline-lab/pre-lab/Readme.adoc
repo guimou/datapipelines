@@ -6,7 +6,7 @@ You should have this pre-installed:
 
 * OpenShift 4.4 or more
 * OpenShift Container Storage 4.4 or more
-* AMQ Streans operator (tested with 1.5.3)
+* AMQ Streams operator (tested with 1.5.3)
 * OpenDataHub operator (tested with 0.8.0)
 * OpenShift Serverless operator (tested with 1.8.0)
 
@@ -17,16 +17,43 @@ You can deploy it by running: +
 
 [bash]
 ----
-oc apply -f objectstore.yaml
+oc apply -f 01_cephobjectstore.yaml
+----
+
+=== Deploy the toolbox
+It will be used for the next step, to be able to create users.
+
+[bash]
+----
+oc patch OCSInitialization ocsinit -n openshift-storage --type json --patch  '[{ "op": "replace", "path": "/spec/enableCephTools", "value": true }]'
 ----
 
 === Create a RadosGateway user
-radosgw-admin user create --uid="{user-name}" --display-name="{Display Name}"
+[bash]
+----
+oc exec -n openshift-storage `oc get pods -n openshift-storage | grep rook-ceph-tools | grep Running | awk '{print $1}'` -- radosgw-admin user create --uid="{user-name}" --display-name="{Display Name}"
+----
+
+=== Xray images source
+You need a bucket that will serve as a source of images that will be copied by the image-generator container.
+
+* Create a new bucket. The name. e.g. `xray-source` will be the one used in the configmap you will create later as `bucket-source`.
+* Give it full anonymous read access.
+* Copy into it all the images you will find in the base_images folder. WARNING! Respect the folders name. At the end you shoud have something like:
+----
+xray-source\NORMAL\... +
+           \PNEUMONIA\...
+----
 
 == KNative
-=== Serving
+=== Serving and Eventing
+Use the operator to deploy KNative Serving and Eventing
 
-=== Eventing
-+ Install KafkaSource
+=== Eventing add-on
+KafkaSource is not part of Eventing yet. So you must install it manually.
+
+.Install Kafkasource
+[bash]
+----
 oc apply -f https://github.com/knative/eventing-contrib/releases/download/v0.17.2/kafka-source.yaml
-
+----

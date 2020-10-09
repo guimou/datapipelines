@@ -6,6 +6,9 @@ from time import sleep
 
 import boto3
 import mysql.connector
+import requests
+from botocore import UNSIGNED
+from botocore.client import Config
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
@@ -21,8 +24,11 @@ s3client = boto3.client('s3', 'us-east-1', endpoint_url=service_point,
                         aws_secret_access_key=secret_key,
                         use_ssl=True if 'https' in service_point else False)
 
+s3sourceclient = boto3.client('s3', config=Config(signature_version=UNSIGNED))
+
 # Buckets
 bucket_source = os.environ['bucket-source']
+bucket_source_name = bucket_source.split('/')[-1]
 bucket_destination = os.environ['bucket-base-name']
 
 # Helper database
@@ -38,13 +44,15 @@ seconds_wait = float(os.environ['seconds_wait'])
 # Code #
 ########
 def copy_file(source, image_key, destination, image_name):
-    """Copies an object from a source bucket to a destination bucket.""" 
+    """Copies an object from a URL source to a destination bucket.""" 
 
-    copy_source = {
-        'Bucket': source,
-        'Key': image_key
-    }
-    s3client.copy(copy_source, destination, image_name)
+    image_url = source + '/' + image_key
+    req_for_file = requests.get(image_url, stream=True)
+
+    # Init File-like object (to be used by upload_fileobj method)
+    file_object_from_req = req_for_file.raw
+
+    s3client.upload_fileobj(file_object_from_req,destination,image_name)
 
 def update_images_uploaded(image_name):
     """Inserts image name and timestamp into the helper database."""
@@ -66,10 +74,10 @@ def update_images_uploaded(image_name):
 
 # Populate source images lists
 pneumonia_images=[]
-for image in s3client.list_objects(Bucket=bucket_source,Prefix='PNEUMONIA/')['Contents']:
+for image in s3sourceclient.list_objects(Bucket=bucket_source_name,Prefix='PNEUMONIA/')['Contents']:
     pneumonia_images.append(image['Key'])
 normal_images=[]
-for image in s3client.list_objects(Bucket=bucket_source,Prefix='NORMAL/')['Contents']:
+for image in s3sourceclient.list_objects(Bucket=bucket_source_name,Prefix='NORMAL/')['Contents']:
     normal_images.append(image['Key'])
 
 # Main loop
