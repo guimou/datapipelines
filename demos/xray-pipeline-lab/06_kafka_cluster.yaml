@@ -15,12 +15,7 @@ spec:
       transaction.state.log.min.isr: 1
       transaction.state.log.replication.factor: 1
     listeners:
-      plain:
-        authentiation:
-          type: scram-sha-512
-      tls:
-        authentiation:
-          type: tls
+      plain: {}
     replicas: 1
     storage:
       type: ephemeral
