@@ -24,7 +24,7 @@ spec:
         - name: image-generator
           image: image-generator:latest
           env:
-            - name: seconds_wait
+            - name: SECONDS_WAIT
               value: '0'
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
@@ -36,37 +36,37 @@ spec:
                 secretKeyRef:
                   name: s3-secret
                   key: AWS_SECRET_ACCESS_KEY
-            - name: service_point
+            - name: SERVICE_POINT
               valueFrom:
                 configMapKeyRef:
                   name: service-point
                   key: url
-            - name: database-user
+            - name: DATABASE_USER
               valueFrom:
                 secretKeyRef:
                   name: db-secret
                   key:  database-user
-            - name: database-password
+            - name: DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: db-secret
                   key:  database-password
-            - name: database-host
+            - name: DATABASE_HOST
               valueFrom:
                 secretKeyRef:
                   name: db-secret
                   key:  database-host
-            - name: database-db
+            - name: DATABASE_DB
               valueFrom:
                 secretKeyRef:
                   name: db-secret
                   key:  database-db
-            - name: bucket-base-name
+            - name: BUCKET_BASE_NAME
               valueFrom:
                 configMapKeyRef:
                   name: buckets-config
                   key: bucket-base-name
-            - name: bucket-source
+            - name: BUCKET_SOURCE
               valueFrom:
                 configMapKeyRef:
                   name: buckets-config

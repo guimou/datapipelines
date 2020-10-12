@@ -18,7 +18,7 @@ logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 # Object storage
 access_key = os.environ['AWS_ACCESS_KEY_ID']
 secret_key = os.environ['AWS_SECRET_ACCESS_KEY']
-service_point = os.environ['service_point']
+service_point = os.environ['SERVICE_POINT']
 s3client = boto3.client('s3', 'us-east-1', endpoint_url=service_point,
                         aws_access_key_id=access_key,
                         aws_secret_access_key=secret_key,
@@ -27,18 +27,18 @@ s3client = boto3.client('s3', 'us-east-1', endpoint_url=service_point,
 s3sourceclient = boto3.client('s3', config=Config(signature_version=UNSIGNED))
 
 # Buckets
-bucket_source = os.environ['bucket-source']
+bucket_source = os.environ['BUCKET_SOURCE']
 bucket_source_name = bucket_source.split('/')[-1]
-bucket_destination = os.environ['bucket-base-name']
+bucket_destination = os.environ['BUCKET_BASE_NAME']
 
 # Helper database
-db_user = os.environ['database-user']
-db_password = os.environ['database-password']
-db_host = os.environ['database-host']
-db_db = os.environ['database-db']
+db_user = os.environ['DATABASE_USER']
+db_password = os.environ['DATABASE_PASSWORD']
+db_host = os.environ['DATABASE_HOST']
+db_db = os.environ['DATABASE_DB']
 
 # Delay between images
-seconds_wait = float(os.environ['seconds_wait'])
+seconds_wait = float(os.environ['SECONDS_WAIT'])
 
 ########
 # Code #
