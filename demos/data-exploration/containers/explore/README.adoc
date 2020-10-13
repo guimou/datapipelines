@@ -1,0 +1,7 @@
+= Explore
+
+Required environment variables are: +
+*Object storage*
+
+* `service_point`: S3 storage endpoint, http(s)://myendpoint.address
+

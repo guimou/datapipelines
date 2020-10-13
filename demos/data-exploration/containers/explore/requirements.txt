@@ -1,0 +1,5 @@
+boto3==1.14.*
+cloudevents==1.2.*
+Flask==1.1.*
+flask-cors==3.0.*
+pandas==1.1.*
