@@ -146,21 +146,22 @@ def prediction(new_image):
         model = tf.keras.models.load_model('./pneumonia_model.h5')
         logging.info('model loaded')
         pred = model.predict_on_batch(new_image)
+        pred_result = pred[0][0].numpy()
         logging.info('prediction made')
-    
-        if pred[0][0] > 0.80:
-            label='Pneumonia, risk=' + str(round(pred[0][0]*100,2)) + '%'
-        elif pred[0][0] < 0.60:
-            label='Normal, risk=' + str(round(pred[0][0]*100,2)) + '%'
+        
+        if pred_result > 0.80:
+            label='Pneumonia, risk=' + str(round(pred_result*100,2)) + '%'
+        elif pred_result < 0.60:
+            label='Normal, risk=' + str(round(pred_result*100,2)) + '%'
         else:
-            label='Unsure, risk=' + str(round(pred[0][0]*100,2)) + '%'
+            label='Unsure, risk=' + str(round(pred_result*100,2)) + '%'
         tf.keras.backend.clear_session()
         gc.collect()
     except Exception as e:
         logging.error(f"Prediction error: {e}")
         raise   
     logging.info('label')
-    prediction = {'label':label,'pred':pred[0][0]}
+    prediction = {'label':label,'pred':pred_result}
     return prediction
 
 def anonymize(img,img_name):
