@@ -34,17 +34,6 @@ oc patch OCSInitialization ocsinit -n openshift-storage --type json --patch  '[{
 oc exec -n openshift-storage `oc get pods -n openshift-storage | grep rook-ceph-tools | grep Running | awk '{print $1}'` -- radosgw-admin user create --uid="{user-name}" --display-name="{Display Name}"
 ----
 
-=== Xray images source
-You need a bucket that will serve as a source of images that will be copied by the image-generator container.
-
-* Create a new bucket. The name. e.g. `xray-source` will be the one used in the configmap you will create later as `bucket-source`.
-* Give it full anonymous read access.
-* Copy into it all the images you will find in the base_images folder. WARNING! Respect the folders name. At the end you shoud have something like:
-----
-xray-source\NORMAL\... +
-           \PNEUMONIA\...
-----
-
 == KNative
 === Serving and Eventing
 Use the operator to deploy KNative Serving and Eventing

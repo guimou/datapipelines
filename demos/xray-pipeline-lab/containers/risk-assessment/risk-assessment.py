@@ -1,6 +1,7 @@
 import io
 import logging
 import os
+import gc
 import sys
 from hashlib import blake2b
 from io import BytesIO
@@ -144,7 +145,7 @@ def prediction(new_image):
     try:
         model = tf.keras.models.load_model('./pneumonia_model.h5')
         logging.info('model loaded')
-        pred = model.predict(new_image)
+        pred = model.predict_on_batch(new_image)
         logging.info('prediction made')
     
         if pred[0][0] > 0.80:
@@ -153,6 +154,8 @@ def prediction(new_image):
             label='Normal, risk=' + str(round(pred[0][0]*100,2)) + '%'
         else:
             label='Unsure, risk=' + str(round(pred[0][0]*100,2)) + '%'
+        tf.keras.backend.clear_session()
+        gc.collect()
     except Exception as e:
         logging.error(f"Prediction error: {e}")
         raise   
