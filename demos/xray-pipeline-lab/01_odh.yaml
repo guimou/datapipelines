@@ -1,3 +1,17 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: additional-profiles
+  labels:
+    jupyterhub: singleuser-profiles
+data:
+  jupyterhub-singleuser-profiles.yaml: |-
+    profiles:
+    - name: preload repos
+      env:
+        - name: JUPYTER_PRELOAD_REPOS
+          value: https://github.com/guimou/xraylab_notebooks.git
+---
 apiVersion: kfdef.apps.kubeflow.org/v1
 kind: KfDef
 metadata:
@@ -14,7 +28,7 @@ spec:
     - kustomizeConfig:
         parameters:
           - name: s3_endpoint_url
-            value: s3.odh.com
+            value: rook-ceph-rgw-s3a.openshift-storage.svc.cluster.local
         repoRef:
           name: manifests
           path: jupyterhub/jupyterhub

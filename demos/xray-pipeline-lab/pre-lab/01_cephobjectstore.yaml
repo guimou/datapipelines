@@ -103,7 +103,10 @@ spec:
     kind: Service
     name: rook-ceph-rgw-s3a
     weight: 100
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Allow
   port:
     targetPort: http
   wildcardPolicy: None
-
+  
