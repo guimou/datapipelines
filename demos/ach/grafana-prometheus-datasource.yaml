@@ -10,11 +10,7 @@ spec:
       secureJsonData: {}
       name: prometheus
       url: 'https://prometheus-k8s.openshift-monitoring.svc:9091'
-      basicAuthPassword:
-        valueFrom:
-          secretKeyRef:
-              name: prometheus-secret
-              key: session_secret
+      basicAuthPassword: replace_me
       jsonData:
         timeInterval: 5s
         tlsSkipVerify: true

@@ -1,8 +1,253 @@
-= ACH process
-
+= ACH demo
+:toc:
 This demo shows how to implement an ACH payment process, leveraging Ceph notifications, Kafka and KNative.
 
-What you will find here:
+
+
+== Demo installation
+
+Those steps will guide you through all the steps needed to run this demo. They're based on a fresh deployment of OpenShift in AWS.
+
+=== Requirements and Operators
+You should have this pre-installed:
+
+* OpenShift 4.4 or more (last tested on 4.5), with cluster-admin access
+* OpenShift Container Storage 4.5 or more (last tested on 4.5)
+* AMQ Streams or Strimzi operator (last tested with AMQ Streams 1.6.0)
+* OpenDataHub operator (last tested with 0.9.0), optional (see below)
+* OpenShift Serverless operator (last tested 1.7.2)
+
+=== ObjectStore and RGW
+If you are running OpenShift on AWS, OpenShift Container Storage won't have deployed an ObjectStore and the RadosGateway which are needed for bucket notifications. +
+You can deploy it, along with a Service and a Route, by running: +
+
+.Create the Object Store
+[bash]
+----
+oc apply -f cephobjectstore.yaml
+----
+
+=== Ceph toolbox
+The Ceph toolbox will be used in the next step, to be able to create users.
+
+.Deploy the Ceph Toolbox
+[bash]
+----
+oc patch OCSInitialization ocsinit -n openshift-storage --type json --patch  '[{ "op": "replace", "path": "/spec/enableCephTools", "value": true }]'
+----
+
+=== Create a RadosGateway user
+You can now create the RGW user (called "ach"), which will allow us to create buckets and configure bucket notifications.
+
+.Create the RGW user
+[bash]
+----
+oc exec -n openshift-storage `oc get pods -n openshift-storage | grep rook-ceph-tools | grep Running | awk '{print $1}'` -- radosgw-admin user create --uid="ach" --display-name="ach"
+----
+
+Make note of the credentials in the ouput of the command:
+
+* aws_access_key_id
+* aws_secret_access_key
+
+=== KNative
+==== Serving and Eventing
+Use the operator to deploy KNative Serving and Eventing. Do not forget to create the namespaces and instantiate Serving and Eventing in them. If you don't know what I mean, refer to the doc.
+
+==== Eventing add-on
+KafkaSource CRD is not part of Eventing yet (as of Serverlerss 1.7.2), it's only a contrib. So you must install it manually.
+
+.Install Kafkasource
+[bash]
+----
+oc apply -f https://github.com/knative/eventing-contrib/releases/download/v0.17.2/kafka-source.yaml
+----
+
+=== Project
+For this demo we will use the "ach" project. If you choose another name, please update all the config files accordingly.
+
+.Create the project
+[bash]
+----
+oc create project ach
+----
+
+From now on, all the commands must be run into this `ach` project.
+
+=== Kafka
+
+Usign the AMQ Stream or Strimzi operator, we can create a basic Kafka cluster, along with the needed topics.
+
+.Create the kafka cluster
+[bash]
+----
+oc apply -f kafka_cluster.yaml
+----
+
+.Create the topics
+[bash]
+----
+oc apply -f topics.yaml
+----
+
+=== Secrets
+
+Those are the secrets that will be used by the various pods we will create.
+
+First, edit the file `secrets.yaml` and replace the values for `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` that you got when creating the RGW user.
+
+If you have followed the previous instructions for creating the Object Store, the service should have been created with the right name, `http://rook-ceph-rgw-ocs-storagecluster-cephobjectstore.openshift-storage` so you should not need to change it.
+
+You can leave the database parameters as they are, but you must use those when creating the database...
+
+.Create the secrets
+[bash]
+----
+oc apply -f secrets.yaml
+----
+
+=== Database
+
+We will need a MySQL/MariaDB database to hold some values on the transactions processed. Create the database in the `ach` namespace with the `+Add` function from the OpenShift Developer view. Choose Database, MariaDB, and `Instantiate Template` using the values from the `secrets.yaml` file:
+
+* Database Service Name: achdbservice
+* MariaDB Connection Username: achuser
+* MariaDB Connection Password: achpassword
+* MariaDB root Password: achpassword
+* MariaDB Database Name: achdb
+
+Once the database has been instantiated, connect to its pod (oc rsh, or Terminal tab of the pod) and follow those steps to instantiate the database:
+
+.Connect to the DB engine from the bash prompt
+[bash]
+----
+mysql -u root
+----
+
+.Connect to the schema
+[bash]
+----
+USE ach-db;
+----
+
+.Database init (you can copy/paste all lines at once)
+[bash]
+----
+CREATE TABLE bank_balance(time TIMESTAMP, balance DECIMAL(12,2));
+CREATE TABLE merchant_upload(time TIMESTAMP, entry INT(5));
+CREATE TABLE odfi_split(time TIMESTAMP, entry INT(5));
+CREATE TABLE rdfi_split(time TIMESTAMP, entry INT(5));
+CREATE TABLE rdfi_process(time TIMESTAMP, entry INT(5));
+
+SELECT * FROM bank_balance;
+SELECT * FROM merchant_upload;
+SELECT * FROM odfi_split;
+SELECT * FROM rdfi_split;
+SELECT * FROM rdfi_process;
+----
+
+You can then exit the Terminal view.
+
+=== Buckets
+
+To configure buckets and bukect notifications, we will use a Jupyter notebook, from the file `bucket_notifications.ipynb`.
+
+To open this notebook you can use Jupyter if you have it installed on your computer. If not, you can use the Open Data Hub operator to deploy JupyterHub and then launch Jupyter.
+
+In both cases, you can then upload this notebook to your environment and open it. Adjust the parameters in the second cell (RGW address and credentials) and run all the cells to create the buckets and configure the notifications.
+
+=== KNative Serving and Eventing
+
+First, create the 3 Services we will need to process the data.
+
+.Create the services
+[bash]
+----
+oc apply -f service-odfi-split.yaml
+oc apply -f service-rdfi-split.yaml
+oc apply -f service-rdfi-process.yaml
+----
+
+Wait for the Services to be ready, then create the 3 Listeners that will fetch the messages from Kafka and send them to the listeners.
+
+.Create the listeners
+[bash]
+----
+oc apply -f kafkasource-odfi-split.yaml
+oc apply -f kafkasource-rdfi-split.yaml
+oc apply -f kafkasource-rdfi-process.yaml
+----
+
+=== Grafana
+
+There are multiple steps for the Grafana part.
+
+* Deploy the Grafana Operator from OperatorHub (latest tested version 3.7.0)
+* Retrieve the Prometheus authentication:
+** In the `openshift-monitoring` namespace, open the Secret named `grafana-datasources`.
+** In the Data section, click on Reveal Values and in the `prometheus.yaml` section, look for `"basicAuthPassword"`.
+** Copy the value.
+* Edit the file `grafana-prometheus-datasource.yaml` and paste the password you copied for the `"basicAuthPassword"` variable.
+* You can now apply the different Grafana files to create the Datasources, the Dashboard, and the Grafana instance.
+
+.Create the Grafana resources
+[bash]
+----
+oc apply -f grafana-prometheus-datasource.yaml
+oc apply -f grafana-mysql-datasource.yaml
+oc apply -f grafana-ach-dashboard.yaml
+----
+
+== Running the demo
+
+Once all the installation steps are done, you can launch the demo by running the `transaction-job.yaml` file. It will create 60 pods with a parallelism of 5 that will generate transaction files, which will launch the pipeline.
+
+You can monitor the data pipeline from the Grafana Dashborad. A Route will have been create when instantiating Grafana, in the form `https://grafana-route-ach.apps.your-cluster-address/`
+
+== Reinitializing the demo
+
+To reinitialize the demo, follow those steps.
+
+* Delete the transaction job:
+
+.Delete the transaction job
+[bash]
+----
+oc delete job create-transaction
+----
+
+* Reset the database by connecting to the terminal from its Pod and:
+
+.Connect to the DB engine from the bash prompt
+[bash]
+----
+mysql -u root
+----
+
+.Connect to the schema
+[bash]
+----
+USE ach-db;
+----
+
+.Database reset (you can copy/paste all lines at once)
+[bash]
+----
+DELETE FROM bank_balance;
+DELETE FROM merchant_upload;
+DELETE FROM odfi_split;
+DELETE FROM rdfi_split;
+DELETE FROM rdfi_process;
+INSERT INTO bank_balance(time,balance) SELECT CURRENT_TIMESTAMP(), 0;
+INSERT INTO merchant_upload(time,entry) SELECT CURRENT_TIMESTAMP(), 0;
+INSERT INTO odfi_split(time,entry) SELECT CURRENT_TIMESTAMP(), 0;
+INSERT INTO rdfi_split(time,entry) SELECT CURRENT_TIMESTAMP(), 0;
+INSERT INTO rdfi_process(time,entry) SELECT CURRENT_TIMESTAMP(), 0;
+----
+
+== NOTES
+
+You will also find in this repo the following files:
 
 * link:Automate%20and%20scale%20your%20data%20pipelines%20the%20Cloud%20Native%20Way.pdf[Slides] from a presentation of this demo. The full video of the presentation is available https://www.openshift.com/blog/openshift-commons-briefing-automate-and-scale-your-data-pipelines-the-cloud-native-way-with-guillaume-moutier-red-hat[here]
 * topics.yaml: definition of the Kafka topics needed in the demo
