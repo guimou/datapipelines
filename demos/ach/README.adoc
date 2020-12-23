@@ -137,11 +137,11 @@ CREATE TABLE odfi_split(time TIMESTAMP, entry INT(5));
 CREATE TABLE rdfi_split(time TIMESTAMP, entry INT(5));
 CREATE TABLE rdfi_process(time TIMESTAMP, entry INT(5));
 
-SELECT * FROM bank_balance;
-SELECT * FROM merchant_upload;
-SELECT * FROM odfi_split;
-SELECT * FROM rdfi_split;
-SELECT * FROM rdfi_process;
+INSERT INTO bank_balance(time,balance) SELECT CURRENT_TIMESTAMP(), 0;
+INSERT INTO merchant_upload(time,entry) SELECT CURRENT_TIMESTAMP(), 0;
+INSERT INTO odfi_split(time,entry) SELECT CURRENT_TIMESTAMP(), 0;
+INSERT INTO rdfi_split(time,entry) SELECT CURRENT_TIMESTAMP(), 0;
+INSERT INTO rdfi_process(time,entry) SELECT CURRENT_TIMESTAMP(), 0;
 ----
 
 You can then exit the Terminal view.
