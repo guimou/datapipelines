@@ -1,8 +1,6 @@
 = ACH demo
-:toc:
 This demo shows how to implement an ACH payment process, leveraging Ceph notifications, Kafka and KNative.
-
-
+:toc:
 
 == Demo installation
 
