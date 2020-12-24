@@ -72,6 +72,13 @@ oc create project ach
 
 From now on, all the commands must be run into this `ach` project.
 
+=== Open Data Hub
+Open Data Hub(ODH) will be deployed using ODH operator. Create an instance of ODH by using the Kfdef definition in /odh. This is the version 0.9 of ODH.
+[bash]
+----
+oc apply -f odh/kfdef-v0.9.yaml
+----
+
 === Kafka
 
 Usign the AMQ Stream or Strimzi operator, we can create a basic Kafka cluster, along with the needed topics.
