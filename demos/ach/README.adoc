@@ -101,7 +101,7 @@ Those are the secrets that will be used by the various pods we will create.
 
 First, edit the file `secrets.yaml` and replace the values for `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` that you got when creating the RGW user.
 
-If you have followed the previous instructions for creating the Object Store, the service should have been created with the right name, `http://rook-ceph-rgw-ocs-storagecluster-cephobjectstore.openshift-storage` so you should not need to change it.
+If you have followed the previous instructions for creating the Object Store, the service should have been created with the right name, `http://rook-ceph-rgw-s3a.openshift-storage` so you should not need to change it.
 
 You can leave the database parameters as they are, but you must use those when creating the database...
 
