@@ -8,7 +8,7 @@ spec:
     - type: mysql
       name: MySQL
       access: proxy
-      url: ach-db.ach
+      url: achdbservice.ach
       database: achdb
       user: achuser
       password: achpassword

@@ -5,7 +5,7 @@ metadata:
   namespace: ach
 spec:
   bootstrapServers:
-    - 'my-cluster-kafka-bootstrap.kafka:9092'
+    - 'my-cluster-kafka-bootstrap.ach:9092'
   consumerGroup: rdfi-split
   sink:
     ref:
