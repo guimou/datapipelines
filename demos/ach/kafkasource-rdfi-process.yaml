@@ -6,7 +6,7 @@ metadata:
 spec:
   consumerGroup: rdfi-process
   bootstrapServers:
-    - my-cluster-kafka-bootstrap.kafka:9092
+    - my-cluster-kafka-bootstrap.ach:9092
   topics:
     - rdfi
   sink:
